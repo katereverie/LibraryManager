@@ -78,13 +78,13 @@ namespace LibraryManager.Data.Repositories.EntityFramework
             return _dbContext.Media
                              .Include(m => m.MediaType)
                              .Include(m => m.CheckoutLogs)
-                             .Where(m => m.MediaType != null && m.CheckoutLogs != null)
+                             .Where(m => m.CheckoutLogs.Any())
                              .Select(m => new TopThreeMedia
                              {
                                  MediaID = m.MediaID,
                                  Title = m.Title,
                                  MediaTypeName = m.MediaType.MediaTypeName,
-                                 CheckoutCount = m.CheckoutLogs != null ? m.CheckoutLogs.Count : 0
+                                 CheckoutCount = m.CheckoutLogs.Count
                              })
                              .OrderByDescending(m => m.CheckoutCount)
                              .Take(3)

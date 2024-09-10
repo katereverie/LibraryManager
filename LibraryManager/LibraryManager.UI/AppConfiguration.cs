@@ -23,7 +23,7 @@ namespace LibraryManagement.UI
 
         public DatabaseAccessMode GetDatabaseAccessMode()
         {
-            switch (_configuration["DatabaseMode"])
+            switch (_configuration["DatabaseAccessMode"])
             {
                 case "ORM":
                     return DatabaseAccessMode.ORM;
