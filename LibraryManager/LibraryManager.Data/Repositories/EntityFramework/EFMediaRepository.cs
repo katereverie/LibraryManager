@@ -23,7 +23,7 @@ namespace LibraryManager.Data.Repositories.EntityFramework
 
         public void Archive(int mediaID)
         {
-            var media = _dbContext.Media.FirstOrDefault(m => m.MediaID == mediaID);
+            var media = _dbContext.Media.SingleOrDefault(m => m.MediaID == mediaID);
 
             if (media != null)
             {
@@ -62,7 +62,7 @@ namespace LibraryManager.Data.Repositories.EntityFramework
 
         public Media? GetByID(int mediaId)
         {
-            return _dbContext.Media.FirstOrDefault(m => m.MediaID == mediaId);
+            return _dbContext.Media.SingleOrDefault(m => m.MediaID == mediaId);
         }
 
         public List<Media> GetByType(int typeId)
