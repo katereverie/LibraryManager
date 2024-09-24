@@ -55,7 +55,7 @@ namespace LibraryManager.Application.Services
             }
         }
 
-        public Result<int> AddBorrower(Borrower newBorrower)
+        public Result AddBorrower(Borrower newBorrower)
         {
             try
             {
@@ -65,14 +65,9 @@ namespace LibraryManager.Application.Services
                     return ResultFactory.Fail<int>($"{newBorrower.Email} has already been taken!");
                 }
 
-                int newID = _borrowerRepository.Add(newBorrower);
-                switch (newID)
-                {
-                    case -1:
-                        return ResultFactory.Fail<int>("New Borrower Registration failed.");
-                    default:
-                        return ResultFactory.Success(newID);
-                }
+                _borrowerRepository.Add(newBorrower);
+                return ResultFactory.Success();
+               
             }
             catch (Exception ex)
             {
