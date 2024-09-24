@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManager.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class BorrowerController : Controller
     {
         private readonly IBorrowerService _borrowerService;
@@ -148,6 +150,32 @@ namespace LibraryManager.API.Controllers
             }
 
             _logger.LogError("Error adding borrower. {BorrowerEmail} Error: {ErrorMessage}", entity.Email, result.Message);
+            return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+        }
+
+        /// <summary>
+        /// Delete a borrower
+        /// </summary>
+        /// <param name="borrowerId"></param>
+        /// <returns></returns>
+        [HttpDelete("{borrowerId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult DeleteBorrower(int borrowerId)
+        {
+            var entity = new Borrower
+            {
+                BorrowerID = borrowerId
+            };
+
+            var result = _borrowerService.DeleteBorrower(entity);
+
+            if (result.Ok)
+            {
+                _logger.LogInformation("Borrower successfully deleted.");
+                return NoContent();
+            }
+
+            _logger.LogError("Error deleting borrower. Error: {ErrorMessage}", result.Message);
             return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
         }
     }
