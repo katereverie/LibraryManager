@@ -26,14 +26,6 @@ namespace LibraryManager.UI.Workflows
             int exitChoice = 0;
             while (exitChoice != 2)
             {
-                var checkResult = serivce.CheckBorrowStatus(borrower.BorrowerID);
-                if (!checkResult.Ok)
-                {
-                    Console.WriteLine(checkResult.Message);
-                    IO.AnyKey();
-                    return;
-                }
-
                 var getMediaResult = serivce.GetAvailableMedia();
 
                 if (!getMediaResult.Ok)
@@ -48,25 +40,10 @@ namespace LibraryManager.UI.Workflows
 
                 int mediaID = IO.GetMediaID(mediaList, "Enter the ID of the media to check out: ");
 
-                CheckoutLog newLog = new CheckoutLog
-                {
-                    BorrowerID = borrower.BorrowerID,
-                    MediaID = mediaID,
-                    CheckoutDate = DateTime.Now,
-                    DueDate = DateTime.Now.AddDays(7),
-                    ReturnDate = null
-                };
+                var checkoutResult = serivce.CheckoutMedia(mediaID, borrower.BorrowerID);
 
-                var checkoutResult = serivce.CheckoutMedia(newLog);
-                if (!checkoutResult.Ok)
-                {
-                    Console.WriteLine(checkoutResult.Message);
-                }
-                else
-                {
-                    Console.WriteLine($"New checkout log registered with ID: {checkoutResult.Data}");
-                }
-
+                Console.WriteLine(checkoutResult.Ok ? "Media successfully checked out." : checkoutResult.Message);
+               
                 exitChoice = IO.GetCheckoutOption();
             }
         }
@@ -105,23 +82,13 @@ namespace LibraryManager.UI.Workflows
 
                 int logID = IO.GetCheckoutLogID(checkoutLogList, "Enter the Log ID to return: ");
                 var returnResult = serivce.ReturnMedia(logID);
-                if (returnResult.Ok)
-                {
-                    Console.WriteLine("Return successfull.");
-                }
-                else
-                {
-                    Console.WriteLine(returnResult.Message);
-                }
+
+                Console.WriteLine(returnResult.Ok ? "Return successfull" : returnResult.Message);
 
                 if (checkoutLogList.Count == 1)
-                {
                     break;
-                }
-                else
-                {
-                    returnOption = IO.GetReturnOption();
-                }
+
+                returnOption = IO.GetReturnOption();
             }
 
             IO.AnyKey();
