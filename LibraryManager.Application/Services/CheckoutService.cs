@@ -14,38 +14,6 @@ namespace LibraryManager.Application.Services
             _mediaRepository = mediaRepository;
         }
 
-        //public Result CheckBorrowStatus(int borrowerID)
-        //{
-        //    try
-        //    {
-        //        var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
-        //        int checkedoutItemCount = 0;
-
-        //        foreach (var log in logs)
-        //        {
-        //            if (log.DueDate < DateTime.Now)
-        //            {
-        //                return ResultFactory.Fail("Borrower has overdue item.");
-        //            }
-        //            else if (log.ReturnDate == null)
-        //            {
-        //                checkedoutItemCount++;
-        //            }
-        //        }
-
-        //        if (checkedoutItemCount >= 3)
-        //        {
-        //            return ResultFactory.Fail("Borrower has more than 3 checked-out items.");
-        //        }
-
-        //        return ResultFactory.Success();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ResultFactory.Fail(ex.Message);
-        //    }
-        //}
-
         public Result CheckoutMedia(int mediaID, int borrowerID)
         {
             try
