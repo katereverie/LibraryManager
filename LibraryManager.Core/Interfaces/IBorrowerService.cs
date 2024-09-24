@@ -8,7 +8,7 @@ namespace LibraryManager.Core.Interfaces
         Result<Borrower> GetBorrower(string email);
         Result<List<CheckoutLog>> GetCheckoutLogsByBorrower(Borrower borrower);
         Result UpdateBorrower(Borrower borrower);
-        Result<int> AddBorrower(Borrower newBorrower);
+        Result AddBorrower(Borrower newBorrower);
         Result DeleteBorrower(Borrower Borrower);
     }
 }
