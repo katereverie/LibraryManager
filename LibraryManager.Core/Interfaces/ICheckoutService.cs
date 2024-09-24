@@ -10,7 +10,6 @@ namespace LibraryManager.Core.Interfaces
         Result<List<CheckoutLog>> GetCheckedOutMediaByBorrowerID(int borrowerID);
         Result<int> CheckoutMedia(CheckoutLog newCheckoutLog);
         Result<Borrower> GetBorrowerByEmail(string email);
-        Result CheckBorrowStatus(int borrowerID);
         Result<Media> GetMediaByID(int mediaID);
         Result ReturnMedia(int checkoutLogID);
     }
