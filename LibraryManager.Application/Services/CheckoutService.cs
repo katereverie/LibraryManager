@@ -14,51 +14,73 @@ namespace LibraryManager.Application.Services
             _mediaRepository = mediaRepository;
         }
 
-        public Result CheckBorrowStatus(int borrowerID)
+        //public Result CheckBorrowStatus(int borrowerID)
+        //{
+        //    try
+        //    {
+        //        var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
+        //        int checkedoutItemCount = 0;
+
+        //        foreach (var log in logs)
+        //        {
+        //            if (log.DueDate < DateTime.Now)
+        //            {
+        //                return ResultFactory.Fail("Borrower has overdue item.");
+        //            }
+        //            else if (log.ReturnDate == null)
+        //            {
+        //                checkedoutItemCount++;
+        //            }
+        //        }
+
+        //        if (checkedoutItemCount >= 3)
+        //        {
+        //            return ResultFactory.Fail("Borrower has more than 3 checked-out items.");
+        //        }
+
+        //        return ResultFactory.Success();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ResultFactory.Fail(ex.Message);
+        //    }
+        //}
+
+        public Result CheckoutMedia(int mediaID, int borrowerID)
         {
             try
             {
                 var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
-                int checkedoutItemCount = 0;
+                int checkoutItemCount = 0;
 
                 foreach (var log in logs)
                 {
-                    if (log.DueDate < DateTime.Now)
-                    {
+                    if (log.DueDate < DateTime.Now )
                         return ResultFactory.Fail("Borrower has overdue item.");
-                    }
-                    else if (log.ReturnDate == null)
-                    {
-                        checkedoutItemCount++;
-                    }
+                    
+                    
+                    if (log.ReturnDate == null)
+                        checkoutItemCount++;
                 }
 
-                if (checkedoutItemCount >= 3)
-                {
+                if (checkoutItemCount >= 3)
                     return ResultFactory.Fail("Borrower has more than 3 checked-out items.");
-                }
 
+                var newCheckoutLog = new CheckoutLog
+                {
+                    BorrowerID = borrowerID,
+                    MediaID = mediaID,
+                    CheckoutDate = DateTime.Now,
+                    DueDate = DateTime.Now.AddDays(7),
+                    ReturnDate = null
+                };
+
+                _checkoutRepository.Add(newCheckoutLog);
                 return ResultFactory.Success();
             }
             catch (Exception ex)
             {
                 return ResultFactory.Fail(ex.Message);
-            }
-        }
-
-        public Result<int> CheckoutMedia(CheckoutLog newCheckoutLog)
-        {
-            try
-            {
-                var newID = _checkoutRepository.Add(newCheckoutLog);
-
-                return newID != 0 && newID != -1
-                    ? ResultFactory.Success(newID)
-                    : ResultFactory.Fail<int>("Check out attempt failed.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<int>(ex.Message);
             }
         }
 
