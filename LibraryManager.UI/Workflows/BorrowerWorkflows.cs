@@ -73,7 +73,7 @@ namespace LibraryManagement.UI.Workflows
 
             if (addResult.Ok)
             {
-                Console.WriteLine($"New Borrower successfully registered with the ID {addResult.Data}");
+                Console.WriteLine($"New Borrower successfully registered.");
             }
             else
             {
