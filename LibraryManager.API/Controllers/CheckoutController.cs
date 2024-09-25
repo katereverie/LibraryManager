@@ -15,7 +15,7 @@ namespace LibraryManager.API.Controllers
         private readonly ILogger<CheckoutController> _logger;
 
         /// <summary>
-        /// Constructor method of CheckoutController, which takes an ICheckoutService and an ILogger as parameters, and store them in private readonly fields
+        /// Constructor method of CheckoutController, which injects ICheckoutService and ILogger and stores them in private readonly fields.
         /// </summary>
         /// <param name="checkoutService">Service for handling checkout-related operations</param>
         /// <param name="logger">Logger for logging events and errors</param>
@@ -28,7 +28,7 @@ namespace LibraryManager.API.Controllers
         /// <summary>
         /// Retrieves a list of available media that can be checked out
         /// </summary>
-        /// <returns>List of available media objects</returns>
+        /// <returns>List of available media objects and an IActionResult indicating corresponding HTTP response</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
         public IActionResult GetAvailableMedia()
@@ -48,7 +48,7 @@ namespace LibraryManager.API.Controllers
         /// <summary>
         /// Retrieves a list of checkout logs that shows all checked-out media
         /// </summary>
-        /// <returns>List of checked-out media</returns>
+        /// <returns>List of checked-out media and an IActionResult indicating corresponding HTTP response</returns>
         [HttpGet("log")]
         [ProducesResponseType(typeof(List<CheckoutLog>), StatusCodes.Status200OK)]
         public IActionResult GetCheckoutLog()
@@ -70,7 +70,7 @@ namespace LibraryManager.API.Controllers
         /// </summary>
         /// <param name="mediaID">The ID of the media</param>
         /// <param name="borrowerID">The ID of the borrower</param>
-        /// <returns></returns>
+        /// <returns>An IActionResult indicating corresponding HTTP response</returns>
         [HttpPost("media/{mediaID}/{borrowerID}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -95,10 +95,10 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// Returns a media
+        /// Returns a media item by assigning true to its IsArchived property
         /// </summary>
         /// <param name="checkoutLogID">the ID of the checkout log</param>
-        /// <returns></returns>
+        /// <returns>An IActionResult indicating corresponding HTTP response</returns>
         [HttpPost("returns/{checkoutLogID}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult ReturnMedia(int checkoutLogID)

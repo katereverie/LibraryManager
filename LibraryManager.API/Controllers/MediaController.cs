@@ -16,7 +16,7 @@ namespace LibraryManager.API.Controllers
         private readonly ILogger<MediaController> _logger;
 
         /// <summary>
-        /// Constructor method of MediaController, which takes an IMediaService and an ILogger as parameters, and store them in private readonly fields
+        /// Constructor method of MediaController, which injects IMediaService and ILogger, and stores them in private readonly fields.
         /// </summary>
         /// <param name="mediaService">Service for handling media-related operations</param>
         /// <param name="logger">Logger for logging events and errors</param>
