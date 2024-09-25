@@ -8,7 +8,5 @@ namespace LibraryManager.API.Models
         public int MediaTypeID { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Title field musn't be empty.")]
         public string Title { get; set; }
-        public bool IsArchived { get; set; }
-
     }
 }
