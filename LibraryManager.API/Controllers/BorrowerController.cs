@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManager.API.Controllers
 {
+    /// <summary>
+    /// Controller for handling borrower-related operations
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class BorrowerController : Controller
@@ -12,6 +15,11 @@ namespace LibraryManager.API.Controllers
         private readonly IBorrowerService _borrowerService;
         private readonly ILogger<BorrowerController> _logger;
 
+        /// <summary>
+        /// Constructor method of BorrowerController, which injects ICheckoutService and ILogger and stores them in private readonly fields.
+        /// </summary>
+        /// <param name="borrowerService">Service for handling borrower-related operations</param>
+        /// <param name="logger">Logger for logging events and errors</param>
         public BorrowerController(IBorrowerService borrowerService, ILogger<BorrowerController> logger)
         {
             _borrowerService = borrowerService;
@@ -19,9 +27,9 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// List all borrowers
+        /// Retrieves a list of all borrowers, which includes their information
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of objects of type Borrower</returns>
         [HttpGet("")]
         [ProducesResponseType(typeof(List<Borrower>), StatusCodes.Status200OK)]
         public IActionResult GetAllBorrowers()
@@ -39,10 +47,10 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// View a borrower
+        /// Retrieve a single borrower, which includes their personal information
         /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
+        /// <param name="email">A string representation of the email address of a borrower</param>
+        /// <returns>A single Borrower object or null if not found</returns>
         [HttpGet("{email}")]
         [ProducesResponseType(typeof(Borrower), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -67,10 +75,10 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// Add a borrower
+        /// Adds a single borrower, which includes the borrower's first and last name, email address, and phone number.
         /// </summary>
-        /// <param name="borrowerToAdd"></param>
-        /// <returns></returns>
+        /// <param name="borrowerToAdd">A model for adding borrower, which includes string representation of FirstName, LastName, Email, Phone</param>
+        /// <returns>An IActionResult indicating corresponding HTTP response</returns>
         [HttpPost("")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -110,11 +118,11 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// Edit a borrower
+        /// Edits the first name, the last name, the email address, and phone number of a borrower.
         /// </summary>
-        /// <param name="borrowerId"></param>
-        /// <param name="borrowerToEdit"></param>
-        /// <returns></returns>
+        /// <param name="borrowerId">An integer parameter that uniquely identifies a borrower</param>
+        /// <param name="borrowerToEdit">A model for editing a borrower,  which includes string representation of FirstName, LastName, Email, Phone</param>
+        /// <returns>An IActionResult indicating corresponding HTTP response</returns>
         [HttpPut("{borrowerId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -154,17 +162,17 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// Delete a borrower
+        /// Deletes a borrower by deleting their personal information and their associated data, such as checkout logs, if any.
         /// </summary>
-        /// <param name="borrowerId"></param>
-        /// <returns></returns>
-        [HttpDelete("{borrowerId}")]
+        /// <param name="borrowerID">An integer parameter that uniquely identifies a borrower</param>
+        /// <returns>An IActionResult indicating corresponding HTTP response</returns>
+        [HttpDelete("{borrowerID}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult DeleteBorrower(int borrowerId)
+        public IActionResult DeleteBorrower(int borrowerID)
         {
             var entity = new Borrower
             {
-                BorrowerID = borrowerId
+                BorrowerID = borrowerID
             };
 
             var result = _borrowerService.DeleteBorrower(entity);
