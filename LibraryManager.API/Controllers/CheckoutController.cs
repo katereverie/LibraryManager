@@ -15,7 +15,7 @@ namespace LibraryManager.API.Controllers
         private readonly ILogger<CheckoutController> _logger;
 
         /// <summary>
-        /// Constructor method of CheckoutController takes an ICheckoutService and an ILogger as parameters, and store them in private readonly fields
+        /// Constructor method of CheckoutController, which takes an ICheckoutService and an ILogger as parameters, and store them in private readonly fields
         /// </summary>
         /// <param name="checkoutService">Service for handling checkout-related operations</param>
         /// <param name="logger">Logger for logging events and errors</param>
@@ -28,7 +28,7 @@ namespace LibraryManager.API.Controllers
         /// <summary>
         /// Retrieves a list of available media that can be checked out
         /// </summary>
-        /// <returns>List of available media</returns>
+        /// <returns>List of available media objects</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
         public IActionResult GetAvailableMedia()
