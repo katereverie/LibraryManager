@@ -8,22 +8,41 @@ namespace LibraryManagement.Test
     public class CheckoutServiceTests
     {
         [Test]
-        public void CheckBorrowerStatus()
+        public void CheckoutMedia_BorrowerHasMoreThanThreeCheckedoutItems()
         {
             var service = new CheckoutService(new MockCheckoutRepo(), new MockMediaRepo());
 
             // Borrower with ID 1 has 3 unreturned checked out items
-            // Borrower with ID 2 has 1 checked out item
-            // Borrower with ID 3 has overdue item
-            var result1 = service.CheckBorrowStatus(1);
-            var result2 = service.CheckBorrowStatus(2);
-            var result3 = service.CheckBorrowStatus(3);
+            var result = service.CheckoutMedia(6, 1);
 
-            Assert.That(result1.Ok, Is.False);
-            Assert.That(result1.Message, Is.EqualTo("Borrower has more than 3 checked-out items."));
-            Assert.That(result2.Ok, Is.True);
-            Assert.That(result3.Ok, Is.False);
-            Assert.That(result3.Message, Is.EqualTo("Borrower has overdue item."));
+            Console.WriteLine(result.Message);
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Message, Is.EqualTo("Borrower has more than 3 checked-out items."));
+        }
+
+        [Test]
+        public void CheckoutMedia_BorrowerOverdueItems()
+        {
+            var service = new CheckoutService(new MockCheckoutRepo(), new MockMediaRepo());
+
+            // Borrower with ID 3 has overdue item
+            var result = service.CheckoutMedia(6, 3);
+
+            Console.WriteLine(result.Message);
+
+            Assert.That(result.Ok, Is.False);
+            Assert.That(result.Message, Is.EqualTo("Borrower has overdue item."));
+        }
+
+        [Test]
+        public void CheckoutMedia_Success()
+        {
+            var service = new CheckoutService(new MockCheckoutRepo(), new MockMediaRepo());
+
+            // Borrower with ID 2 has 1 checked out item
+            var result = service.CheckoutMedia(6, 2);
+
+            Assert.That(result.Ok, Is.True);
         }
     }
 }
