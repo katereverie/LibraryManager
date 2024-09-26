@@ -66,7 +66,7 @@ namespace LibraryManager.API.Controllers
         }
 
         /// <summary>
-        /// Checks out a media
+        /// Checks out a media item that is neither archived nor already checked-out
         /// </summary>
         /// <param name="mediaID">The ID of the media</param>
         /// <param name="borrowerID">The ID of the borrower</param>
