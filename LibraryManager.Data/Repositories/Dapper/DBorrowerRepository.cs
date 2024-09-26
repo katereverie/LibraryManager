@@ -62,40 +62,28 @@ namespace LibraryManager.Data.Repositories.Dapper
 
         public List<Borrower> GetAll()
         {
-            List<Borrower> list = new List<Borrower>();
-
-
             using (var cn = new SqlConnection(_connectionString))
             {
                 var command = "SELECT * FROM Borrower";
-                list = cn.Query<Borrower>(command).ToList();
-            }
 
-            return list;
+                return cn.Query<Borrower>(command).ToList();
+            }
         }
 
         public Borrower? GetByEmail(string email)
         {
-            Borrower? borrower = null;
-
-
             using (var cn = new SqlConnection(_connectionString))
             {
                 var command = @"SELECT *
                                 FROM Borrower
                                 WHERE Email = @Email";
 
-                borrower = cn.QueryFirstOrDefault<Borrower>(command, new { Email = email });
+                return cn.QueryFirstOrDefault<Borrower>(command, new { Email = email });
             }
-
-            return borrower;
         }
 
         public List<CheckoutLog> GetCheckoutLogs(Borrower borrower)
         {
-            List<CheckoutLog> logList = new List<CheckoutLog>();
-
-
             using (var cn = new SqlConnection(_connectionString))
             {
                 var command = @"SELECT cl.CheckoutLogID, cl.BorrowerID, cl.MediaID, cl.CheckoutDate, cl.DueDate, cl.ReturnDate,
@@ -104,7 +92,7 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 INNER JOIN Media m ON m.MediaID = cl.MediaID
                                 WHERE cl.BorrowerID = @BorrowerID";
 
-                logList = cn.Query<CheckoutLog, Media, CheckoutLog>(
+                return cn.Query<CheckoutLog, Media, CheckoutLog>(
                     command,
                     (cl, m) =>
                     {
@@ -115,14 +103,10 @@ namespace LibraryManager.Data.Repositories.Dapper
                     splitOn: "MediaID"
                 ).ToList();
             }
-
-
-            return logList;
         }
 
         public void Update(Borrower request)
         {
-
             using (var cn = new SqlConnection(_connectionString))
             {
                 var command = @"UPDATE [Borrower] SET
