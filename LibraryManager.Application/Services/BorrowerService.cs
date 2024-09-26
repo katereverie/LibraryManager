@@ -62,7 +62,7 @@ namespace LibraryManager.Application.Services
                 var duplicate = _borrowerRepository.GetByEmail(newBorrower.Email);
                 if (duplicate != null)
                 {
-                    return ResultFactory.Fail<int>($"{newBorrower.Email} has already been taken!");
+                    return ResultFactory.Fail($"{newBorrower.Email} has already been taken!");
                 }
 
                 _borrowerRepository.Add(newBorrower);
@@ -71,7 +71,7 @@ namespace LibraryManager.Application.Services
             }
             catch (Exception ex)
             {
-                return ResultFactory.Fail<int>(ex.Message);
+                return ResultFactory.Fail(ex.Message);
             }
         }
 
