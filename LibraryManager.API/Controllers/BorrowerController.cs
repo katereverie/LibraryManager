@@ -120,14 +120,14 @@ namespace LibraryManager.API.Controllers
         /// <summary>
         /// Edits the first name, the last name, the email address, and phone number of a borrower.
         /// </summary>
-        /// <param name="borrowerId">An integer parameter that uniquely identifies a borrower</param>
+        /// <param name="borrowerID">An integer parameter that uniquely identifies a borrower</param>
         /// <param name="borrowerToEdit">A model for editing a borrower,  which includes string representation of FirstName, LastName, Email, Phone</param>
         /// <returns>An IActionResult indicating corresponding HTTP response</returns>
-        [HttpPut("{borrowerId}")]
+        [HttpPut("{borrowerID}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult EditBorrower(int borrowerId, EditBorrower borrowerToEdit)
+        public IActionResult EditBorrower(int borrowerID, EditBorrower borrowerToEdit)
         {
             if (!ModelState.IsValid)
             {
@@ -137,6 +137,7 @@ namespace LibraryManager.API.Controllers
 
             var entity = new Borrower
             {
+                BorrowerID = borrowerID,
                 FirstName = borrowerToEdit.FirstName,
                 LastName = borrowerToEdit.LastName,
                 Email = borrowerToEdit.Email,
