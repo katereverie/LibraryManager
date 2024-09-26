@@ -93,15 +93,15 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 WHERE cl.BorrowerID = @BorrowerID";
 
                 return cn.Query<CheckoutLog, Media, CheckoutLog>(
-                    command,
-                    (cl, m) =>
-                    {
-                        cl.Media = m;
-                        return cl;
-                    },
-                    new { borrower.BorrowerID },
-                    splitOn: "MediaID"
-                ).ToList();
+                                command,
+                                (cl, m) =>
+                                {
+                                    cl.Media = m;
+                                    return cl;
+                                },
+                                new { borrower.BorrowerID },
+                                splitOn: "MediaID"
+                                ).ToList();
             }
         }
 

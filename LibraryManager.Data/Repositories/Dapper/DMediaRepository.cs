@@ -128,7 +128,7 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 },
                                 new { mediaTypeID },
                                 splitOn: "MediaTypeID"
-                            ).ToList();
+                                ).ToList();
             }
         }
 
