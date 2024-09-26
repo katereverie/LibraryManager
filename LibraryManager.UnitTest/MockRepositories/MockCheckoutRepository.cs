@@ -62,7 +62,8 @@ namespace LibraryManagement.Test.MockRepos
 
         public int Add(CheckoutLog newCheckoutLog)
         {
-            throw new NotImplementedException();
+            _logs.Add(newCheckoutLog);
+            return newCheckoutLog.CheckoutLogID;
         }
 
         public List<CheckoutLog> GetAllCheckedoutMedia()
