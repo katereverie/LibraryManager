@@ -54,49 +54,60 @@ namespace LibraryManager.Data.Repositories.Dapper
         }
         public List<Media> GetAll()
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(_connectionString))
+            {
+                var command = "SELECT * FROM Media";
+
+                return cn.Query<Media>(command).ToList();
+            }
         }
 
         public List<Media> GetAllArchived()
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(_connectionString))
+            {
+                var command = @"SELECT m.*, mt.*
+                                FROM Media m
+                                INNER JOIN MediaType mt ON mt.MediaTypeID = m.MediaTypeID
+                                WHERE m.IsArchived = 1
+                                ORDER BY m.MediaTypeID, m.Title";
+
+                return cn.Query<Media>(command).ToList();
+            }
         }
 
         public List<MediaType> GetAllMediaTypes()
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection(_connectionString))
+            {
+                var command = @"SELECT * FROM MediaType";
+
+                return cn.Query<MediaType>(command).ToList();
+            }
         }
 
         public List<Media> GetAllUnarchived()
         {
-            List<Media> list = new();
-
             using (var cn = new SqlConnection(_connectionString))
             {
                 var command = @"SELECT * 
                                 FROM Media
                                 WHERE IsArchived = 0";
 
-                list = cn.Query<Media>(command).ToList();
+                return cn.Query<Media>(command).ToList();
             }
-
-            return list;
         }
 
         public Media? GetByID(int mediaID)
         {
-            Media? media;
-
             using (var cn = new SqlConnection(_connectionString))
             {
                 var command = @"SELECT * 
                                 FROM Media 
                                 WHERE MediaID = @MediaID";
 
-                media = cn.QueryFirstOrDefault<Media>(command, new { mediaID });
+                return cn.QueryFirstOrDefault<Media>(command, new { mediaID });
             }
-
-            return media;
         }
 
         public List<Media> GetByType(int mediaTypeID)
@@ -108,18 +119,16 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 INNER JOIN MediaType mt On mt.MediaTypeID = m.MediaTypeID
                                 WHERE m.MediaTypeID = @MediaTypeID";
 
-                var media = cn.Query<Media, MediaType, Media>(
-                    command,
-                    (m, mt) =>
-                    {
-                        m.MediaType = mt;
-                        return m;
-                    },
-                    new { mediaTypeID },
-                    splitOn: "MediaTypeID"
-                ).ToList();
-
-                return media;
+                return cn.Query<Media, MediaType, Media>(
+                                command,
+                                (m, mt) =>
+                                {
+                                    m.MediaType = mt;
+                                    return m;
+                                },
+                                new { mediaTypeID },
+                                splitOn: "MediaTypeID"
+                            ).ToList();
             }
         }
 
@@ -148,7 +157,7 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 WHERE m.IsArchived = 0 
                                 AND m.MediaTypeID = @MediaTypeID";
 
-                var media = cn.Query<Media, MediaType, Media>(
+                return cn.Query<Media, MediaType, Media>(
                     command,
                     (m, mt) =>
                     {
@@ -158,8 +167,6 @@ namespace LibraryManager.Data.Repositories.Dapper
                     new { mediaTypeID },
                     splitOn: "MediaTypeID"
                 ).ToList();
-
-                return media;
             }
         }
 
