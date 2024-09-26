@@ -1,7 +1,7 @@
 ﻿using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 
-namespace LibraryManagement.UI
+namespace LibraryManagement.API
 {
     public class AppConfiguration : IAppConfiguration
     {
