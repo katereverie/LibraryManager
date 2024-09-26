@@ -49,15 +49,15 @@ namespace LibraryManager.Data.Repositories.Dapper
 
 
                 return cn.Query<CheckoutLog, Borrower, Media, CheckoutLog>(
-                    command,
-                    (cl, borrower, media) =>
-                    {
-                        cl.Borrower = borrower;
-                        cl.Media = media;
-                        return cl;
-                    },
-                    splitOn: "BorrowerID,MediaID"
-                ).ToList();
+                                command,
+                                (cl, borrower, media) =>
+                                {
+                                    cl.Borrower = borrower;
+                                    cl.Media = media;
+                                    return cl;
+                                },
+                                splitOn: "BorrowerID,MediaID"
+                                ).ToList();
             }
         }
 
@@ -85,15 +85,15 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 AND cl.ReturnDate IS NULL";
 
                 return cn.Query<CheckoutLog, Media, CheckoutLog>(
-                    command,
-                    (cl, m) =>
-                    {
-                        cl.Media = m;
-                        return cl;
-                    },
-                    new { borrowerID },
-                    splitOn: "MediaID"
-                ).ToList();
+                                command,
+                                (cl, m) =>
+                                {
+                                    cl.Media = m;
+                                    return cl;
+                                },
+                                new { borrowerID },
+                                splitOn: "MediaID"
+                            ).ToList();
             }
         }
 
