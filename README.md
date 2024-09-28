@@ -1,5 +1,5 @@
 
-## Introduction
+# Introduction
 
 ### Project Description
 
@@ -12,7 +12,7 @@ It's core features include:<br>
 * __Media Management__: catalog, organize, and manage the details of different types of media, such as books, DVDs, and digital audios; generate reports, such as most popular media items.
 * __Checkout Management__: oversee the borrowering and returning of media, tracking due dates of borrowed media.
 
-## Architecture
+# Architecture
 
 ### Pattern (n-Tier-architecture)
 
@@ -31,7 +31,7 @@ It's core features include:<br>
 - Tests: NUnit
 - Other tools: Postman, Azure Data Studio, Swagger, Visual Studio (IDE)
 
-## Visual Demonstration
+# Visual Demonstration
 
 ### Borrower Management
 
