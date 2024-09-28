@@ -1,7 +1,6 @@
+# Library Manager
 
-# Introduction
-
-### Project Description
+### Overview
 
 Library Manager is a cross-platform application designed to streamline and simplify the management of library resources. <br>
 
