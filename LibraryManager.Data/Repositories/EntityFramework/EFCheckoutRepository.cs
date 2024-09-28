@@ -37,7 +37,7 @@ namespace LibraryManager.Data.Repositories.EntityFramework
                              .Where(m => !m.IsArchived)
                              .Where(m => m.CheckoutLogs == null ||
                                          (m.CheckoutLogs.OrderByDescending(cl => cl.CheckoutLogID)
-                                                        .First().ReturnDate != null))
+                                                        .First().ReturnDate == null))
                              .ToList();
         }
 
