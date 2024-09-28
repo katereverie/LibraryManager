@@ -1,3 +1,4 @@
+
 ## Introduction
 
 ### Project Description
@@ -45,5 +46,9 @@ https://github.com/user-attachments/assets/d30b3124-de16-483c-9d7b-f43f143374db
 
 https://github.com/user-attachments/assets/b0cccf5a-fb6d-47d6-90a3-3dbb0dd03b53
 
+
+### API Testing (Swagger, Console Logging)
+
+https://github.com/user-attachments/assets/25a34d5c-256b-49e3-b4ba-059a0417d79f
 
 
