@@ -35,9 +35,9 @@ namespace LibraryManager.Data.Repositories.EntityFramework
                              .Include(m => m.CheckoutLogs)
                              .Include(m => m.MediaType)
                              .Where(m => !m.IsArchived)
-                             .Where(m => m.CheckoutLogs == null ||
-                                         (m.CheckoutLogs.OrderByDescending(cl => cl.CheckoutLogID)
-                                                        .First().ReturnDate == null))
+                             .Where(m => !m.CheckoutLogs.Any() ||
+                                         m.CheckoutLogs.OrderByDescending(cl => cl.CheckoutLogID)
+                                                        .First().ReturnDate != null)
                              .ToList();
         }
 

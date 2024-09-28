@@ -122,7 +122,7 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 ) LatestLog ON m.MediaID = LatestLog.MediaID
                                 LEFT JOIN CheckoutLog cl ON LatestLog.LatestCheckoutLogID = cl.CheckoutLogID
                                 WHERE m.IsArchived = 0
-                                AND (LatestLog.MediaID IS NULL OR cl.ReturnDate IS NULL)";
+                                AND (LatestLog.MediaID IS NULL OR cl.ReturnDate IS NOT NULL)";
 
                 return cn.Query<Media>(command).ToList();
             }
