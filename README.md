@@ -34,7 +34,16 @@ It's core features include:<br>
 
 ### Borrower Management
 
+https://github.com/user-attachments/assets/4c64d2ef-7acb-4d59-bda6-4f0e7ed25aab
 
+### Media Management 
+
+https://github.com/user-attachments/assets/d30b3124-de16-483c-9d7b-f43f143374db
+
+
+### Checkout Management
+
+https://github.com/user-attachments/assets/b0cccf5a-fb6d-47d6-90a3-3dbb0dd03b53
 
 
 
