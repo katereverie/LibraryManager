@@ -6,7 +6,6 @@ Library Manager is a cross-platform application designed to streamline and simpl
 
 ### Core Features
 
-It's core features include:<br>
 * __Borrower Management__: register, track, and manage library users, including their borrow history (in the form of checkout logs), personal information.
 * __Media Management__: catalog, organize, and manage the details of different types of media, such as books, DVDs, and digital audios; generate reports, such as most popular media items.
 * __Checkout Management__: oversee the borrowering and returning of media, tracking due dates of borrowed media.
