@@ -177,7 +177,7 @@ namespace LibraryManager.Data.Repositories.Dapper
                 var command = @"UPDATE [Media] SET
                                     MediaTypeID = @MediaTypeID,
                                     Title = @Title
-                            WHERE MediaID = @MediaID";
+                                WHERE MediaID = @MediaID";
                 var parameters = new
                 {
                     request.MediaTypeID,
