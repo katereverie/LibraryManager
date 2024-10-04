@@ -47,9 +47,9 @@ public class BorrowerController : Controller
     }
 
     /// <summary>
-    /// Retrieve a single borrower, which includes their personal information
+    /// Retrieves a single borrower, which includes their personal information
     /// </summary>
-    /// <param name="email">A string representation of the email address of a borrower</param>
+    /// <param name="email">The email address of a borrower</param>
     /// <returns>A single Borrower object or null if not found</returns>
     [HttpGet("{email}")]
     [ProducesResponseType(typeof(Borrower), StatusCodes.Status200OK)]
@@ -77,7 +77,7 @@ public class BorrowerController : Controller
     /// <summary>
     /// Adds a single borrower, which includes the borrower's first and last name, email address, and phone number.
     /// </summary>
-    /// <param name="borrowerToAdd">A model for adding borrower, which includes string representation of FirstName, LastName, Email, Phone</param>
+    /// <param name="borrowerToAdd">A JSON object for adding borrower, which includes a borrower's FirstName, LastName, Email, Phone</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
     [HttpPost("")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -120,8 +120,8 @@ public class BorrowerController : Controller
     /// <summary>
     /// Edits the first name, the last name, the email address, and phone number of a borrower.
     /// </summary>
-    /// <param name="borrowerID">An integer parameter that uniquely identifies a borrower</param>
-    /// <param name="borrowerToEdit">A model for editing a borrower,  which includes string representation of FirstName, LastName, Email, Phone</param>
+    /// <param name="borrowerID">The ID number that uniquely identifies a borrower</param>
+    /// <param name="borrowerToEdit">A JSON object for editing a borrower,  which includes the borrower's FirstName, LastName, Email, Phone</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
     [HttpPut("{borrowerID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -165,7 +165,7 @@ public class BorrowerController : Controller
     /// <summary>
     /// Deletes a borrower by deleting their personal information and their associated data, such as checkout logs, if any.
     /// </summary>
-    /// <param name="borrowerID">An integer parameter that uniquely identifies a borrower</param>
+    /// <param name="borrowerID">The ID number that uniquely identifies a borrower</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
     [HttpDelete("{borrowerID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
