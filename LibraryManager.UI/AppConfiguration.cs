@@ -2,36 +2,35 @@
 using LibraryManager.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 
-namespace LibraryManagement.UI
+namespace LibraryManagement.UI;
+
+public class AppConfiguration : IAppConfiguration
 {
-    public class AppConfiguration : IAppConfiguration
+    private IConfiguration _configuration;
+
+    public AppConfiguration()
     {
-        private IConfiguration _configuration;
+        _configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddUserSecrets<Program>()
+            .Build();
+    }
 
-        public AppConfiguration()
-        {
-            _configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddUserSecrets<Program>()
-                .Build();
-        }
+    public string GetConnectionString()
+    {
+        return _configuration["LibraryDb"] ?? "";
+    }
 
-        public string GetConnectionString()
+    public DatabaseAccessMode GetDatabaseAccessMode()
+    {
+        switch (_configuration["DatabaseAccessMode"])
         {
-            return _configuration["LibraryDb"] ?? "";
-        }
-
-        public DatabaseAccessMode GetDatabaseAccessMode()
-        {
-            switch (_configuration["DatabaseAccessMode"])
-            {
-                case "ORM":
-                    return DatabaseAccessMode.ORM;
-                case "SQL":
-                    return DatabaseAccessMode.DirectSQL;
-                default:
-                    throw new Exception("DatabaseMode configuration key not found!");
-            }
+            case "ORM":
+                return DatabaseAccessMode.ORM;
+            case "SQL":
+                return DatabaseAccessMode.DirectSQL;
+            default:
+                throw new Exception("DatabaseMode configuration key not found!");
         }
     }
 }

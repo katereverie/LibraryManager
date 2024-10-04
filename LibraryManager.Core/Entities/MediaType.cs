@@ -1,10 +1,9 @@
-﻿namespace LibraryManager.Core.Entities
-{
-    public class MediaType
-    {
-        public int MediaTypeID { get; set; }
-        public string MediaTypeName { get; set; }
+﻿namespace LibraryManager.Core.Entities;
 
-        public List<Media>? Medias { get; set; }
-    }
+public class MediaType
+{
+    public int MediaTypeID { get; set; }
+    public string MediaTypeName { get; set; }
+
+    public List<Media>? Medias { get; set; }
 }

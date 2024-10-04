@@ -1,166 +1,165 @@
 ﻿using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 
-namespace LibraryManager.Application.Services
+namespace LibraryManager.Application.Services;
+
+public class CheckoutService : ICheckoutService
 {
-    public class CheckoutService : ICheckoutService
+    private ICheckoutRepository _checkoutRepository;
+    private IMediaRepository _mediaRepository;
+
+    public CheckoutService(ICheckoutRepository checkoutRepository, IMediaRepository mediaRepository)
     {
-        private ICheckoutRepository _checkoutRepository;
-        private IMediaRepository _mediaRepository;
+        _checkoutRepository = checkoutRepository;
+        _mediaRepository = mediaRepository;
+    }
 
-        public CheckoutService(ICheckoutRepository checkoutRepository, IMediaRepository mediaRepository)
+    public Result CheckoutMedia(int mediaID, int borrowerID)
+    {
+        try
         {
-            _checkoutRepository = checkoutRepository;
-            _mediaRepository = mediaRepository;
+            var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
+            int checkoutItemCount = 0;
+
+            foreach (var log in logs)
+            {
+                if (log.DueDate < DateTime.Now )
+                    return ResultFactory.Fail("Borrower has overdue item.");
+                
+                
+                if (log.ReturnDate == null)
+                    checkoutItemCount++;
+            }
+
+            if (checkoutItemCount >= 3)
+                return ResultFactory.Fail("Borrower has more than 3 checked-out items.");
+
+            var newCheckoutLog = new CheckoutLog
+            {
+                BorrowerID = borrowerID,
+                MediaID = mediaID,
+                CheckoutDate = DateTime.Now,
+                DueDate = DateTime.Now.AddDays(7),
+                ReturnDate = null
+            };
+
+            _checkoutRepository.Add(newCheckoutLog);
+            return ResultFactory.Success();
         }
-
-        public Result CheckoutMedia(int mediaID, int borrowerID)
+        catch (Exception ex)
         {
-            try
-            {
-                var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
-                int checkoutItemCount = 0;
-
-                foreach (var log in logs)
-                {
-                    if (log.DueDate < DateTime.Now )
-                        return ResultFactory.Fail("Borrower has overdue item.");
-                    
-                    
-                    if (log.ReturnDate == null)
-                        checkoutItemCount++;
-                }
-
-                if (checkoutItemCount >= 3)
-                    return ResultFactory.Fail("Borrower has more than 3 checked-out items.");
-
-                var newCheckoutLog = new CheckoutLog
-                {
-                    BorrowerID = borrowerID,
-                    MediaID = mediaID,
-                    CheckoutDate = DateTime.Now,
-                    DueDate = DateTime.Now.AddDays(7),
-                    ReturnDate = null
-                };
-
-                _checkoutRepository.Add(newCheckoutLog);
-                return ResultFactory.Success();
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail(ex.Message);
-            }
+            return ResultFactory.Fail(ex.Message);
         }
+    }
 
-        public Result<List<CheckoutLog>> GetAllCheckedoutMedia()
+    public Result<List<CheckoutLog>> GetAllCheckedoutMedia()
+    {
+        try
         {
-            try
-            {
-                var list = _checkoutRepository.GetAllCheckedoutMedia();
+            var list = _checkoutRepository.GetAllCheckedoutMedia();
 
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<CheckoutLog>>("Currently no checked-out media.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-            }
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<CheckoutLog>>("Currently no checked-out media.");
         }
-
-        public Result<List<Media>> GetAvailableMedia()
+        catch (Exception ex)
         {
-            try
-            {
-                var list = _checkoutRepository.GetAvailableMedia();
-
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<Media>>("All media are either checked out or archived.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<Media>>(ex.Message);
-            }
+            return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
         }
+    }
 
-        public Result<Borrower> GetBorrowerByEmail(string email)
+    public Result<List<Media>> GetAvailableMedia()
+    {
+        try
         {
-            try
-            {
-                var borrower = _checkoutRepository.GetByEmail(email);
+            var list = _checkoutRepository.GetAvailableMedia();
 
-                return borrower != null
-                    ? ResultFactory.Success(borrower)
-                    : ResultFactory.Fail<Borrower>($"No Borrower with {email} was found.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<Borrower>(ex.Message);
-            }
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<Media>>("All media are either checked out or archived.");
         }
-
-        public Result<List<CheckoutLog>> GetCheckedOutMediaByBorrowerID(int borrowerID)
+        catch (Exception ex)
         {
-            try
-            {
-                var list = _checkoutRepository.GetCheckedoutMediaByBorrowerID(borrowerID);
-
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<CheckoutLog>>("Borrower hasn't checked out any media.");
-
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-            }
+            return ResultFactory.Fail<List<Media>>(ex.Message);
         }
+    }
 
-        public Result<List<CheckoutLog>> GetCheckoutLogsByBorrowerID(int borrowerID)
+    public Result<Borrower> GetBorrowerByEmail(string email)
+    {
+        try
         {
-            try
-            {
-                var list = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
+            var borrower = _checkoutRepository.GetByEmail(email);
 
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<CheckoutLog>>($"No checkout log by Borrrower ID {borrowerID} found.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-            }
+            return borrower != null
+                ? ResultFactory.Success(borrower)
+                : ResultFactory.Fail<Borrower>($"No Borrower with {email} was found.");
         }
-
-        public Result<Media> GetMediaByID(int mediaID)
+        catch (Exception ex)
         {
-            try
-            {
-                var media = _mediaRepository.GetByID(mediaID);
-
-                return media != null
-                    ? ResultFactory.Success(media)
-                    : ResultFactory.Fail<Media>($"No media by ID: {mediaID} found.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<Media>(ex.Message);
-            }
+            return ResultFactory.Fail<Borrower>(ex.Message);
         }
+    }
 
-        public Result ReturnMedia(int checkoutLogID)
+    public Result<List<CheckoutLog>> GetCheckedOutMediaByBorrowerID(int borrowerID)
+    {
+        try
         {
-            try
-            {
-                _checkoutRepository.Update(checkoutLogID);
+            var list = _checkoutRepository.GetCheckedoutMediaByBorrowerID(borrowerID);
 
-                return ResultFactory.Success();
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail(ex.Message);
-            }
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<CheckoutLog>>("Borrower hasn't checked out any media.");
+
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
+        }
+    }
+
+    public Result<List<CheckoutLog>> GetCheckoutLogsByBorrowerID(int borrowerID)
+    {
+        try
+        {
+            var list = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
+
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<CheckoutLog>>($"No checkout log by Borrrower ID {borrowerID} found.");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
+        }
+    }
+
+    public Result<Media> GetMediaByID(int mediaID)
+    {
+        try
+        {
+            var media = _mediaRepository.GetByID(mediaID);
+
+            return media != null
+                ? ResultFactory.Success(media)
+                : ResultFactory.Fail<Media>($"No media by ID: {mediaID} found.");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<Media>(ex.Message);
+        }
+    }
+
+    public Result ReturnMedia(int checkoutLogID)
+    {
+        try
+        {
+            _checkoutRepository.Update(checkoutLogID);
+
+            return ResultFactory.Success();
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail(ex.Message);
         }
     }
 }

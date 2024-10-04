@@ -1,154 +1,153 @@
 ﻿using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 
-namespace LibraryManager.Application.Services
+namespace LibraryManager.Application.Services;
+
+public class MediaService : IMediaService
 {
-    public class MediaService : IMediaService
+    private readonly IMediaRepository _mediaRepository;
+
+    public MediaService(IMediaRepository mediaRepository)
     {
-        private readonly IMediaRepository _mediaRepository;
+        _mediaRepository = mediaRepository;
+    }
 
-        public MediaService(IMediaRepository mediaRepository)
+    public Result<int> AddMedia(Media newMedia)
+    {
+        try
         {
-            _mediaRepository = mediaRepository;
+            int newID = _mediaRepository.Add(newMedia);
+            return newID != 0 && newID != -1
+                ? ResultFactory.Success(newID)
+                : ResultFactory.Fail<int>("Add attempt failed.");
         }
-
-        public Result<int> AddMedia(Media newMedia)
+        catch (Exception ex)
         {
-            try
-            {
-                int newID = _mediaRepository.Add(newMedia);
-                return newID != 0 && newID != -1
-                    ? ResultFactory.Success(newID)
-                    : ResultFactory.Fail<int>("Add attempt failed.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<int>(ex.Message);
-            }
+            return ResultFactory.Fail<int>(ex.Message);
         }
+    }
 
-        public Result ArchiveMedia(int mediaID)
+    public Result ArchiveMedia(int mediaID)
+    {
+        try
         {
-            try
-            {
-                _mediaRepository.Archive(mediaID);
+            _mediaRepository.Archive(mediaID);
 
-                return ResultFactory.Success();
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail(ex.Message);
-            }
+            return ResultFactory.Success();
         }
-
-        public Result EditMedia(Media request)
+        catch (Exception ex)
         {
-            try
-            {
-                _mediaRepository.Update(request);
-
-                return ResultFactory.Success();
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail(ex.Message);
-            }
+            return ResultFactory.Fail(ex.Message);
         }
+    }
 
-        public Result<List<Media>> GetAllArchivedMedia()
+    public Result EditMedia(Media request)
+    {
+        try
         {
-            try
-            {
-                var list = _mediaRepository.GetAllArchived();
+            _mediaRepository.Update(request);
 
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<Media>>("Currently, there is no archived media.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<Media>>(ex.Message);
-            }
+            return ResultFactory.Success();
         }
-
-        public Result<List<MediaType>> GetAllMediaTypes()
+        catch (Exception ex)
         {
-            try
-            {
-                var list = _mediaRepository.GetAllMediaTypes();
-
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<MediaType>>("Currently, there is not registered media type.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<MediaType>>(ex.Message);
-            }
+            return ResultFactory.Fail(ex.Message);
         }
+    }
 
-        public Result<Media> GetMediaByID(int mediaID)
+    public Result<List<Media>> GetAllArchivedMedia()
+    {
+        try
         {
-            try
-            {
-                var media = _mediaRepository.GetByID(mediaID);
+            var list = _mediaRepository.GetAllArchived();
 
-                return media != null
-                    ? ResultFactory.Success(media)
-                    : ResultFactory.Fail<Media>($"Media with ID {mediaID} not found");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<Media>(ex.Message);
-            }
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<Media>>("Currently, there is no archived media.");
         }
-
-        public Result<List<Media>> GetMediaByType(int typeId)
+        catch (Exception ex)
         {
-            try
-            {
-                var list = _mediaRepository.GetByType(typeId);
-
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<Media>>("Media of this type not found.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<Media>>(ex.Message);
-            }
+            return ResultFactory.Fail<List<Media>>(ex.Message);
         }
+    }
 
-        public Result<List<TopThreeMedia>> GetTop3MostPopularMedia()
+    public Result<List<MediaType>> GetAllMediaTypes()
+    {
+        try
         {
-            try
-            {
-                var list = _mediaRepository.GetTopThreeMostPopularMedia();
+            var list = _mediaRepository.GetAllMediaTypes();
 
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<TopThreeMedia>>("Top 3 Most Popular Media not found.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<TopThreeMedia>>(ex.Message);
-            }
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<MediaType>>("Currently, there is not registered media type.");
         }
-
-        public Result<List<Media>> GetUnarchivedMediaByType(int typeID)
+        catch (Exception ex)
         {
-            try
-            {
-                var list = _mediaRepository.GetUnarchivedByType(typeID);
+            return ResultFactory.Fail<List<MediaType>>(ex.Message);
+        }
+    }
 
-                return list.Any()
-                    ? ResultFactory.Success(list)
-                    : ResultFactory.Fail<List<Media>>("No unarchived media of this type is found.");
-            }
-            catch (Exception ex)
-            {
-                return ResultFactory.Fail<List<Media>>(ex.Message);
-            }
+    public Result<Media> GetMediaByID(int mediaID)
+    {
+        try
+        {
+            var media = _mediaRepository.GetByID(mediaID);
+
+            return media != null
+                ? ResultFactory.Success(media)
+                : ResultFactory.Fail<Media>($"Media with ID {mediaID} not found");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<Media>(ex.Message);
+        }
+    }
+
+    public Result<List<Media>> GetMediaByType(int typeId)
+    {
+        try
+        {
+            var list = _mediaRepository.GetByType(typeId);
+
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<Media>>("Media of this type not found.");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<List<Media>>(ex.Message);
+        }
+    }
+
+    public Result<List<TopThreeMedia>> GetTop3MostPopularMedia()
+    {
+        try
+        {
+            var list = _mediaRepository.GetTopThreeMostPopularMedia();
+
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<TopThreeMedia>>("Top 3 Most Popular Media not found.");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<List<TopThreeMedia>>(ex.Message);
+        }
+    }
+
+    public Result<List<Media>> GetUnarchivedMediaByType(int typeID)
+    {
+        try
+        {
+            var list = _mediaRepository.GetUnarchivedByType(typeID);
+
+            return list.Any()
+                ? ResultFactory.Success(list)
+                : ResultFactory.Fail<List<Media>>("No unarchived media of this type is found.");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<List<Media>>(ex.Message);
         }
     }
 }

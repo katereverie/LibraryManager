@@ -1,10 +1,9 @@
 ﻿using LibraryManager.Core.Entities;
 
-namespace LibraryManager.Core.Interfaces
+namespace LibraryManager.Core.Interfaces;
+
+public interface IAppConfiguration
 {
-    public interface IAppConfiguration
-    {
-        string GetConnectionString();
-        DatabaseAccessMode GetDatabaseAccessMode();
-    }
+    string GetConnectionString();
+    DatabaseAccessMode GetDatabaseAccessMode();
 }

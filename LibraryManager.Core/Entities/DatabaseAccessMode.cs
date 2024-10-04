@@ -1,8 +1,7 @@
-﻿namespace LibraryManager.Core.Entities
+﻿namespace LibraryManager.Core.Entities;
+
+public enum DatabaseAccessMode
 {
-    public enum DatabaseAccessMode
-    {
-        ORM,
-        DirectSQL
-    }
+    ORM,
+    DirectSQL
 }

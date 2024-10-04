@@ -4,48 +4,47 @@ using LibraryManager.Core.Interfaces;
 using LibraryManager.Data.Repositories.Dapper;
 using LibraryManager.Data.Repositories.EntityFramework;
 
-namespace LibraryManager.Application
+namespace LibraryManager.Application;
+
+public class ServiceFactory
 {
-    public class ServiceFactory
+    private IAppConfiguration _appConfig;
+
+    public ServiceFactory(IAppConfiguration appConfig)
     {
-        private IAppConfiguration _appConfig;
+        _appConfig = appConfig;
+    }
 
-        public ServiceFactory(IAppConfiguration appConfig)
+    public IBorrowerService CreateBorrowerService()
+    {
+        switch (_appConfig.GetDatabaseAccessMode())
         {
-            _appConfig = appConfig;
+            case DatabaseAccessMode.ORM:
+                return new BorrowerService(new EFBorrowerRepository(_appConfig.GetConnectionString()));
+            default:
+                return new BorrowerService(new DBorrowerRepository(_appConfig.GetConnectionString()));
         }
+    }
 
-        public IBorrowerService CreateBorrowerService()
+    public IMediaService CreateMediaService()
+    {
+        switch (_appConfig.GetDatabaseAccessMode())
         {
-            switch (_appConfig.GetDatabaseAccessMode())
-            {
-                case DatabaseAccessMode.ORM:
-                    return new BorrowerService(new EFBorrowerRepository(_appConfig.GetConnectionString()));
-                default:
-                    return new BorrowerService(new DBorrowerRepository(_appConfig.GetConnectionString()));
-            }
+            case DatabaseAccessMode.ORM:
+                return new MediaService(new EFMediaRepository(_appConfig.GetConnectionString()));
+            default:
+                return new MediaService(new DMediaRepository(_appConfig.GetConnectionString()));
         }
+    }
 
-        public IMediaService CreateMediaService()
+    public ICheckoutService CreateCheckoutService()
+    {
+        switch (_appConfig.GetDatabaseAccessMode())
         {
-            switch (_appConfig.GetDatabaseAccessMode())
-            {
-                case DatabaseAccessMode.ORM:
-                    return new MediaService(new EFMediaRepository(_appConfig.GetConnectionString()));
-                default:
-                    return new MediaService(new DMediaRepository(_appConfig.GetConnectionString()));
-            }
-        }
-
-        public ICheckoutService CreateCheckoutService()
-        {
-            switch (_appConfig.GetDatabaseAccessMode())
-            {
-                case DatabaseAccessMode.ORM:
-                    return new CheckoutService(new EFCheckoutRepository(_appConfig.GetConnectionString()), new EFMediaRepository(_appConfig.GetConnectionString()));
-                default:
-                    return new CheckoutService(new DCheckoutRepository(_appConfig.GetConnectionString()), new DMediaRepository(_appConfig.GetConnectionString()));
-            }
+            case DatabaseAccessMode.ORM:
+                return new CheckoutService(new EFCheckoutRepository(_appConfig.GetConnectionString()), new EFMediaRepository(_appConfig.GetConnectionString()));
+            default:
+                return new CheckoutService(new DCheckoutRepository(_appConfig.GetConnectionString()), new DMediaRepository(_appConfig.GetConnectionString()));
         }
     }
 }

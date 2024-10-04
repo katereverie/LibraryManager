@@ -3,43 +3,43 @@ using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 using Microsoft.Data.SqlClient;
 
-namespace LibraryManager.Data.Repositories.Dapper
+namespace LibraryManager.Data.Repositories.Dapper;
+
+public class DCheckoutRepository : ICheckoutRepository
 {
-    public class DCheckoutRepository : ICheckoutRepository
+    private readonly string _connectionString;
+
+    public DCheckoutRepository(string connectionString)
     {
-        private readonly string _connectionString;
+        _connectionString = connectionString;
+    }
 
-        public DCheckoutRepository(string connectionString)
+    public int Add(CheckoutLog newCheckoutLog)
+    {
+        using (var cn = new SqlConnection(_connectionString))
         {
-            _connectionString = connectionString;
-        }
-
-        public int Add(CheckoutLog newCheckoutLog)
-        {
-            using (var cn = new SqlConnection(_connectionString))
-            {
-                var command = @"INSERT INTO CheckoutLog (BorrowerID, MediaID, CheckoutDate, DueDate, ReturnDate)
+            var command = @"INSERT INTO CheckoutLog (BorrowerID, MediaID, CheckoutDate, DueDate, ReturnDate)
                                 VALUES (@BorrowerID, @MediaID, @CheckoutDate, @DueDate, @ReturnDate)
                                 SELECT SCOPE_IDENTITY()";
 
-                var parameters = new
-                {
-                    newCheckoutLog.BorrowerID,
-                    newCheckoutLog.MediaID,
-                    newCheckoutLog.CheckoutDate,
-                    newCheckoutLog.DueDate,
-                    newCheckoutLog.ReturnDate
-                };
-
-                return cn.ExecuteScalar<int>(command, parameters);
-            }
-        }
-
-        public List<CheckoutLog> GetAllCheckedoutMedia()
-        {
-            using (var cn = new SqlConnection(_connectionString))
+            var parameters = new
             {
-                var command = @"SELECT cl.CheckoutLogID, cl.BorrowerID, cl.MediaID, cl.CheckoutDate, cl.DueDate, cl.ReturnDate,
+                newCheckoutLog.BorrowerID,
+                newCheckoutLog.MediaID,
+                newCheckoutLog.CheckoutDate,
+                newCheckoutLog.DueDate,
+                newCheckoutLog.ReturnDate
+            };
+
+            return cn.ExecuteScalar<int>(command, parameters);
+        }
+    }
+
+    public List<CheckoutLog> GetAllCheckedoutMedia()
+    {
+        using (var cn = new SqlConnection(_connectionString))
+        {
+            var command = @"SELECT cl.CheckoutLogID, cl.BorrowerID, cl.MediaID, cl.CheckoutDate, cl.DueDate, cl.ReturnDate,
                                         b.BorrowerID, b.FirstName, b.LastName, b.Email, b.Phone,
                                         m.MediaID, m.MediaTypeID, m.Title, m.IsArchived
                                 FROM CheckoutLog cl
@@ -48,72 +48,72 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 WHERE cl.ReturnDate IS NULL";
 
 
-                return cn.Query<CheckoutLog, Borrower, Media, CheckoutLog>(
-                                command,
-                                (cl, borrower, media) =>
-                                {
-                                    cl.Borrower = borrower;
-                                    cl.Media = media;
-                                    return cl;
-                                },
-                                splitOn: "BorrowerID,MediaID"
-                                ).ToList();
-            }
+            return cn.Query<CheckoutLog, Borrower, Media, CheckoutLog>(
+                            command,
+                            (cl, borrower, media) =>
+                            {
+                                cl.Borrower = borrower;
+                                cl.Media = media;
+                                return cl;
+                            },
+                            splitOn: "BorrowerID,MediaID"
+                            ).ToList();
         }
+    }
 
 
-        public Borrower? GetByEmail(string email)
+    public Borrower? GetByEmail(string email)
+    {
+        using (var cn = new SqlConnection(_connectionString))
         {
-            using (var cn = new SqlConnection(_connectionString))
-            {
-                var command = @"SELECT * 
+            var command = @"SELECT * 
                                 FROM Borrower
                                 WHERE Email = @Email";
 
-                return cn.QueryFirstOrDefault<Borrower>(command, new { email });
-            }
+            return cn.QueryFirstOrDefault<Borrower>(command, new { email });
         }
+    }
 
-        public List<CheckoutLog> GetCheckedoutMediaByBorrowerID(int borrowerID)
+    public List<CheckoutLog> GetCheckedoutMediaByBorrowerID(int borrowerID)
+    {
+        using (var cn = new SqlConnection(_connectionString))
         {
-            using (var cn = new SqlConnection(_connectionString))
-            {
-                var command = @"SELECT cl.CheckoutLogID, cl.MediaID, m.Title
+            var command = @"SELECT cl.CheckoutLogID, cl.MediaID, m.Title
                                 FROM CheckoutLog cl
                                 INNER JOIN Media m ON m.MediaID = cl.MediaID
                                 WHERE cl.BorrowerID = @BorrowerID
                                 AND cl.ReturnDate IS NULL";
 
-                return cn.Query<CheckoutLog, Media, CheckoutLog>(
-                                command,
-                                (cl, m) =>
-                                {
-                                    cl.Media = m;
-                                    return cl;
-                                },
-                                new { borrowerID },
-                                splitOn: "MediaID"
-                            ).ToList();
-            }
+            return cn.Query<CheckoutLog, Media, CheckoutLog>(
+                            command,
+                            (cl, m) =>
+                            {
+                                cl.Media = m;
+                                return cl;
+                            },
+                            new { borrowerID },
+                            splitOn: "MediaID"
+                        ).ToList();
         }
+    }
 
-        public List<CheckoutLog> GetCheckoutLogsByBorrowerID(int borrowerID)
+    public List<CheckoutLog> GetCheckoutLogsByBorrowerID(int borrowerID)
+    {
+        using (var cn = new SqlConnection(_connectionString))
         {
-            using (var cn = new SqlConnection(_connectionString))
-            {
-                var command = @"SELECT *
+            var command = @"SELECT *
                                 FROM CheckoutLog
                                 WHERE BorrowerID = @BorrowerID";
 
-                return cn.Query<CheckoutLog>(command, new { borrowerID }).ToList();
-            }
+            return cn.Query<CheckoutLog>(command, new { borrowerID }).ToList();
         }
+    }
 
-        public List<Media> GetAvailableMedia()
+    public List<Media> GetAvailableMedia()
+    {
+        using (var cn = new SqlConnection(_connectionString))
         {
-            using (var cn = new SqlConnection(_connectionString))
-            {
-                var command = @"SELECT m.*
+            var command = @"SELECT m.*
                                 FROM Media m
                                 LEFT JOIN (
                                     SELECT cl.MediaID, MAX(cl.CheckoutLogID) AS LatestCheckoutLogID
@@ -124,26 +124,25 @@ namespace LibraryManager.Data.Repositories.Dapper
                                 WHERE m.IsArchived = 0
                                 AND (LatestLog.MediaID IS NULL OR cl.ReturnDate IS NOT NULL)";
 
-                return cn.Query<Media>(command).ToList();
-            }
+            return cn.Query<Media>(command).ToList();
         }
+    }
 
-        public void Update(int checkoutLogID)
+    public void Update(int checkoutLogID)
+    {
+        using (var cn = new SqlConnection(_connectionString))
         {
-            using (var cn = new SqlConnection(_connectionString))
-            {
-                var command = @"UPDATE [CheckoutLog] SET
+            var command = @"UPDATE [CheckoutLog] SET
                                         ReturnDate = @ReturnDate
                                 WHERE CheckoutLogID = @CheckoutLogID";
 
-                var parameters = new
-                {
-                    ReturnDate = DateTime.Now,
-                    checkoutLogID
-                };
+            var parameters = new
+            {
+                ReturnDate = DateTime.Now,
+                checkoutLogID
+            };
 
-                cn.Execute(command, parameters);
-            }
+            cn.Execute(command, parameters);
         }
     }
 }
