@@ -49,7 +49,7 @@ public class MediaController : Controller
     /// <summary>
     /// Retrieves a list of media specified by its type ID.
     /// </summary>
-    /// <param name="mediaTypeID">Type ID of media</param>
+    /// <param name="mediaTypeID">The ID number that uniquely identifies a media type</param>
     /// <returns>List of objects of type Media</returns>
     [HttpGet("types/{mediaTypeID}")]
     [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
@@ -111,7 +111,7 @@ public class MediaController : Controller
     /// <summary>
     /// Adds a new media item specified by its media type ID and title.
     /// </summary>
-    /// <param name="mediaToAdd">A model for adding media, which includes the media type ID and title.</param>
+    /// <param name="mediaToAdd">A JSON object for adding media, which includes a media's type ID and title.</param>
     /// <returns>A newly created media item of type AddMedia or an error response.</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -145,7 +145,7 @@ public class MediaController : Controller
     /// <summary>
     /// Archives a media item that has not been archived.
     /// </summary>
-    /// <param name="mediaID">The ID of an media item of type Media. Must be a positive integer</param>
+    /// <param name="mediaID">The ID number that uniquely identifies a media item</param>
     /// <returns>An IActionResult indicating the result of the operation</returns>
     [HttpPost("{mediaID}/archive")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -166,8 +166,8 @@ public class MediaController : Controller
     /// <summary>
     /// Edits the title, the media type ID of a media item.
     /// </summary>
-    /// <param name="mediaID">The ID of an media item of type Media. Must be a positive integer</param>
-    /// <param name="editedMedia">A model for editing media, which includes MediaID, MediaTypeID, and Title</param>
+    /// <param name="mediaID">The ID number that uniquely identifies a media item</param>
+    /// <param name="editedMedia">A JSON object for editing media, which includes a media's ID, type ID, and title</param>
     /// <returns></returns>
     [HttpPut("{mediaID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
