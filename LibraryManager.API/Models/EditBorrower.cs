@@ -2,7 +2,7 @@
 
 namespace LibraryManager.API.Models
 {
-    public class EditBorrower
+    public class EditBorrower : IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "First name is required")]
         public string FirstName { get; set; }
