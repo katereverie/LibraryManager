@@ -68,8 +68,8 @@ public class CheckoutController : Controller
     /// <summary>
     /// Checks out a media item that is neither archived nor already checked-out
     /// </summary>
-    /// <param name="mediaID">The ID of the media</param>
-    /// <param name="borrowerID">The ID of the borrower</param>
+    /// <param name="mediaID">The ID number that uniquely identifies a media</param>
+    /// <param name="borrowerID">The ID number that uniquely identifies a borrower</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
     [HttpPost("media/{mediaID}/{borrowerID}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -97,7 +97,7 @@ public class CheckoutController : Controller
     /// <summary>
     /// Returns a media item by assigning true to its IsArchived property
     /// </summary>
-    /// <param name="checkoutLogID">the ID of the checkout log</param>
+    /// <param name="checkoutLogID">The ID number that uniquely identifies a checkout log</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
     [HttpPost("returns/{checkoutLogID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
