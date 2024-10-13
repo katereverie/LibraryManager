@@ -4,7 +4,7 @@ namespace LibraryManager.UI.Workflows;
 
 public class MediaWorkflows
 {
-    public static void ListMedia(IMediaAPIClient client)
+    public static async Task ListMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
@@ -35,7 +35,7 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void AddMedia(IMediaAPIClient client)
+    public static async Task AddMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
@@ -71,7 +71,7 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void EditMedia(IMediaAPIClient client)
+    public static async Task EditMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
@@ -117,7 +117,7 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void ArchiveMedia(IMediaAPIClient client)
+    public static async Task ArchiveMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
@@ -159,7 +159,7 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void ViewArchive(IMediaAPIClient client)
+    public static async Task ViewArchive(IMediaAPIClient client)
     {
         Console.Clear();
 
@@ -177,7 +177,7 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void GetMostPopularMediaReport(IMediaAPIClient client)
+    public static async Task GetMostPopularMediaReport(IMediaAPIClient client)
     {
         Console.Clear();
 

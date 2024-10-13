@@ -4,7 +4,7 @@ namespace LibraryManager.UI.Workflows;
 
 public static class CheckoutWorkflows
 {
-    public static void Checkout(ICheckoutAPIClient client)
+    public static async Task Checkout(ICheckoutAPIClient client)
     {
         Console.Clear();
 
@@ -46,7 +46,7 @@ public static class CheckoutWorkflows
         }
     }
 
-    public static void Return(ICheckoutAPIClient client)
+    public static async Task Return(ICheckoutAPIClient client)
     {
         Console.Clear();
 
@@ -92,7 +92,7 @@ public static class CheckoutWorkflows
         IO.AnyKey();
     }
 
-    public static void CheckoutLog(ICheckoutAPIClient client)
+    public static async Task CheckoutLog(ICheckoutAPIClient client)
     {
         Console.Clear();
 

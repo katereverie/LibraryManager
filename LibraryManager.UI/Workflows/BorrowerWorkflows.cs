@@ -4,7 +4,7 @@ namespace LibraryManager.UI.Workflows;
 
 public static class BorrowerWorkflows
 {
-    public static void ListAllBorrowers(IBorrowerAPIClient client)
+    public static async Task ListAllBorrowers(IBorrowerAPIClient client)
     {
         Console.Clear();
 
@@ -26,7 +26,7 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void ViewBorrower(IBorrowerAPIClient client)
+    public static async Task ViewBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
@@ -55,7 +55,7 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void AddBorrower(IBorrowerAPIClient client)
+    public static async Task AddBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
@@ -81,7 +81,7 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void EditBorrower(IBorrowerAPIClient client)
+    public static async Task EditBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
@@ -171,7 +171,7 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void DeleteBorrower(IBorrowerAPIClient client)
+    public static async Task DeleteBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
