@@ -56,7 +56,7 @@ public class App
         } while (true);
     }
 
-    private void ManageBorrower()
+    private async Task ManageBorrower()
     {
         do
         {
@@ -66,19 +66,19 @@ public class App
             switch (choice)
             {
                 case 1:
-                    BorrowerWorkflows.ListAllBorrowers(_serviceFactory.CreateBorrowerService());
+                    await BorrowerWorkflows.ListAllBorrowers(_borrowerAPIClient);
                     break;
                 case 2:
-                    BorrowerWorkflows.ViewBorrower(_serviceFactory.CreateBorrowerService());
+                    await BorrowerWorkflows.ViewBorrower(_borrowerAPIClient);
                     break;
                 case 3:
-                    BorrowerWorkflows.EditBorrower(_serviceFactory.CreateBorrowerService());
+                    await BorrowerWorkflows.EditBorrower(_borrowerAPIClient);
                     break;
                 case 4:
-                    BorrowerWorkflows.AddBorrower(_serviceFactory.CreateBorrowerService());
+                    await BorrowerWorkflows.AddBorrower(_borrowerAPIClient);
                     break;
                 case 5:
-                    BorrowerWorkflows.DeleteBorrower(_serviceFactory.CreateBorrowerService());
+                    await BorrowerWorkflows.DeleteBorrower(_borrowerAPIClient);
                     break;
                 case 6:
                     return;
@@ -90,7 +90,7 @@ public class App
         } while (true);
     }
 
-    private void ManageMedia()
+    private async Task ManageMedia()
     {
         do
         {
@@ -100,22 +100,22 @@ public class App
             switch (choice)
             {
                 case 1:
-                    MediaWorkflows.ListMedia(_serviceFactory.CreateMediaService());
+                    await MediaWorkflows.ListMedia(_mediaAPIClient);
                     break;
                 case 2:
-                    MediaWorkflows.AddMedia(_serviceFactory.CreateMediaService());
+                    await MediaWorkflows.AddMedia(_mediaAPIClient);
                     break;
                 case 3:
-                    MediaWorkflows.EditMedia(_serviceFactory.CreateMediaService());
+                    await MediaWorkflows.EditMedia(_mediaAPIClient);
                     break;
                 case 4:
-                    MediaWorkflows.ArchiveMedia(_serviceFactory.CreateMediaService());
+                    await MediaWorkflows.ArchiveMedia(_mediaAPIClient);
                     break;
                 case 5:
-                    MediaWorkflows.ViewArchive(_serviceFactory.CreateMediaService());
+                    await MediaWorkflows.ViewArchive(_mediaAPIClient);
                     break;
                 case 6:
-                    MediaWorkflows.GetMostPopularMediaReport(_serviceFactory.CreateMediaService());
+                    await MediaWorkflows.GetMostPopularMediaReport(_mediaAPIClient);
                     break;
                 case 7:
                     return;
@@ -127,7 +127,7 @@ public class App
         } while (true);
     }
 
-    private void ManageCheckout()
+    private async Task ManageCheckout()
     {
         do
         {
@@ -137,13 +137,13 @@ public class App
             switch (choice)
             {
                 case 1:
-                    CheckoutWorkflows.Checkout(_serviceFactory.CreateCheckoutService());
+                    await CheckoutWorkflows.Checkout(_checkoutAPIClient);
                     break;
                 case 2:
-                    CheckoutWorkflows.Return(_serviceFactory.CreateCheckoutService());
+                    await CheckoutWorkflows.Return(_checkoutAPIClient);
                     break;
                 case 3:
-                    CheckoutWorkflows.CheckoutLog(_serviceFactory.CreateCheckoutService());
+                    await CheckoutWorkflows.CheckoutLog(_checkoutAPIClient);
                     break;
                 case 4:
                     return;
