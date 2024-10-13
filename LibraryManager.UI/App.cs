@@ -1,20 +1,29 @@
-﻿using LibraryManagement.UI.Workflows;
-using LibraryManagement.UI.Utilities;
-using LibraryManager.Application;
-using LibraryManager.Core.Interfaces;
-using LibraryManager.UI.Workflows;
+﻿using LibraryManager.UI.Workflows;
+using LibraryManager.UI.Interfaces;
+using LibraryManager.UI.API;
 
-namespace LibraryManagement.UI;
+namespace LibraryManager.UI;
 
 public class App
 {
-    IAppConfiguration _appConfig;
-    ServiceFactory _serviceFactory;
+    private IClientAppConfiguration _clientConfig;
+    private HttpClient _httpClient;
+    
+    private IBorrowerAPIClient _borrowerAPIClient;
+    private IMediaAPIClient _mediaAPIClient;
+    private ICheckoutAPIClient _checkoutAPIClient;
 
     public App()
     {
-        _appConfig = new AppConfiguration();
-        _serviceFactory = new ServiceFactory(_appConfig);
+        _clientConfig = new ClientAppConfiguration();
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(_clientConfig.GetBaseUrl())
+        };
+
+        _borrowerAPIClient = APIClientFactory.GetBorrowerClient(_httpClient);
+        _mediaAPIClient = APIClientFactory.GetMediaClient(_httpClient);
+        _checkoutAPIClient = APIClientFactory.GetCheckoutClient(_httpClient);
     }
 
     public void Run()
