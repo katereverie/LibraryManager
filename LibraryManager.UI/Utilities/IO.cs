@@ -49,6 +49,23 @@ public static class IO
         } while (true);
     }
 
+    public static string GetEditedString(string prompt, string originalString)
+    {
+        string? input;
+
+        do
+        {
+            Console.Write(prompt);
+            input = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return originalString;
+            }
+
+            return input;
+        } while (true);
+    }
+
     public static int GetMediaTypeID(List<MediaType> typeList, string prompt = "Enter media type ID: ")
     {
         do
@@ -137,8 +154,14 @@ public static class IO
         Console.WriteLine();
     }
 
-    public static void PrintBorrowerCheckoutLog(List<CheckoutLog> logs)
+    public static void PrintBorrowerCheckoutLog(List<CheckoutLog>? logs)
     {
+        if (logs == null)
+        {
+            Console.WriteLine("No checkout records.\n");
+            return;
+        }
+
         PrintHeader(" Checkout Record ");
         Console.WriteLine($"{"Media ID",-10} {"Title",-40} {"Checkout Date",-20} {"Return Date",-20}");
         Console.WriteLine(new string('=', 100));
