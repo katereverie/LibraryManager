@@ -1,4 +1,6 @@
 ﻿using LibraryManager.UI.Interfaces;
+using LibraryManager.UI.Models;
+using LibraryManager.UI.Utilities;
 
 namespace LibraryManager.UI.Workflows;
 
@@ -8,19 +10,18 @@ public static class BorrowerWorkflows
     {
         Console.Clear();
 
-        var result = client.GetAllBorrowers();
+        try
+        {
+            var borrowers = await client.GetAllBorrowersAsync();
 
-        if (!result.Ok)
-        {
-            Console.WriteLine(result.Message);
+            if (borrowers.Any())
+                IO.PrintBorrowerList(borrowers);
+            else
+                Console.WriteLine("Currently, there's no registered borrower.");
         }
-        else if (result.Data.Any())
+        catch (Exception ex)
         {
-            IO.PrintBorrowerList(result.Data);
-        }
-        else
-        {
-            Console.WriteLine("Currently, there's no registered borrower.");
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
@@ -30,26 +31,25 @@ public static class BorrowerWorkflows
     {
         Console.Clear();
 
-        var email = IO.GetRequiredString("Enter borrower email: ");
-
-        var getBorrowerResult = client.GetBorrower(email);
-        if (!getBorrowerResult.Ok)
+        try
         {
-            Console.WriteLine(getBorrowerResult.Message);
-            IO.AnyKey();
-            return;
+            var email = IO.GetRequiredString("Enter borrower email: ");
+
+            var borrower = await client.GetBorrowerAsync(email);
+
+            if (borrower == null)
+            {
+                Console.WriteLine($"Borrower with the email address: {email} not found.");
+            }
+            else
+            {
+                IO.PrintBorrowerInformation(borrower);
+                IO.PrintBorrowerCheckoutLog(borrower.CheckoutLogs);
+            }
         }
-
-        IO.PrintBorrowerInformation(getBorrowerResult.Data);
-
-        var getCheckoutLogsResult = client.GetCheckoutLogsByBorrower(getBorrowerResult.Data);
-        if (!getCheckoutLogsResult.Ok)
+        catch (Exception ex)
         {
-            Console.WriteLine(getCheckoutLogsResult.Message);
-        }
-        else
-        {
-            IO.PrintBorrowerCheckoutLog(getCheckoutLogsResult.Data);
+            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
         }
 
         IO.AnyKey();
@@ -59,23 +59,22 @@ public static class BorrowerWorkflows
     {
         Console.Clear();
 
-        Borrower newBorrower = new Borrower
+        try
         {
-            FirstName = IO.GetRequiredString("First Name: "),
-            LastName = IO.GetRequiredString("Last Name: "),
-            Email = IO.GetRequiredString("Email: "),
-            Phone = IO.GetRequiredString("Phone: ")
-        };
+            var newBorrower = new AddBorrowerRequest
+            {
+                FirstName = IO.GetRequiredString("First Name: "),
+                LastName = IO.GetRequiredString("Last Name: "),
+                Email = IO.GetRequiredString("Email: "),
+                Phone = IO.GetRequiredString("Phone: ")
+            };
 
-        var addResult = client.AddBorrower(newBorrower);
-
-        if (addResult.Ok)
-        {
+            await client.AddBorrowerAsync(newBorrower);
             Console.WriteLine($"New Borrower successfully registered.");
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine(addResult.Message);
+            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
         }
 
         IO.AnyKey();
@@ -85,87 +84,34 @@ public static class BorrowerWorkflows
     {
         Console.Clear();
 
-        var getBorrowerResult = client.GetBorrower(IO.GetRequiredString("Enter the Email of the Borrower to be edited: "));
-
-        if (!getBorrowerResult.Ok)
+        try
         {
-            Console.WriteLine(getBorrowerResult.Message);
-        }
-        else
-        {
-            Borrower b = getBorrowerResult.Data;
-            int option = 0;
+            var email = IO.GetRequiredString("Enter the Email of the Borrower to be edited: ");
+            var borrower = await client.GetBorrowerAsync(email);
 
-            while (true)
+            if (borrower == null)
             {
-                Console.WriteLine("\nYou have the following edit options.");
-                Menus.DisplayEditBorrowerOptions();
-                option = IO.GetPositiveInteger("Enter edit options (1-5) or return (6): ");
-
-                if (option >= 1 && option <= 6)
-                {
-                    break;
-                }
-
-                Console.WriteLine("Invalid option.");
-                IO.AnyKey();
-            }
-
-
-            switch (option)
-            {
-                case 1:
-                    b.FirstName = IO.GetRequiredString("Enter new First Name: ");
-                    break;
-                case 2:
-                    b.LastName = IO.GetRequiredString("Enter new Last Name: ");
-                    break;
-                case 3:
-                    while (true)
-                    {
-                        string newEmail = IO.GetRequiredString("Enter new Email address: ");
-                        var duplicateResult = client.GetBorrower(newEmail);
-                        if (duplicateResult.Data == null)
-                        {
-                            b.Email = newEmail;
-                            break;
-                        }
-                        Console.WriteLine($"{newEmail} has already been taken.");
-                    }
-                    break;
-                case 4:
-                    b.Phone = IO.GetRequiredString("Enter new phone number: ");
-                    break;
-                case 5:
-                    b.FirstName = IO.GetRequiredString("Enter new First name: ");
-                    b.LastName = IO.GetRequiredString("Enter new Last name:");
-                    while (true)
-                    {
-                        string newEmail = IO.GetRequiredString("Enter new Email address: ");
-                        var duplicateResult = client.GetBorrower(newEmail);
-                        if (duplicateResult.Data == null)
-                        {
-                            b.Email = newEmail;
-                            break;
-                        }
-                        Console.WriteLine($"{newEmail} has already been taken.");
-                    }
-                    b.Phone = IO.GetRequiredString("Enter new phone number:");
-                    break;
-                case 6:
-                    return;
-            }
-
-            var updateResult = client.UpdateBorrower(b);
-
-            if (updateResult.Ok)
-            {
-                Console.WriteLine($"Borrower successfully edited.");
+                Console.WriteLine($"Borrower with the email address: {email} not found.");
             }
             else
             {
-                Console.WriteLine(updateResult.Message);
+                Console.WriteLine("Edit Borrower (Press \"Enter\" to skip)");
+                var editedBorrower = new EditBorrowerRequest
+                {
+                    FirstName = IO.GetEditedString($"First Name ({borrower.FirstName}): ", borrower.FirstName),
+                    LastName = IO.GetEditedString($"Last Name ({borrower.LastName}): ", borrower.LastName),
+                    Email = IO.GetEditedString($"Email ({borrower.Email}): ", borrower.Email),
+                    Phone = IO.GetEditedString($"Phone ({borrower.Phone}): ", borrower.Phone),
+                };
+
+                
+                await client.EditBorrowerAsync(editedBorrower);
+                Console.WriteLine($"Borrower successfully edited.");
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
         }
 
         IO.AnyKey();
@@ -175,46 +121,47 @@ public static class BorrowerWorkflows
     {
         Console.Clear();
 
-        var getResult = client.GetBorrower(IO.GetRequiredString("Enter the Email of the borrower to be deleted: "));
-
-        if (!getResult.Ok)
+        try
         {
-            Console.WriteLine(getResult.Message);
-        }
-        else
-        {
-            int choice = 0;
+            var email = IO.GetRequiredString("Enter the Email of the borrower to be deleted: ");
+            var borrower = await client.GetBorrowerAsync(email);
 
-            do
+            if (borrower == null)
             {
-                Console.WriteLine("Deleting a borrower will result in erasing all information related to the borrower.");
-                Console.WriteLine("Are you sure you'd like to proceed?\n1. Proceed\n2. Cancel");
-                choice = IO.GetPositiveInteger("Enter choice: ");
-                if (choice != 1 && choice != 2)
-                {
-                    Console.WriteLine("Invalid choice. Please enter either 1 or 2.");
-                    continue;
-                }
-                break;
-            } while (true);
-
-            switch (choice)
-            {
-                case 1:
-                    var deleteResult = client.DeleteBorrower(getResult.Data);
-                    if (deleteResult.Ok)
-                    {
-                        Console.WriteLine("Borrower successfully deleted.");
-                    }
-                    else
-                    {
-                        Console.WriteLine(deleteResult.Message);
-                    }
-                    break;
-                case 2:
-                    Console.WriteLine("Delete Process cancelled.");
-                    break;
+                Console.WriteLine($"Borrower with the email address: {email} not found.");
             }
+            else
+            {
+                int choice = 0;
+
+                do
+                {
+                    Console.WriteLine("Deleting a borrower will result in erasing all information related to the borrower.");
+                    Console.WriteLine("Are you sure you'd like to proceed?\n1. Proceed\n2. Cancel");
+                    choice = IO.GetPositiveInteger("Enter choice: ");
+                    if (choice != 1 && choice != 2)
+                    {
+                        Console.WriteLine("Invalid choice. Please enter either 1 or 2.");
+                        continue;
+                    }
+                    break;
+                } while (true);
+
+                switch (choice)
+                {
+                    case 1:
+                        await client.DeleteBorrowerAsync(borrower.BorrowerID);
+                        Console.WriteLine("Borrower successfully deleted.");
+                        break;
+                    case 2:
+                        Console.WriteLine("Delete Process cancelled.");
+                        break;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
         }
 
         IO.AnyKey();
