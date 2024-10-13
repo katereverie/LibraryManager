@@ -1,14 +1,16 @@
-﻿namespace LibraryManager.UI.Workflows;
+﻿using LibraryManager.UI.Interfaces;
+
+namespace LibraryManager.UI.Workflows;
 
 public static class CheckoutWorkflows
 {
-    public static void Checkout(ICheckoutService serivce)
+    public static void Checkout(ICheckoutAPIClient client)
     {
         Console.Clear();
 
         Borrower borrower;
         string email = IO.GetRequiredString("Enter Borrower's Email: ");
-        var getBorrowerResult = serivce.GetBorrowerByEmail(email);
+        var getBorrowerResult = client.GetBorrowerByEmail(email);
 
         if (!getBorrowerResult.Ok)
         {
@@ -22,7 +24,7 @@ public static class CheckoutWorkflows
         int exitChoice = 0;
         while (exitChoice != 2)
         {
-            var getMediaResult = serivce.GetAvailableMedia();
+            var getMediaResult = client.GetAvailableMedia();
 
             if (!getMediaResult.Ok)
             {
@@ -36,7 +38,7 @@ public static class CheckoutWorkflows
 
             int mediaID = IO.GetMediaID(mediaList, "Enter the ID of the media to check out: ");
 
-            var checkoutResult = serivce.CheckoutMedia(mediaID, borrower.BorrowerID);
+            var checkoutResult = client.CheckoutMedia(mediaID, borrower.BorrowerID);
 
             Console.WriteLine(checkoutResult.Ok ? "Media successfully checked out." : checkoutResult.Message);
            
@@ -44,13 +46,13 @@ public static class CheckoutWorkflows
         }
     }
 
-    public static void Return(ICheckoutService serivce)
+    public static void Return(ICheckoutAPIClient client)
     {
         Console.Clear();
 
         Borrower borrower;
         string email = IO.GetRequiredString("Enter Borrower's Email: ");
-        var getBorrowerResult = serivce.GetBorrowerByEmail(email);
+        var getBorrowerResult = client.GetBorrowerByEmail(email);
 
         if (!getBorrowerResult.Ok)
         {
@@ -64,7 +66,7 @@ public static class CheckoutWorkflows
         int returnOption = 0;
         while (returnOption != 2)
         {
-            var getCheckoutLogResult = serivce.GetCheckedOutMediaByBorrowerID(borrower.BorrowerID);
+            var getCheckoutLogResult = client.GetCheckedOutMediaByBorrowerID(borrower.BorrowerID);
             if (!getCheckoutLogResult.Ok)
             {
                 Console.WriteLine(getCheckoutLogResult.Message);
@@ -77,7 +79,7 @@ public static class CheckoutWorkflows
             IO.PrintBorrowersCheckedoutMedia(checkoutLogList);
 
             int logID = IO.GetCheckoutLogID(checkoutLogList, "Enter the Log ID to return: ");
-            var returnResult = serivce.ReturnMedia(logID);
+            var returnResult = client.ReturnMedia(logID);
 
             Console.WriteLine(returnResult.Ok ? "Return successfull" : returnResult.Message);
 
@@ -90,11 +92,11 @@ public static class CheckoutWorkflows
         IO.AnyKey();
     }
 
-    public static void CheckoutLog(ICheckoutService serivce)
+    public static void CheckoutLog(ICheckoutAPIClient client)
     {
         Console.Clear();
 
-        var getMediaResult = serivce.GetAllCheckedoutMedia();
+        var getMediaResult = client.GetAllCheckedoutMedia();
 
         if (!getMediaResult.Ok)
         {

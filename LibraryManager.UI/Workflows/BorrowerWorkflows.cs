@@ -1,12 +1,14 @@
-﻿namespace LibraryManagement.UI.Workflows;
+﻿using LibraryManager.UI.Interfaces;
+
+namespace LibraryManager.UI.Workflows;
 
 public static class BorrowerWorkflows
 {
-    public static void ListAllBorrowers(IBorrowerService service)
+    public static void ListAllBorrowers(IBorrowerAPIClient client)
     {
         Console.Clear();
 
-        var result = service.GetAllBorrowers();
+        var result = client.GetAllBorrowers();
 
         if (!result.Ok)
         {
@@ -24,13 +26,13 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void ViewBorrower(IBorrowerService service)
+    public static void ViewBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
         var email = IO.GetRequiredString("Enter borrower email: ");
 
-        var getBorrowerResult = service.GetBorrower(email);
+        var getBorrowerResult = client.GetBorrower(email);
         if (!getBorrowerResult.Ok)
         {
             Console.WriteLine(getBorrowerResult.Message);
@@ -40,7 +42,7 @@ public static class BorrowerWorkflows
 
         IO.PrintBorrowerInformation(getBorrowerResult.Data);
 
-        var getCheckoutLogsResult = service.GetCheckoutLogsByBorrower(getBorrowerResult.Data);
+        var getCheckoutLogsResult = client.GetCheckoutLogsByBorrower(getBorrowerResult.Data);
         if (!getCheckoutLogsResult.Ok)
         {
             Console.WriteLine(getCheckoutLogsResult.Message);
@@ -53,7 +55,7 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void AddBorrower(IBorrowerService service)
+    public static void AddBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
@@ -65,7 +67,7 @@ public static class BorrowerWorkflows
             Phone = IO.GetRequiredString("Phone: ")
         };
 
-        var addResult = service.AddBorrower(newBorrower);
+        var addResult = client.AddBorrower(newBorrower);
 
         if (addResult.Ok)
         {
@@ -79,11 +81,11 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void EditBorrower(IBorrowerService service)
+    public static void EditBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
-        var getBorrowerResult = service.GetBorrower(IO.GetRequiredString("Enter the Email of the Borrower to be edited: "));
+        var getBorrowerResult = client.GetBorrower(IO.GetRequiredString("Enter the Email of the Borrower to be edited: "));
 
         if (!getBorrowerResult.Ok)
         {
@@ -122,7 +124,7 @@ public static class BorrowerWorkflows
                     while (true)
                     {
                         string newEmail = IO.GetRequiredString("Enter new Email address: ");
-                        var duplicateResult = service.GetBorrower(newEmail);
+                        var duplicateResult = client.GetBorrower(newEmail);
                         if (duplicateResult.Data == null)
                         {
                             b.Email = newEmail;
@@ -140,7 +142,7 @@ public static class BorrowerWorkflows
                     while (true)
                     {
                         string newEmail = IO.GetRequiredString("Enter new Email address: ");
-                        var duplicateResult = service.GetBorrower(newEmail);
+                        var duplicateResult = client.GetBorrower(newEmail);
                         if (duplicateResult.Data == null)
                         {
                             b.Email = newEmail;
@@ -154,7 +156,7 @@ public static class BorrowerWorkflows
                     return;
             }
 
-            var updateResult = service.UpdateBorrower(b);
+            var updateResult = client.UpdateBorrower(b);
 
             if (updateResult.Ok)
             {
@@ -169,11 +171,11 @@ public static class BorrowerWorkflows
         IO.AnyKey();
     }
 
-    public static void DeleteBorrower(IBorrowerService service)
+    public static void DeleteBorrower(IBorrowerAPIClient client)
     {
         Console.Clear();
 
-        var getResult = service.GetBorrower(IO.GetRequiredString("Enter the Email of the borrower to be deleted: "));
+        var getResult = client.GetBorrower(IO.GetRequiredString("Enter the Email of the borrower to be deleted: "));
 
         if (!getResult.Ok)
         {
@@ -199,7 +201,7 @@ public static class BorrowerWorkflows
             switch (choice)
             {
                 case 1:
-                    var deleteResult = service.DeleteBorrower(getResult.Data);
+                    var deleteResult = client.DeleteBorrower(getResult.Data);
                     if (deleteResult.Ok)
                     {
                         Console.WriteLine("Borrower successfully deleted.");

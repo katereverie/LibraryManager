@@ -1,12 +1,14 @@
-﻿namespace LibraryManager.UI.Workflows;
+﻿using LibraryManager.UI.Interfaces;
+
+namespace LibraryManager.UI.Workflows;
 
 public class MediaWorkflows
 {
-    public static void ListMedia(IMediaService service)
+    public static void ListMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var getTypeResult = service.GetAllMediaTypes();
+        var getTypeResult = client.GetAllMediaTypes();
         if (!getTypeResult.Ok)
         {
             Console.WriteLine(getTypeResult.Message);
@@ -19,7 +21,7 @@ public class MediaWorkflows
 
         int typeID = IO.GetMediaTypeID(typeList);
 
-        var result = service.GetMediaByType(typeID);
+        var result = client.GetMediaByType(typeID);
 
         if (!result.Ok)
         {
@@ -33,11 +35,11 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void AddMedia(IMediaService service)
+    public static void AddMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var getTypeResult = service.GetAllMediaTypes();
+        var getTypeResult = client.GetAllMediaTypes();
         if (!getTypeResult.Ok)
         {
             Console.WriteLine(getTypeResult.Message);
@@ -55,7 +57,7 @@ public class MediaWorkflows
             IsArchived = false
         };
 
-        var result = service.AddMedia(newMedia);
+        var result = client.AddMedia(newMedia);
 
         if (result.Ok)
         {
@@ -69,11 +71,11 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void EditMedia(IMediaService service)
+    public static void EditMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var getTypeResult = service.GetAllMediaTypes();
+        var getTypeResult = client.GetAllMediaTypes();
         if (!getTypeResult.Ok)
         {
             Console.WriteLine(getTypeResult.Message);
@@ -84,7 +86,7 @@ public class MediaWorkflows
         IO.PrintMediaTypeList(typeList);
         int typeID = IO.GetMediaTypeID(typeList);
 
-        var getResult = service.GetUnarchivedMediaByType(typeID);
+        var getResult = client.GetUnarchivedMediaByType(typeID);
         if (!getResult.Ok)
         {
             Console.WriteLine(getResult.Message);
@@ -101,7 +103,7 @@ public class MediaWorkflows
             mediaToEdit.Title = IO.GetRequiredString("Enter new title: ");
             mediaToEdit.MediaTypeID = IO.GetMediaTypeID(typeList, "Enter new type ID: ");
 
-            var editResult = service.EditMedia(mediaToEdit);
+            var editResult = client.EditMedia(mediaToEdit);
             if (editResult.Ok)
             {
                 Console.WriteLine("Media successfully updated.");
@@ -115,11 +117,11 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void ArchiveMedia(IMediaService service)
+    public static void ArchiveMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var getTypeResult = service.GetAllMediaTypes();
+        var getTypeResult = client.GetAllMediaTypes();
         if (!getTypeResult.Ok)
         {
             Console.WriteLine(getTypeResult.Message);
@@ -130,7 +132,7 @@ public class MediaWorkflows
         IO.PrintMediaTypeList(typeList);
         int typeID = IO.GetMediaTypeID(typeList);
 
-        var getMediaResult = service.GetUnarchivedMediaByType(typeID);
+        var getMediaResult = client.GetUnarchivedMediaByType(typeID);
 
         if (!getMediaResult.Ok)
         {
@@ -142,7 +144,7 @@ public class MediaWorkflows
             IO.PrintMediaList(mediaList);
             int mediaID = IO.GetMediaID(mediaList, "Enter the ID of the media to be archived: ");
 
-            var archiveResult = service.ArchiveMedia(mediaID);
+            var archiveResult = client.ArchiveMedia(mediaID);
 
             if (archiveResult.Ok)
             {
@@ -157,11 +159,11 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void ViewArchive(IMediaService service)
+    public static void ViewArchive(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var result = service.GetAllArchivedMedia();
+        var result = client.GetAllArchivedMedia();
 
         if (result.Ok)
         {
@@ -175,11 +177,11 @@ public class MediaWorkflows
         IO.AnyKey();
     }
 
-    public static void GetMostPopularMediaReport(IMediaService service)
+    public static void GetMostPopularMediaReport(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var result = service.GetTop3MostPopularMedia();
+        var result = client.GetTop3MostPopularMedia();
 
         if (result.Ok)
         {
