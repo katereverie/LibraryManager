@@ -6,5 +6,4 @@ public class TopThreeMedia
     public string MediaTypeName { get; set; }
     public string Title { get; set; }
     public int CheckoutCount { get; set; }
-    
 }
