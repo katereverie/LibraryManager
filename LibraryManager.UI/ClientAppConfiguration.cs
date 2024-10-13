@@ -1,7 +1,7 @@
 ﻿using LibraryManager.UI.Interfaces;
 using Microsoft.Extensions.Configuration;
 
-namespace LibraryManagement.UI;
+namespace LibraryManager.UI;
 
 public class ClientAppConfiguration : IClientAppConfiguration
 {

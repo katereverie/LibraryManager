@@ -1,6 +1,4 @@
-﻿using LibraryManager.Core.Entities;
-
-namespace LibraryManagement.UI.Utilities;
+﻿namespace LibraryManager.UI.Utilities;
 
 public static class IO
 {

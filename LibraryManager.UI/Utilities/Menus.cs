@@ -1,4 +1,4 @@
-﻿namespace LibraryManagement.UI.Utilities;
+﻿namespace LibraryManager.UI.Utilities;
 
 public class Menus
 {
