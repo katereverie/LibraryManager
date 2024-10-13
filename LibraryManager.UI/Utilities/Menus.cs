@@ -51,19 +51,6 @@ public class Menus
         Console.WriteLine("4. Go back to previous Menu\n");
     }
 
-    public static void DisplayEditBorrowerOptions()
-    {
-        Console.WriteLine();
-        Console.WriteLine("Edit Options");
-        Console.WriteLine("============");
-        Console.WriteLine("1. First Name");
-        Console.WriteLine("2. Last Name");
-        Console.WriteLine("3. Email");
-        Console.WriteLine("4. Phone Number");
-        Console.WriteLine("5. Edit All Information");
-        Console.WriteLine("6. Go back to previous menu\n");
-    }
-
     public static void DisplayCheckoutOptions()
     {
         Console.WriteLine();
