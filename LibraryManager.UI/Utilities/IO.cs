@@ -1,4 +1,6 @@
-﻿namespace LibraryManager.UI.Utilities;
+﻿using LibraryManager.UI.Models;
+
+namespace LibraryManager.UI.Utilities;
 
 public static class IO
 {
