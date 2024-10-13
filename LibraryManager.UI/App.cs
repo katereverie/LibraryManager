@@ -1,6 +1,7 @@
 ﻿using LibraryManager.UI.Workflows;
 using LibraryManager.UI.Interfaces;
 using LibraryManager.UI.API;
+using LibraryManager.UI.Utilities;
 
 namespace LibraryManager.UI;
 
@@ -26,7 +27,7 @@ public class App
         _checkoutAPIClient = APIClientFactory.GetCheckoutClient(_httpClient);
     }
 
-    public void Run()
+    public async Task Run()
     {
         do
         {
@@ -37,13 +38,13 @@ public class App
             switch (choice)
             {
                 case 1:
-                    ManageBorrower();
+                    await ManageBorrower();
                     break;
                 case 2:
-                    ManageMedia();
+                    await ManageMedia();
                     break;
                 case 3:
-                    ManageCheckout();
+                    await ManageCheckout();
                     break;
                 case 4:
                     return;

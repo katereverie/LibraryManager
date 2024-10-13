@@ -1,4 +1,9 @@
 ﻿using LibraryManager.UI;
 
-var app = new App();
-app.Run();
+await RunAsync();
+
+async Task RunAsync()
+{
+    var app = new App();
+    await app.Run();
+}
