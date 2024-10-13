@@ -39,15 +39,15 @@ public class BorrowerAPIClient : IBorrowerAPIClient
         return JsonSerializer.Deserialize<Borrower>(content, _options);
     }
 
-    public async Task<Borrower> AddBorrowerAsync(AddBorrowerRequest borrower)
+    public async Task AddBorrowerAsync(AddBorrowerRequest borrower)
     {
         var response = await _httpClient.PostAsJsonAsync(PATH, borrower);
-        var content = await response.Content.ReadAsStringAsync();
+        
 
-        if (!response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode) {
+            var content = await response.Content.ReadAsStringAsync();
             throw new HttpRequestException($"Error adding borrower: {content}");
-
-        return JsonSerializer.Deserialize<Borrower>(content, _options);
+        }
     }
 
     public async Task EditBorrowerAsync(EditBorrowerRequest borrower)
