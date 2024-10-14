@@ -1,35 +1,34 @@
 ﻿using LibraryManager.UI.Interfaces;
+using LibraryManager.UI.Models;
+using LibraryManager.UI.Utilities;
 
 namespace LibraryManager.UI.Workflows;
 
-public class MediaWorkflows
+public static class MediaWorkflows
 {
     public static async Task ListMedia(IMediaAPIClient client)
     {
         Console.Clear();
 
-        var getTypeResult = client.GetAllMediaTypes();
-        if (!getTypeResult.Ok)
+        try
         {
-            Console.WriteLine(getTypeResult.Message);
-            return;
+            var mediaTypes = await client.GetMediaTypesAsync();
+
+            if (mediaTypes.Any())
+            {
+                IO.PrintMediaTypeList(mediaTypes);
+                int typeID = IO.GetMediaTypeID(mediaTypes);
+                var selectedMedia = await client.GetMediaByTypeAsync(typeID);
+                IO.PrintMediaList(selectedMedia);
+            }
+            else
+            {
+                Console.WriteLine("No media type found.");
+            }
         }
-
-        var typeList = getTypeResult.Data;
-
-        IO.PrintMediaTypeList(typeList);
-
-        int typeID = IO.GetMediaTypeID(typeList);
-
-        var result = client.GetMediaByType(typeID);
-
-        if (!result.Ok)
+        catch (Exception ex)
         {
-            Console.WriteLine(result.Message);
-        }
-        else
-        {
-            IO.PrintMediaList(result.Data);
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
@@ -39,33 +38,27 @@ public class MediaWorkflows
     {
         Console.Clear();
 
-        var getTypeResult = client.GetAllMediaTypes();
-        if (!getTypeResult.Ok)
+        try
         {
-            Console.WriteLine(getTypeResult.Message);
-            return;
+            var mediaTypes = await client.GetMediaTypesAsync();
+
+            if (mediaTypes.Any())
+            {
+                IO.PrintMediaTypeList(mediaTypes);
+                int typeID = IO.GetMediaTypeID(mediaTypes);
+                AddMediaRequest media = new()
+                {
+                    MediaTypeID = typeID,
+                    Title = IO.GetRequiredString("Enter media title: "),
+                };
+
+                var newMedia = await client.AddMediaAsync(media);
+                Console.WriteLine($"new Media with ID: {newMedia.MediaID} added successfully.");
+            }
         }
-
-        var typeList = getTypeResult.Data;
-
-        IO.PrintMediaTypeList(typeList);
-
-        Media newMedia = new Media
+        catch (Exception ex)
         {
-            MediaTypeID = IO.GetMediaTypeID(typeList),
-            Title = IO.GetRequiredString("Enter media title: "),
-            IsArchived = false
-        };
-
-        var result = client.AddMedia(newMedia);
-
-        if (result.Ok)
-        {
-            Console.WriteLine($"new Media with ID: {result.Data} added successfully.");
-        }
-        else
-        {
-            Console.WriteLine(result.Message);
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
@@ -75,43 +68,31 @@ public class MediaWorkflows
     {
         Console.Clear();
 
-        var getTypeResult = client.GetAllMediaTypes();
-        if (!getTypeResult.Ok)
+        try
         {
-            Console.WriteLine(getTypeResult.Message);
-            return;
-        }
-        var typeList = getTypeResult.Data;
-
-        IO.PrintMediaTypeList(typeList);
-        int typeID = IO.GetMediaTypeID(typeList);
-
-        var getResult = client.GetUnarchivedMediaByType(typeID);
-        if (!getResult.Ok)
-        {
-            Console.WriteLine(getResult.Message);
-        }
-        else
-        {
-            var mediaList = getResult.Data;
-
-            IO.PrintMediaList(mediaList);
-            int mediaID = IO.GetMediaID(mediaList, "Enter the ID of the media to edit: ");
-
-            var mediaToEdit = mediaList.Find(m => m.MediaID == mediaID);
-
-            mediaToEdit.Title = IO.GetRequiredString("Enter new title: ");
-            mediaToEdit.MediaTypeID = IO.GetMediaTypeID(typeList, "Enter new type ID: ");
-
-            var editResult = client.EditMedia(mediaToEdit);
-            if (editResult.Ok)
+            var mediaTypes = await client.GetMediaTypesAsync();
+            if (mediaTypes.Any())
             {
+                IO.PrintMediaTypeList(mediaTypes);
+                int typeID = IO.GetMediaTypeID(mediaTypes);
+                var selectedMedias = await client.GetMediaByTypeAsync(typeID);
+                IO.PrintMediaList(selectedMedias);
+                int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
+                var mediaToEdit = selectedMedias.Single(m => m.MediaID == mediaID);
+                mediaToEdit.Title = IO.GetRequiredString("Enter new title: ");
+                mediaToEdit.MediaTypeID = IO.GetMediaTypeID(mediaTypes, "Enter new type ID: ");
+
+                await client.EditMediaAsync(mediaToEdit);
                 Console.WriteLine("Media successfully updated.");
             }
             else
             {
-                Console.WriteLine(editResult.Message);
+                Console.WriteLine("No media type found.");
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
@@ -121,39 +102,30 @@ public class MediaWorkflows
     {
         Console.Clear();
 
-        var getTypeResult = client.GetAllMediaTypes();
-        if (!getTypeResult.Ok)
+        try
         {
-            Console.WriteLine(getTypeResult.Message);
-            return;
-        }
-
-        var typeList = getTypeResult.Data;
-        IO.PrintMediaTypeList(typeList);
-        int typeID = IO.GetMediaTypeID(typeList);
-
-        var getMediaResult = client.GetUnarchivedMediaByType(typeID);
-
-        if (!getMediaResult.Ok)
-        {
-            Console.WriteLine(getMediaResult.Message);
-        }
-        else
-        {
-            var mediaList = getMediaResult.Data;
-            IO.PrintMediaList(mediaList);
-            int mediaID = IO.GetMediaID(mediaList, "Enter the ID of the media to be archived: ");
-
-            var archiveResult = client.ArchiveMedia(mediaID);
-
-            if (archiveResult.Ok)
+            var mediaTypes = await client.GetMediaTypesAsync();
+            if (mediaTypes.Any())
             {
+                IO.PrintMediaTypeList(mediaTypes);
+                int typeID = IO.GetMediaTypeID(mediaTypes);
+                var selectedMedias = await client.GetMediaByTypeAsync(typeID);
+                IO.PrintMediaList(selectedMedias);
+                int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
+                var mediaToArchive = selectedMedias.Single(m => m.MediaID == mediaID);
+                mediaToArchive.IsArchived = true;
+
+                await client.ArchiveMediaAsync(mediaToArchive);
                 Console.WriteLine("Media successfully archived.");
             }
             else
             {
-                Console.WriteLine(archiveResult.Message);
+                Console.WriteLine("No media type found.");
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
@@ -163,15 +135,22 @@ public class MediaWorkflows
     {
         Console.Clear();
 
-        var result = client.GetAllArchivedMedia();
+        try
+        {
+            var archivedMedias = await client.GetArchivedMediaAsync();
 
-        if (result.Ok)
-        {
-            IO.PrintMediaArchive(result.Data);
+            if (archivedMedias.Any())
+            {
+                IO.PrintMediaArchive(archivedMedias);
+            }
+            else
+            {
+                Console.WriteLine("No archived media items found.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine(result.Message);
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
@@ -181,16 +160,22 @@ public class MediaWorkflows
     {
         Console.Clear();
 
-        var result = client.GetTop3MostPopularMedia();
-
-        if (result.Ok)
+        try
         {
-            IO.PrintMediaReport(result.Data);
+            var topMedias = await client.GetMostPopularMediaAsync();
 
+            if (topMedias.Any())
+            {
+                IO.PrintMediaReport(topMedias);
+            }
+            else
+            {
+                Console.WriteLine("No top media items found.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine(result.Message);
+            Console.WriteLine($"API request failed.\n{ex.Message}");
         }
 
         IO.AnyKey();
