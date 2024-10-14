@@ -29,7 +29,7 @@ public class CheckoutController : Controller
     /// Retrieves a list of available media that can be checked out
     /// </summary>
     /// <returns>List of available media objects and an IActionResult indicating corresponding HTTP response</returns>
-    [HttpGet]
+    [HttpGet("")]
     [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
     public IActionResult GetAvailableMedia()
     {
@@ -95,11 +95,11 @@ public class CheckoutController : Controller
     }
 
     /// <summary>
-    /// Returns a media item by assigning true to its IsArchived property
+    /// Returns a media item by assigning a return date to the corresponding checkout log
     /// </summary>
     /// <param name="checkoutLogID">The ID number that uniquely identifies a checkout log</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
-    [HttpPost("returns/{checkoutLogID}")]
+    [HttpPut("returns/{checkoutLogID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult ReturnMedia(int checkoutLogID)
     {
