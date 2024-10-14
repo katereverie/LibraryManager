@@ -53,7 +53,7 @@ public class MediaController : Controller
     /// <returns>List of objects of type Media</returns>
     [HttpGet("types/{mediaTypeID}")]
     [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
-    public IActionResult ListMediaByType(int mediaTypeID)
+    public IActionResult GetMediaByType(int mediaTypeID)
     {
         var result = _mediaService.GetMediaByType(mediaTypeID);
 
@@ -114,7 +114,7 @@ public class MediaController : Controller
     /// <param name="mediaToAdd">A JSON object for adding media, which includes a media's type ID and title.</param>
     /// <returns>A newly created media item of type AddMedia or an error response.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Media), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult AddMedia(AddMedia mediaToAdd)
     {
@@ -147,7 +147,7 @@ public class MediaController : Controller
     /// </summary>
     /// <param name="mediaID">The ID number that uniquely identifies a media item</param>
     /// <returns>An IActionResult indicating the result of the operation</returns>
-    [HttpPost("{mediaID}/archive")]
+    [HttpPut("{mediaID}/archive")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult ArchiveMedia(int mediaID)
     {
