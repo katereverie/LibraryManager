@@ -16,23 +16,51 @@ public class CheckoutAPIClient : ICheckoutAPIClient
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
-    public Task CheckoutMediaAsync(int mediaId, string borrowerEmail)
+    public async Task<List<Media>> GetAvailableMediaAsync()
     {
-        throw new NotImplementedException();
+        var response = await _httpClient.GetAsync(PATH);
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Error getting available medias: {content}");
+        }
+
+        return JsonSerializer.Deserialize<List<Media>>(content, _options);
     }
 
-    public Task<List<Media>> GetAvailableMediaAsync()
+    public async Task<List<CheckoutLog>> GetCheckoutLogAsync()
     {
-        throw new NotImplementedException();
+        var response = await _httpClient.GetAsync($"{PATH}/log");
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Error getting checkout logs: {content}");
+        }
+
+        return JsonSerializer.Deserialize<List<CheckoutLog>>(content, _options);
     }
 
-    public Task<List<CheckoutLog>> GetCheckoutLogAsync()
+    public async Task CheckoutMediaAsync(int mediaID, string borrowerEmail)
     {
-        throw new NotImplementedException();
+        var response = await _httpClient.PostAsync($"{PATH}/media/{mediaID}/{borrowerEmail}", null);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Error checking out media: {content}");
+        }
     }
 
-    public Task ReturnMediaAsync(int checkoutLogId)
+    public async Task ReturnMediaAsync(int checkoutLogID)
     {
-        throw new NotImplementedException();
+        var response = await _httpClient.PutAsync($"{PATH}/returns/{checkoutLogID}", null);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Error returning media item: {content}");
+        }
     }
 }
