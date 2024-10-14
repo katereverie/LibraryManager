@@ -12,18 +12,17 @@ public class MediaService : IMediaService
         _mediaRepository = mediaRepository;
     }
 
-    public Result<int> AddMedia(Media newMedia)
+    public Result<Media> AddMedia(Media newMedia)
     {
         try
         {
-            int newID = _mediaRepository.Add(newMedia);
-            return newID != 0 && newID != -1
-                ? ResultFactory.Success(newID)
-                : ResultFactory.Fail<int>("Add attempt failed.");
+            _mediaRepository.Add(newMedia);
+            return ResultFactory.Success(newMedia);
+
         }
         catch (Exception ex)
         {
-            return ResultFactory.Fail<int>(ex.Message);
+            return ResultFactory.Fail<Media>(ex.Message);
         }
     }
 

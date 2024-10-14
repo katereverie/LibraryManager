@@ -10,7 +10,7 @@ public interface IMediaService
     Result<List<MediaType>> GetAllMediaTypes();
     Result<List<TopThreeMedia>> GetTop3MostPopularMedia();
     Result<Media> GetMediaByID(int mediaID);
-    Result<int> AddMedia(Media newMedia);
+    Result<Media> AddMedia(Media newMedia);
     Result ArchiveMedia(int mediaID);
     Result EditMedia(Media request);
 }
