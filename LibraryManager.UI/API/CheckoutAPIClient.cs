@@ -8,7 +8,7 @@ public class CheckoutAPIClient : ICheckoutAPIClient
 {
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _options;
-    private const string PATH = "checkout";
+    private const string PATH = "api/checkout";
 
     public CheckoutAPIClient(HttpClient httpClient)
     {
@@ -29,7 +29,7 @@ public class CheckoutAPIClient : ICheckoutAPIClient
         return JsonSerializer.Deserialize<List<Media>>(content, _options);
     }
 
-    public async Task<List<CheckoutLog>> GetCheckoutLogAsync()
+    public async Task<List<CheckoutLog>> GetCurrentCheckoutLogsAsync()
     {
         var response = await _httpClient.GetAsync($"{PATH}/log");
         var content = await response.Content.ReadAsStringAsync();
