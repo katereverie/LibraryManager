@@ -187,4 +187,25 @@ public class BorrowerController : Controller
         _logger.LogError("Error deleting borrower. Error: {ErrorMessage}", result.Message);
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
+
+    /// <summary>
+    /// Retrieves borrower information including checkout records
+    /// </summary>
+    /// <param name="email">borrower's email address</param>
+    /// <returns></returns>
+    [HttpGet("info/{email}")]
+    [ProducesResponseType(typeof(List<CheckoutLog>), StatusCodes.Status200OK)]
+    public IActionResult GetBorrowerInformation(string email)
+    {
+        var result = _borrowerService.GetCheckoutLogsByEmail(email);
+
+        if (result.Ok)
+        {
+            _logger.LogInformation("Borrower information successfully retrieved.");
+            return Ok(result.Data);
+        }
+
+        _logger.LogError("Error getting borrower information. Error: {ErrorMessage}", result.Message);
+        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+    }
 }
