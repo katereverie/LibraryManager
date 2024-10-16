@@ -9,7 +9,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
 {
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _options;
-    private const string PATH = "borrower";
+    private const string PATH = "api/borrower";
 
     public BorrowerAPIClient(HttpClient httpClient)
     {
@@ -69,5 +69,18 @@ public class BorrowerAPIClient : IBorrowerAPIClient
             var content = await response.Content.ReadAsStringAsync();
             throw new HttpRequestException($"Error deleting borrower with ID {borrowerID}: {content}");
         }
+    }
+
+    public async Task<List<CheckoutLog>> GetBorrowerInformationAsync(string email)
+    {
+        var response = await _httpClient.GetAsync($"{PATH}/info/{email}");
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Error getting borrower information: {content}");
+        }
+
+        return JsonSerializer.Deserialize<List<CheckoutLog>>(content, _options);
     }
 }
