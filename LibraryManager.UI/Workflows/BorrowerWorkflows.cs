@@ -35,23 +35,21 @@ public static class BorrowerWorkflows
         {
             var email = IO.GetRequiredString("Enter borrower email: ");
 
-            var borrower = await client.GetBorrowerAsync(email);
+            var borrowerDTO = await client.GetBorrowerWithLogsAsync(email);
 
             Console.Clear();
-            if (borrower == null)
+            if (borrowerDTO == null)
             {
                 Console.WriteLine($"Borrower with the email address: {email} not found.");
             }
             else
             {
-                var borrowerInformation = await client.GetBorrowerInformationAsync(email);
-                IO.PrintBorrowerInformation(borrower);
-                IO.PrintBorrowerCheckoutLog(borrowerInformation);
+                IO.PrintBorrowerInformation(borrowerDTO);
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
+            Console.WriteLine($"API request failed.\nError: {ex.Message}");
         }
 
         IO.AnyKey();
