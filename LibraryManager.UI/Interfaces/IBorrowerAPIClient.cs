@@ -6,8 +6,8 @@ public interface IBorrowerAPIClient
 {
     Task<List<Borrower>> GetAllBorrowersAsync();
     Task<Borrower> GetBorrowerAsync(string email);
+    Task<ViewBorrowerDTO> GetBorrowerWithLogsAsync(string email);
     Task AddBorrowerAsync(AddBorrowerRequest borrower);
     Task EditBorrowerAsync(EditBorrowerRequest borrower);
     Task DeleteBorrowerAsync(int borrowerID);
-    Task<List<CheckoutLog>> GetBorrowerInformationAsync(string email);
 }
