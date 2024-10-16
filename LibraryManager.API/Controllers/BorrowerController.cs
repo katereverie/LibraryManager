@@ -50,7 +50,7 @@ public class BorrowerController : Controller
     /// Retrieves a single borrower, which includes their personal information
     /// </summary>
     /// <param name="email">The email address of a borrower</param>
-    /// <returns>A single Borrower object or null if not found</returns>
+    /// <returns></returns>
     [HttpGet("{email}")]
     [ProducesResponseType(typeof(Borrower), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -71,6 +71,34 @@ public class BorrowerController : Controller
         }
 
         _logger.LogError("Error retrieving borrowe. Error: {ErrorMessage}", result.Message);
+        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+    }
+
+    /// <summary>
+    /// Retrieves a single borrower, which includes their personal information and their checkout history
+    /// </summary>
+    /// <param name="email">The email address of a borrower</param>
+    /// <returns></returns>
+    [HttpGet("{email}/logs")]
+    [ProducesResponseType(typeof(ViewBorrowerDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetBorrowerWithLogs(string email)
+    {
+        var result = _borrowerService.GetBorrowerWithLogs(email);
+
+        if (result.Message.Contains("Borrower with email"))
+        {
+            _logger.LogWarning("Borrower not found. Email: {BorrowerEmail}", email);
+            return NotFound();
+        }
+
+        if (result.Ok)
+        {
+            _logger.LogInformation("Borrower with checkout logs retrieved successfully.");
+            return Ok(result.Data);
+        }
+
+        _logger.LogError("Error retrieving borrower with checkout logs. Error: {ErrorMessage}", result.Message);
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
 
@@ -188,24 +216,24 @@ public class BorrowerController : Controller
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
 
-    /// <summary>
-    /// Retrieves borrower information including checkout records
-    /// </summary>
-    /// <param name="email">borrower's email address</param>
-    /// <returns></returns>
-    [HttpGet("info/{email}")]
-    [ProducesResponseType(typeof(List<CheckoutLog>), StatusCodes.Status200OK)]
-    public IActionResult GetBorrowerInformation(string email)
-    {
-        var result = _borrowerService.GetCheckoutLogsByEmail(email);
+    ///// <summary>
+    ///// Retrieves borrower information including checkout records
+    ///// </summary>
+    ///// <param name="email">borrower's email address</param>
+    ///// <returns></returns>
+    //[HttpGet("info/{email}")]
+    //[ProducesResponseType(typeof(List<CheckoutLog>), StatusCodes.Status200OK)]
+    //public IActionResult GetBorrowerInformation(string email)
+    //{
+    //    var result = _borrowerService.GetCheckoutLogsByEmail(email);
 
-        if (result.Ok)
-        {
-            _logger.LogInformation("Borrower information successfully retrieved.");
-            return Ok(result.Data);
-        }
+    //    if (result.Ok)
+    //    {
+    //        _logger.LogInformation("Borrower information successfully retrieved.");
+    //        return Ok(result.Data);
+    //    }
 
-        _logger.LogError("Error getting borrower information. Error: {ErrorMessage}", result.Message);
-        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
-    }
+    //    _logger.LogError("Error getting borrower information. Error: {ErrorMessage}", result.Message);
+    //    return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+    //}
 }
