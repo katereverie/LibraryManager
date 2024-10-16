@@ -19,6 +19,7 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedia = await client.GetMediaByTypeAsync(typeID);
+                Console.Clear();
                 IO.PrintMediaList(selectedMedia);
             }
             else
@@ -52,8 +53,8 @@ public static class MediaWorkflows
                     Title = IO.GetRequiredString("Enter media title: "),
                 };
 
-                var newMedia = await client.AddMediaAsync(media);
-                Console.WriteLine($"new Media with ID: {newMedia.MediaID} added successfully.");
+                await client.AddMediaAsync(media);
+                Console.WriteLine($"new Media item {media.Title} added successfully.");
             }
         }
         catch (Exception ex)
@@ -76,7 +77,8 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                IO.PrintMediaList(selectedMedias);
+                Console.Clear();
+                IO.PrintMediaList(selectedMedias.FindAll(m => m.IsArchived == false));
                 int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
                 var mediaToEdit = selectedMedias.Single(m => m.MediaID == mediaID);
                 mediaToEdit.Title = IO.GetRequiredString("Enter new title: ");
@@ -110,6 +112,7 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
+                Console.Clear();
                 IO.PrintMediaList(selectedMedias);
                 int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
                 var mediaToArchive = selectedMedias.Single(m => m.MediaID == mediaID);
