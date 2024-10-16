@@ -13,12 +13,10 @@ public class EFMediaRepository : IMediaRepository
         _dbContext = new LibraryContext(connectionString);
     }
 
-    public int Add(Media newMedia)
+    public void Add(Media newMedia)
     {
         _dbContext.Media.Add(newMedia);
         _dbContext.SaveChanges();
-
-        return newMedia.MediaID;
     }
 
     public void Archive(int mediaID)
