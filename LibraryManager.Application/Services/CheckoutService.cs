@@ -18,11 +18,6 @@ public class CheckoutService : ICheckoutService
     {
         try
         {
-            if (!_checkoutRepository.IsMediaAvailable(mediaID))
-            {
-                return ResultFactory.Fail($"Media with ID {mediaID} is not avaialbel");
-            }
-
             var borrower = _borrowerRepository.GetByEmail(email);
 
             if (borrower == null)
@@ -30,14 +25,13 @@ public class CheckoutService : ICheckoutService
                 return ResultFactory.Fail($"Borrower with {email} not found.");
             }
 
-            var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrower.BorrowerID);
+            var logs = _checkoutRepository.GetCheckoutLogsByBorrowerEmail(email);
             int checkoutItemCount = 0;
 
             foreach (var log in logs)
             {
                 if (log.DueDate < DateTime.Now )
                     return ResultFactory.Fail("Borrower has overdue item.");
-                
                 
                 if (log.ReturnDate == null)
                     checkoutItemCount++;
@@ -62,11 +56,6 @@ public class CheckoutService : ICheckoutService
         {
             return ResultFactory.Fail(ex.Message);
         }
-    }
-
-    public Result CheckoutMedia(int mediaID, int borrowerID)
-    {
-        throw new NotImplementedException();
     }
 
     public Result<List<CheckoutLog>> GetAllCheckedoutMedia()
@@ -98,39 +87,6 @@ public class CheckoutService : ICheckoutService
         catch (Exception ex)
         {
             return ResultFactory.Fail<List<Media>>(ex.Message);
-        }
-    }
-
-    public Result<List<CheckoutLog>> GetCheckedOutMediaByBorrowerID(int borrowerID)
-    {
-        try
-        {
-            var list = _checkoutRepository.GetCheckedoutMediaByBorrowerID(borrowerID);
-
-            return list.Any()
-                ? ResultFactory.Success(list)
-                : ResultFactory.Fail<List<CheckoutLog>>("Borrower hasn't checked out any media.");
-
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-        }
-    }
-
-    public Result<List<CheckoutLog>> GetCheckoutLogsByBorrowerID(int borrowerID)
-    {
-        try
-        {
-            var list = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
-
-            return list.Any()
-                ? ResultFactory.Success(list)
-                : ResultFactory.Fail<List<CheckoutLog>>($"No checkout log by Borrrower ID {borrowerID} found.");
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
         }
     }
 
