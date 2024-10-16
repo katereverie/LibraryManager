@@ -14,7 +14,7 @@ public class DMediaRepository : IMediaRepository
         _connectionString = connectionString;
     }
 
-    public int Add(Media newMedia)
+    public void Add(Media newMedia)
     {
         using (var cn = new SqlConnection(_connectionString))
         {
@@ -22,7 +22,7 @@ public class DMediaRepository : IMediaRepository
 
             var command = @"INSERT INTO Media (MediaTypeID, Title, IsArchived)
                                 VALUES (@MediaTypeID, @Title, @IsArchived);
-                                SELECT CAST(SCOPE_IDENTITY() as int);";
+                                SELECT SCOPE_IDENTITY();";
 
             var parameters = new
             {
@@ -31,7 +31,8 @@ public class DMediaRepository : IMediaRepository
                 newMedia.IsArchived
             };
 
-            return cn.ExecuteScalar<int>(command, parameters);
+            var newID = cn.ExecuteScalar<int>(command, parameters);
+            newMedia.MediaID = newID;
         }
     }
 
