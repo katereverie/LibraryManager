@@ -42,12 +42,12 @@ public class EFBorrowerRepository : IBorrowerRepository
         return _dbContext.Borrower.SingleOrDefault(b => b.Email == email);
     }
 
-    public List<CheckoutLog> GetCheckoutLogs(Borrower borrower)
+    public List<CheckoutLog> GetCheckoutLogsByEmail(string email)
     {
         return _dbContext.CheckoutLog
                          .Include(cl => cl.Media)
                          .Include(cl => cl.Borrower)
-                         .Where(cl => cl.BorrowerID == borrower.BorrowerID)
+                         .Where(cl => cl.Borrower.Email == email)
                          .ToList();
     }
 
