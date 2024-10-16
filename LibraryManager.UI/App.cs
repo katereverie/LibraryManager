@@ -137,13 +137,13 @@ public class App
             switch (choice)
             {
                 case 1:
-                    await CheckoutWorkflows.Checkout(_checkoutAPIClient);
+                    await CheckoutWorkflows.CheckoutMedia(_checkoutAPIClient);
                     break;
                 case 2:
-                    await CheckoutWorkflows.Return(_checkoutAPIClient);
+                    await CheckoutWorkflows.ReturnMedia(_checkoutAPIClient);
                     break;
                 case 3:
-                    await CheckoutWorkflows.CheckoutLog(_checkoutAPIClient);
+                    await CheckoutWorkflows.GetCurrentCheckoutLogs(_checkoutAPIClient);
                     break;
                 case 4:
                     return;
