@@ -69,10 +69,11 @@ public class EFCheckoutRepository : ICheckoutRepository
         }
     }
 
-    public Borrower? GetByEmail(string email)
+    public bool IsMediaAvailable(int mediaID)
     {
-        return _dbContext.Borrower
-                         .FirstOrDefault(b => b.Email == email);
+        return _dbContext.CheckoutLog
+                         .Where(cl => cl.MediaID == mediaID && cl.ReturnDate == null)
+                         .Any();    
     }
 }
 

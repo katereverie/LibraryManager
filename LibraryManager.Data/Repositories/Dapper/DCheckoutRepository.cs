@@ -61,19 +61,6 @@ public class DCheckoutRepository : ICheckoutRepository
         }
     }
 
-
-    public Borrower? GetByEmail(string email)
-    {
-        using (var cn = new SqlConnection(_connectionString))
-        {
-            var command = @"SELECT * 
-                                FROM Borrower
-                                WHERE Email = @Email";
-
-            return cn.QueryFirstOrDefault<Borrower>(command, new { email });
-        }
-    }
-
     public List<CheckoutLog> GetCheckedoutMediaByBorrowerID(int borrowerID)
     {
         using (var cn = new SqlConnection(_connectionString))
@@ -143,6 +130,18 @@ public class DCheckoutRepository : ICheckoutRepository
             };
 
             cn.Execute(command, parameters);
+        }
+    }
+
+    public bool IsMediaAvailable(int mediaID)
+    {
+        using (var cn = new SqlConnection(_connectionString))
+        {
+            var command = @"SELECT Count(*) 
+                            FROM CheckoutLog 
+                            WHERE MediaID = @MediaID AND ReturnDate IS NULL";
+
+            return cn.ExecuteScalar<int>(command, new { mediaID }) == 0;
         }
     }
 }
