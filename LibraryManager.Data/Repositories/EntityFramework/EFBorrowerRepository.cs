@@ -37,9 +37,34 @@ public class EFBorrowerRepository : IBorrowerRepository
         return _dbContext.Borrower.ToList();
     }
 
+    // Method for getting borrower without checkout logs
     public Borrower? GetByEmail(string email)
     {
-        return _dbContext.Borrower.SingleOrDefault(b => b.Email == email);
+        return _dbContext.Borrower.FirstOrDefault(b => b.Email == email);
+    }
+
+    // Method for getting borrower with checkout logs (returns DTO)
+    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    {
+        var borrowerWithLogs = _dbContext.Borrower
+            .Where(b => b.Email == email)
+            .Select(b => new ViewBorrowerDTO
+            {
+                BorrowerID = b.BorrowerID,
+                FirstName = b.FirstName,
+                LastName = b.LastName,
+                Email = b.Email,
+                CheckoutLogs = b.CheckoutLogs.Select(cl => new CheckoutLogDTO
+                {
+                    CheckoutDate = cl.CheckoutDate,
+                    ReturnDate = cl.ReturnDate,
+                    MediaID = cl.MediaID,
+                    Title = cl.Media.Title
+                }).ToList()
+            })
+            .FirstOrDefault();
+
+        return borrowerWithLogs;
     }
 
     public List<CheckoutLog> GetCheckoutLogsByEmail(string email)

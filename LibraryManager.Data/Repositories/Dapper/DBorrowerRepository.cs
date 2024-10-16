@@ -82,6 +82,11 @@ public class DBorrowerRepository : IBorrowerRepository
         }
     }
 
+    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    {
+        throw new NotImplementedException();
+    }
+
     public List<CheckoutLog> GetCheckoutLogsByEmail(string email)
     {
         using (var cn = new SqlConnection(_connectionString))
