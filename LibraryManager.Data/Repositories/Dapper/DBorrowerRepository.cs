@@ -75,32 +75,35 @@ public class DBorrowerRepository : IBorrowerRepository
         using (var cn = new SqlConnection(_connectionString))
         {
             var command = @"SELECT *
-                                FROM Borrower
-                                WHERE Email = @Email";
+                            FROM Borrower
+                            WHERE Email = @Email";
 
             return cn.QueryFirstOrDefault<Borrower>(command, new { Email = email });
         }
     }
 
-    public List<CheckoutLog> GetCheckoutLogs(Borrower borrower)
+    public List<CheckoutLog> GetCheckoutLogsByEmail(string email)
     {
         using (var cn = new SqlConnection(_connectionString))
         {
             var command = @"SELECT cl.CheckoutLogID, cl.BorrowerID, cl.MediaID, cl.CheckoutDate, cl.DueDate, cl.ReturnDate,
-                                        m.MediaID, m.MediaTypeID, m.Title, m.IsArchived
+                                    m.MediaID, m.MediaTypeID, m.Title, m.IsArchived,
+                                    b.BorrowerID, b.Email
                                 FROM CheckoutLog cl
                                 INNER JOIN Media m ON m.MediaID = cl.MediaID
-                                WHERE cl.BorrowerID = @BorrowerID";
+                                INNER JOIN Borrower b ON b.BorrowerID = cl.BorrowerID
+                                WHERE b.Email = @Email AND cl.ReturnDate IS NULL";
 
-            return cn.Query<CheckoutLog, Media, CheckoutLog>(
+            return cn.Query<CheckoutLog, Media, Borrower, CheckoutLog>(
                             command,
-                            (cl, m) =>
+                            (cl, m, b) =>
                             {
                                 cl.Media = m;
+                                cl.Borrower = b;
                                 return cl;
                             },
-                            new { borrower.BorrowerID },
-                            splitOn: "MediaID"
+                            new { email },
+                            splitOn: "MediaID, BorrowerID"
                             ).ToList();
         }
     }
