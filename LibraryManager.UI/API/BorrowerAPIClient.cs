@@ -71,16 +71,16 @@ public class BorrowerAPIClient : IBorrowerAPIClient
         }
     }
 
-    public async Task<List<CheckoutLog>> GetBorrowerInformationAsync(string email)
+    public async Task<ViewBorrowerDTO> GetBorrowerWithLogsAsync(string email)
     {
-        var response = await _httpClient.GetAsync($"{PATH}/info/{email}");
+        var response = await _httpClient.GetAsync($"{PATH}/{email}/logs");
         var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Error getting borrower information: {content}");
+            throw new HttpRequestException($"Error getting borrower with checkout records. {content}");    
         }
 
-        return JsonSerializer.Deserialize<List<CheckoutLog>>(content, _options);
+        return JsonSerializer.Deserialize<ViewBorrowerDTO>(content, _options);
     }
 }
