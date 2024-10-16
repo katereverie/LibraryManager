@@ -84,15 +84,16 @@ public class DCheckoutRepository : ICheckoutRepository
         }
     }
 
-    public List<CheckoutLog> GetCheckoutLogsByBorrowerID(int borrowerID)
+    public List<CheckoutLog> GetCheckoutLogsByBorrowerEmail(string email)
     {
         using (var cn = new SqlConnection(_connectionString))
         {
             var command = @"SELECT *
-                                FROM CheckoutLog
-                                WHERE BorrowerID = @BorrowerID";
+                                FROM CheckoutLog cl
+                                INNER JOIN Borrower b ON b.BorrowerID = cl.BorrowerID
+                                WHERE b.Email = @email";
 
-            return cn.Query<CheckoutLog>(command, new { borrowerID }).ToList();
+            return cn.Query<CheckoutLog>(command, new { email }).ToList();
         }
     }
 
@@ -130,18 +131,6 @@ public class DCheckoutRepository : ICheckoutRepository
             };
 
             cn.Execute(command, parameters);
-        }
-    }
-
-    public bool IsMediaAvailable(int mediaID)
-    {
-        using (var cn = new SqlConnection(_connectionString))
-        {
-            var command = @"SELECT Count(*) 
-                            FROM CheckoutLog 
-                            WHERE MediaID = @MediaID AND ReturnDate IS NULL";
-
-            return cn.ExecuteScalar<int>(command, new { mediaID }) == 0;
         }
     }
 }
