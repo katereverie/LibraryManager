@@ -9,4 +9,5 @@ public interface IBorrowerAPIClient
     Task AddBorrowerAsync(AddBorrowerRequest borrower);
     Task EditBorrowerAsync(EditBorrowerRequest borrower);
     Task DeleteBorrowerAsync(int borrowerID);
+    Task<List<CheckoutLog>> GetBorrowerInformationAsync(string email);
 }
