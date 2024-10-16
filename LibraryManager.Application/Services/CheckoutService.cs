@@ -18,6 +18,11 @@ public class CheckoutService : ICheckoutService
     {
         try
         {
+            if (!_checkoutRepository.IsMediaAvailable(mediaID))
+            {
+                return ResultFactory.Fail($"Media with ID {mediaID} is not avaialbel");
+            }
+
             var borrower = _borrowerRepository.GetByEmail(email);
 
             if (borrower == null)
