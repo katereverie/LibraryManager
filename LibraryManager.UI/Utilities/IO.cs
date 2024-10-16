@@ -145,32 +145,30 @@ public static class IO
         Console.WriteLine();
     }
 
-    public static void PrintBorrowerInformation(Borrower borrower)
+    public static void PrintBorrowerInformation(ViewBorrowerDTO borrowerDTO)
     {
         PrintHeader(" Borrower Information ");
-        Console.WriteLine($"Id: {borrower.BorrowerID}");
-        Console.WriteLine($"Name: {borrower.LastName}, {borrower.FirstName}");
-        Console.WriteLine($"Email: {borrower.Email}");
+        Console.WriteLine($"Id: {borrowerDTO.BorrowerID}");
+        Console.WriteLine($"Name: {borrowerDTO.LastName}, {borrowerDTO.FirstName}");
+        Console.WriteLine($"Email: {borrowerDTO.Email}");
         Console.WriteLine();
-    }
 
-    public static void PrintBorrowerCheckoutLog(List<CheckoutLog>? logs)
-    {
-        if (logs == null)
+        if (borrowerDTO.CheckoutLogs == null)
         {
             Console.WriteLine("No checkout records.\n");
             return;
         }
 
+        var logDTOs = borrowerDTO.CheckoutLogs.FindAll(cl => cl.ReturnDate == null);
         PrintHeader(" Checkout Record ");
         Console.WriteLine($"{"Media ID",-10} {"Title",-40} {"Checkout Date",-20} {"Return Date",-20}");
         Console.WriteLine(new string('=', 100));
-        foreach (var cl in logs)
+        foreach (var log in logDTOs)
         {
-            Console.WriteLine($"{cl.MediaID,-10} " +
-                $"{cl.Media.Title,-40} " +
-                $"{cl.CheckoutDate,-20:MM/dd/yyyy} " +
-                $"{(cl.ReturnDate == null ? "Unreturned" : cl.ReturnDate),-20:MM/dd/yyyy}");
+            Console.WriteLine($"{log.MediaID,-10} " +
+                $"{log.Title,-40} " +
+                $"{log.CheckoutDate,-20:MM/dd/yyyy} " +
+                $"{(log.ReturnDate == null ? "Unreturned" : log.ReturnDate),-20:MM/dd/yyyy}");
         }
         Console.WriteLine();
     }
