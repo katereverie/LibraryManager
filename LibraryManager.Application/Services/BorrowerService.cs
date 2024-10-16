@@ -41,6 +41,22 @@ public class BorrowerService : IBorrowerService
         }
     }
 
+    public Result<ViewBorrowerDTO> GetBorrowerWithLogs(string email)
+    {
+        try
+        {
+            var borrowerDTO = _borrowerRepository.GetByEmailWithLogs(email);
+
+            return borrowerDTO != null
+                ? ResultFactory.Success(borrowerDTO)
+                : ResultFactory.Fail<ViewBorrowerDTO>($"No borrower registered with {email} was found.");
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<ViewBorrowerDTO>(ex.Message);
+        }
+    }
+
     public Result UpdateBorrower(Borrower borrower)
     {
         try
@@ -90,19 +106,19 @@ public class BorrowerService : IBorrowerService
 
     }
 
-    public Result<List<CheckoutLog>> GetCheckoutLogsByEmail(string email)
-    {
-        try
-        {
-            var list = _borrowerRepository.GetCheckoutLogsByEmail(email);
+    //public Result<List<CheckoutLog>> GetCheckoutLogsByEmail(string email)
+    //{
+    //    try
+    //    {
+    //        var list = _borrowerRepository.GetCheckoutLogsByEmail(email);
 
-            return list.Any()
-                ? ResultFactory.Success(list)
-                : ResultFactory.Fail<List<CheckoutLog>>("Borrower has no checkout logs records.");
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-        }
-    }
+    //        return list.Any()
+    //            ? ResultFactory.Success(list)
+    //            : ResultFactory.Fail<List<CheckoutLog>>("Borrower has no checkout logs records.");
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
+    //    }
+    //}
 }
