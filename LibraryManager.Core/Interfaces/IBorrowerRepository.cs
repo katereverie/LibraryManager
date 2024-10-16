@@ -8,7 +8,6 @@ public interface IBorrowerRepository
     void Delete(Borrower borrower);
     void Update(Borrower borrower);
     List<Borrower> GetAll();
-    List<CheckoutLog> GetCheckoutLogs(Borrower borrower);
-
+    List<CheckoutLog> GetCheckoutLogsByEmail(string email);
     Borrower? GetByEmail(string email);
 }
