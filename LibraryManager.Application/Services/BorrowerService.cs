@@ -90,11 +90,11 @@ public class BorrowerService : IBorrowerService
 
     }
 
-    public Result<List<CheckoutLog>> GetCheckoutLogsByBorrower(Borrower borrower)
+    public Result<List<CheckoutLog>> GetCheckoutLogsByEmail(string email)
     {
         try
         {
-            var list = _borrowerRepository.GetCheckoutLogs(borrower);
+            var list = _borrowerRepository.GetCheckoutLogsByEmail(email);
 
             return list.Any()
                 ? ResultFactory.Success(list)
