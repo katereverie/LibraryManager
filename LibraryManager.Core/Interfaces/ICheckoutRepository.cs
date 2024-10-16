@@ -8,7 +8,7 @@ public interface ICheckoutRepository
     List<CheckoutLog> GetCheckoutLogsByBorrowerID(int borrowerID);
     List<CheckoutLog> GetCheckedoutMediaByBorrowerID(int borrowerID);
     List<CheckoutLog> GetAllCheckedoutMedia();
-    Borrower? GetByEmail(string email);
+    bool IsMediaAvailable(int mediaID);
     void Update(int checkoutLogID);
     int Add(CheckoutLog newCheckoutLog);
 }
