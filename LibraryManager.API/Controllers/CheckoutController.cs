@@ -69,14 +69,14 @@ public class CheckoutController : Controller
     /// Checks out a media item that is neither archived nor already checked-out
     /// </summary>
     /// <param name="mediaID">The ID number that uniquely identifies a media</param>
-    /// <param name="borrowerID">The ID number that uniquely identifies a borrower</param>
+    /// <param name="email">The email that uniquely identifies a borrower</param>
     /// <returns>An IActionResult indicating corresponding HTTP response</returns>
-    [HttpPost("media/{mediaID}/{borrowerID}")]
+    [HttpPost("media/{mediaID}/{email}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult CheckoutMedia(int mediaID, int borrowerID)
+    public IActionResult CheckoutMedia(int mediaID, string email)
     {
-        var result = _checkoutService.CheckoutMedia(mediaID, borrowerID);
+        var result = _checkoutService.CheckoutMedia(mediaID, email);
 
         if (result.Ok)
         {
@@ -84,10 +84,10 @@ public class CheckoutController : Controller
             return Created();
         }
 
-        if (result.Message.Contains("Borrower has"))
+        if (result.Message.Contains("Borrower with") || result.Message.Contains("Borrower has"))
         {
-            _logger.LogWarning("Borrower not allowed to check out any more media. {Message}", result.Message);
-            return Conflict();
+            _logger.LogWarning("Checkout process terminated. {Message}", result.Message);
+            return Conflict(result.Message);
         }
 
         _logger.LogError("Error checking out media. Error: {ErrorMessage}", result.Message);
