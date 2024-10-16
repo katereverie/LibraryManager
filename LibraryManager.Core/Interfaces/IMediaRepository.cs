@@ -4,7 +4,7 @@ namespace LibraryManager.Core.Interfaces;
 
 public interface IMediaRepository
 {
-    int Add(Media newMedia);
+    void Add(Media newMedia);
     void Update(Media request);
     void Archive(int mediaID);
     List<Media> GetAll();
