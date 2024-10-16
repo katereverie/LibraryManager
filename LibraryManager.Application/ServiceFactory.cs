@@ -42,9 +42,9 @@ public class ServiceFactory
         switch (_appConfig.GetDatabaseAccessMode())
         {
             case DatabaseAccessMode.ORM:
-                return new CheckoutService(new EFCheckoutRepository(_appConfig.GetConnectionString()), new EFMediaRepository(_appConfig.GetConnectionString()));
+                return new CheckoutService(new EFCheckoutRepository(_appConfig.GetConnectionString()), new EFBorrowerRepository(_appConfig.GetConnectionString()));
             default:
-                return new CheckoutService(new DCheckoutRepository(_appConfig.GetConnectionString()), new DMediaRepository(_appConfig.GetConnectionString()));
+                return new CheckoutService(new DCheckoutRepository(_appConfig.GetConnectionString()), new DBorrowerRepository(_appConfig.GetConnectionString()));
         }
     }
 }
