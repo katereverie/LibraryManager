@@ -37,14 +37,16 @@ public static class BorrowerWorkflows
 
             var borrower = await client.GetBorrowerAsync(email);
 
+            Console.Clear();
             if (borrower == null)
             {
                 Console.WriteLine($"Borrower with the email address: {email} not found.");
             }
             else
             {
+                var borrowerInformation = await client.GetBorrowerInformationAsync(email);
                 IO.PrintBorrowerInformation(borrower);
-                IO.PrintBorrowerCheckoutLog(borrower.CheckoutLogs);
+                IO.PrintBorrowerCheckoutLog(borrowerInformation);
             }
         }
         catch (Exception ex)
@@ -98,6 +100,7 @@ public static class BorrowerWorkflows
                 Console.WriteLine("Edit Borrower (Press \"Enter\" to skip)");
                 var editedBorrower = new EditBorrowerRequest
                 {
+                    BorrowerID = borrower.BorrowerID,
                     FirstName = IO.GetEditedString($"First Name ({borrower.FirstName}): ", borrower.FirstName),
                     LastName = IO.GetEditedString($"Last Name ({borrower.LastName}): ", borrower.LastName),
                     Email = IO.GetEditedString($"Email ({borrower.Email}): ", borrower.Email),
