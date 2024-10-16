@@ -12,12 +12,12 @@ public class MediaService : IMediaService
         _mediaRepository = mediaRepository;
     }
 
-    public Result<Media> AddMedia(Media newMedia)
+    public Result AddMedia(Media newMedia)
     {
         try
         {
             _mediaRepository.Add(newMedia);
-            return ResultFactory.Success(newMedia);
+            return ResultFactory.Success();
 
         }
         catch (Exception ex)
