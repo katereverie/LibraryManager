@@ -41,10 +41,11 @@ public class EFCheckoutRepository : ICheckoutRepository
                          .ToList();
     }
 
-    public List<CheckoutLog> GetCheckoutLogsByBorrowerID(int borrowerID)
+    public List<CheckoutLog> GetCheckoutLogsByBorrowerEmail(string email)
     {
         return _dbContext.CheckoutLog
-                         .Where(cl => cl.BorrowerID == borrowerID)
+                         .Include(cl => cl.Borrower)
+                         .Where(cl => cl.Borrower.Email == email && cl.ReturnDate == null)
                          .ToList();
     }
 
@@ -67,13 +68,6 @@ public class EFCheckoutRepository : ICheckoutRepository
 
             _dbContext.SaveChanges();
         }
-    }
-
-    public bool IsMediaAvailable(int mediaID)
-    {
-        return _dbContext.CheckoutLog
-                         .Where(cl => cl.MediaID == mediaID && cl.ReturnDate == null)
-                         .Any();    
     }
 }
 
