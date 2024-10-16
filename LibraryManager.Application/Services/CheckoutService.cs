@@ -6,19 +6,26 @@ namespace LibraryManager.Application.Services;
 public class CheckoutService : ICheckoutService
 {
     private ICheckoutRepository _checkoutRepository;
-    private IMediaRepository _mediaRepository;
+    private IBorrowerRepository _borrowerRepository;
 
-    public CheckoutService(ICheckoutRepository checkoutRepository, IMediaRepository mediaRepository)
+    public CheckoutService(ICheckoutRepository checkoutRepository, IBorrowerRepository borrowerRepository)
     {
         _checkoutRepository = checkoutRepository;
-        _mediaRepository = mediaRepository;
+        _borrowerRepository = borrowerRepository;
     }
 
-    public Result CheckoutMedia(int mediaID, int borrowerID)
+    public Result CheckoutMedia(int mediaID, string email)
     {
         try
         {
-            var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrowerID);
+            var borrower = _borrowerRepository.GetByEmail(email);
+
+            if (borrower == null)
+            {
+                return ResultFactory.Fail($"Borrower with {email} not found.");
+            }
+
+            var logs = _checkoutRepository.GetCheckoutLogsByBorrowerID(borrower.BorrowerID);
             int checkoutItemCount = 0;
 
             foreach (var log in logs)
@@ -36,7 +43,7 @@ public class CheckoutService : ICheckoutService
 
             var newCheckoutLog = new CheckoutLog
             {
-                BorrowerID = borrowerID,
+                BorrowerID = borrower.BorrowerID,
                 MediaID = mediaID,
                 CheckoutDate = DateTime.Now,
                 DueDate = DateTime.Now.AddDays(7),
@@ -50,6 +57,11 @@ public class CheckoutService : ICheckoutService
         {
             return ResultFactory.Fail(ex.Message);
         }
+    }
+
+    public Result CheckoutMedia(int mediaID, int borrowerID)
+    {
+        throw new NotImplementedException();
     }
 
     public Result<List<CheckoutLog>> GetAllCheckedoutMedia()
@@ -84,22 +96,6 @@ public class CheckoutService : ICheckoutService
         }
     }
 
-    public Result<Borrower> GetBorrowerByEmail(string email)
-    {
-        try
-        {
-            var borrower = _checkoutRepository.GetByEmail(email);
-
-            return borrower != null
-                ? ResultFactory.Success(borrower)
-                : ResultFactory.Fail<Borrower>($"No Borrower with {email} was found.");
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<Borrower>(ex.Message);
-        }
-    }
-
     public Result<List<CheckoutLog>> GetCheckedOutMediaByBorrowerID(int borrowerID)
     {
         try
@@ -130,22 +126,6 @@ public class CheckoutService : ICheckoutService
         catch (Exception ex)
         {
             return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-        }
-    }
-
-    public Result<Media> GetMediaByID(int mediaID)
-    {
-        try
-        {
-            var media = _mediaRepository.GetByID(mediaID);
-
-            return media != null
-                ? ResultFactory.Success(media)
-                : ResultFactory.Fail<Media>($"No media by ID: {mediaID} found.");
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<Media>(ex.Message);
         }
     }
 
