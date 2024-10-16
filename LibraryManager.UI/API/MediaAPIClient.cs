@@ -9,7 +9,7 @@ public class MediaAPIClient : IMediaAPIClient
 {
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _options;
-    private const string PATH = "media";
+    private const string PATH = "api/media";
 
     public MediaAPIClient(HttpClient httpClient)
     {
@@ -30,17 +30,15 @@ public class MediaAPIClient : IMediaAPIClient
         return JsonSerializer.Deserialize<List<Media>>(content, _options);
     }
 
-    public async Task<Media> AddMediaAsync(AddMediaRequest media)
+    public async Task AddMediaAsync(AddMediaRequest media)
     {
         var response = await _httpClient.PostAsJsonAsync(PATH, media);
-        var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
         {
+            var content = await response.Content.ReadAsStringAsync();
             throw new HttpRequestException($"Error adding media: {content}");
         }
-
-        return JsonSerializer.Deserialize<Media>(content, _options);
     }
 
     public async Task ArchiveMediaAsync(Media media)
