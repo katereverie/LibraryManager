@@ -29,7 +29,7 @@ public static class MediaWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -59,7 +59,7 @@ public static class MediaWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -94,7 +94,7 @@ public static class MediaWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -128,7 +128,7 @@ public static class MediaWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -153,7 +153,7 @@ public static class MediaWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -178,7 +178,7 @@ public static class MediaWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();

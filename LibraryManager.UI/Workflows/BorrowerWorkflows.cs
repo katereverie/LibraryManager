@@ -21,7 +21,7 @@ public static class BorrowerWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -49,7 +49,7 @@ public static class BorrowerWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\nError: {ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -74,7 +74,7 @@ public static class BorrowerWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -112,7 +112,7 @@ public static class BorrowerWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -162,7 +162,7 @@ public static class BorrowerWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n Error: {ex.Message}");
+                Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
