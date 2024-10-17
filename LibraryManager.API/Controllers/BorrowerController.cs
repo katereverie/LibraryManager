@@ -58,10 +58,10 @@ public class BorrowerController : Controller
     {
         var result = _borrowerService.GetBorrower(email);
 
-        if (result.Message.Contains("Borrower with email"))
+        if (result.Message.Contains("No Borrower"))
         {
-            _logger.LogWarning("Borrower not found. Email: {BorrowerEmail}", email);
-            return NotFound();
+            _logger.LogWarning(result.Message);
+            return NotFound("Borrower not found.");
         }
 
         if (result.Ok)
@@ -70,7 +70,7 @@ public class BorrowerController : Controller
             return Ok(result.Data);
         }
 
-        _logger.LogError("Error retrieving borrowe. Error: {ErrorMessage}", result.Message);
+        _logger.LogError(result.Message);
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
 
@@ -86,10 +86,10 @@ public class BorrowerController : Controller
     {
         var result = _borrowerService.GetBorrowerWithLogs(email);
 
-        if (result.Message.Contains("Borrower with email"))
+        if (result.Message.Contains("No borrower"))
         {
-            _logger.LogWarning("Borrower not found. Email: {BorrowerEmail}", email);
-            return NotFound();
+            _logger.LogWarning(result.Message);
+            return NotFound("Borrower not found");
         }
 
         if (result.Ok)
@@ -98,7 +98,7 @@ public class BorrowerController : Controller
             return Ok(result.Data);
         }
 
-        _logger.LogError("Error retrieving borrower with checkout logs. Error: {ErrorMessage}", result.Message);
+        _logger.LogError(result.Message);
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
 
