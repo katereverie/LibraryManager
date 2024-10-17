@@ -19,7 +19,6 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedia = await client.GetMediaByTypeAsync(typeID);
-                Console.Clear();
                 IO.PrintMediaList(selectedMedia);
             }
             else
@@ -77,7 +76,6 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                Console.Clear();
                 IO.PrintMediaList(selectedMedias.FindAll(m => m.IsArchived == false));
                 int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
                 var mediaToEdit = selectedMedias.Single(m => m.MediaID == mediaID);
@@ -112,7 +110,6 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                Console.Clear();
                 IO.PrintMediaList(selectedMedias);
                 int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
                 var mediaToArchive = selectedMedias.Single(m => m.MediaID == mediaID);
