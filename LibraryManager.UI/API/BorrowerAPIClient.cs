@@ -23,7 +23,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
         var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
-            throw new HttpRequestException($"Error getting all borrowers: {content}");
+            throw new HttpRequestException(content);
 
         return JsonSerializer.Deserialize<List<Borrower>>(content, _options);
     }
@@ -34,7 +34,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
         var content = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)
-            throw new HttpRequestException($"Error getting borrower with email: {email}");
+            throw new HttpRequestException(content);
 
         return JsonSerializer.Deserialize<Borrower>(content, _options);
     }
@@ -46,7 +46,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
 
         if (!response.IsSuccessStatusCode) {
             var content = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Error adding borrower: {content}");
+            throw new HttpRequestException(content);
         }
     }
 
@@ -56,7 +56,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
         
         if (!response.IsSuccessStatusCode) {
             var content = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Error editing borrower: {content}");
+            throw new HttpRequestException(content);
         }
     }
 
@@ -67,7 +67,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
         if (!response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Error deleting borrower with ID {borrowerID}: {content}");
+            throw new HttpRequestException(content);
         }
     }
 
@@ -78,7 +78,7 @@ public class BorrowerAPIClient : IBorrowerAPIClient
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Error getting borrower with checkout records. {content}");    
+            throw new HttpRequestException(content);    
         }
 
         return JsonSerializer.Deserialize<ViewBorrowerDTO>(content, _options);
