@@ -70,7 +70,7 @@ public class MediaAPIClient : IMediaAPIClient
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException($"Error getting archived media: {content}");
+            throw new HttpRequestException(content);
         }
 
         return JsonSerializer.Deserialize<List<Media>>(content, _options);
