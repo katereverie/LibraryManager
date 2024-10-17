@@ -34,13 +34,11 @@ public static class BorrowerWorkflows
         try
         {
             var email = IO.GetRequiredString("Enter borrower email: ");
-
             var borrowerDTO = await client.GetBorrowerWithLogsAsync(email);
 
-            Console.Clear();
             if (borrowerDTO == null)
             {
-                Console.WriteLine($"Borrower with the email address: {email} not found.");
+                Console.WriteLine("Borrower not found.");
             }
             else
             {
