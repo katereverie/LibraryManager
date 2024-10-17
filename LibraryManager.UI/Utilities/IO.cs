@@ -6,7 +6,7 @@ public static class IO
 {
     public static void AnyKey()
     {
-        Console.WriteLine("Press any key to continue...");
+        Console.WriteLine("\nPress any key to continue...");
         Console.ReadKey();
     }
 
@@ -153,7 +153,7 @@ public static class IO
         Console.WriteLine($"Email: {borrowerDTO.Email}");
         Console.WriteLine();
 
-        if (borrowerDTO.CheckoutLogs == null)
+        if (borrowerDTO.CheckoutLogs == null || !borrowerDTO.CheckoutLogs.Any())
         {
             Console.WriteLine("No checkout records.\n");
             return;
