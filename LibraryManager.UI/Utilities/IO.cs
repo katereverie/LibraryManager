@@ -156,7 +156,7 @@ public static class IO
 
         if (borrowerDTO.CheckoutLogs == null || !borrowerDTO.CheckoutLogs.Any())
         {
-            Console.WriteLine("No checkout records.\n");
+            Console.WriteLine("No checkout records.");
             return;
         }
 
