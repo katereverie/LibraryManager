@@ -84,7 +84,7 @@ public static class BorrowerWorkflows
 
         try
         {
-            var email = IO.GetRequiredString("Enter the Email of the Borrower to be edited: ");
+            var email = IO.GetRequiredString("Enter the email of the borrower to be edited: ");
             var borrower = await client.GetBorrowerAsync(email);
 
             if (borrower == null)
@@ -122,7 +122,7 @@ public static class BorrowerWorkflows
 
         try
         {
-            var email = IO.GetRequiredString("Enter the Email of the borrower to be deleted: ");
+            var email = IO.GetRequiredString("Enter the email of the borrower to be deleted: ");
             var borrower = await client.GetBorrowerAsync(email);
 
             if (borrower == null)
