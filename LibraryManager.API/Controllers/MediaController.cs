@@ -104,6 +104,12 @@ public class MediaController : Controller
             return Ok(result.Data);
         }
 
+        if (result.Message.Contains("Currently"))
+        {
+            _logger.LogWarning("No archived media found.");
+            return NotFound(result.Message);
+        }
+
         _logger.LogError("Error retrieving all archived media. Error: {ErrorMessage}", result.Message);
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
