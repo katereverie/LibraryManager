@@ -135,18 +135,19 @@ public static class IO
 
     public static void PrintBorrowerList(List<Borrower> list)
     {
+        Console.Clear();
         PrintHeader(" Borrower List ");
-        Console.WriteLine($"{"ID",-5} {"Name",-32} Email");
+        Console.WriteLine($"{"ID",-5} {"Name",-25} {"Email",-35} {"Phone",-20}");
         Console.WriteLine(new string('=', 100));
         foreach (var b in list)
         {
-            Console.WriteLine($"{b.BorrowerID,-5} {b.LastName + ", " + b.FirstName,-32} {b.Email}");
+            Console.WriteLine($"{b.BorrowerID,-5} {b.LastName + ", " + b.FirstName,-25} {b.Email,-35} {b.Phone,-20}");
         }
-        Console.WriteLine();
     }
 
     public static void PrintBorrowerInformation(ViewBorrowerDTO borrowerDTO)
     {
+        Console.Clear();
         PrintHeader(" Borrower Information ");
         Console.WriteLine($"Id: {borrowerDTO.BorrowerID}");
         Console.WriteLine($"Name: {borrowerDTO.LastName}, {borrowerDTO.FirstName}");
