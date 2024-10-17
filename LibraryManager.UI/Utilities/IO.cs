@@ -171,11 +171,11 @@ public static class IO
                 $"{log.CheckoutDate,-20:MM/dd/yyyy} " +
                 $"{(log.ReturnDate == null ? "Unreturned" : log.ReturnDate),-20:MM/dd/yyyy}");
         }
-        Console.WriteLine();
     }
 
     public static void PrintMediaList(List<Media> list)
     {
+        Console.Clear();
         PrintHeader($" {list[0].MediaType.MediaTypeName} List ");
         Console.WriteLine($"{"Media ID",-10} {"Type ID",-10} {"Title",-35} {"Status",-15}");
         Console.WriteLine(new string('=', 100));
@@ -186,11 +186,11 @@ public static class IO
                               $"{m.Title,-35} " +
                               $"{(m.IsArchived ? "Archived" : "Available"),-15}");
         }
-        Console.WriteLine();
     }
 
     public static void PrintMediaArchive(List<Media> list)
     {
+        Console.Clear();
         PrintHeader($" Media Archive ");
         Console.WriteLine($"{"Media ID",-10} {"Type ID",-10} {"Title",-35}");
         Console.WriteLine(new string('=', 100));
@@ -200,11 +200,11 @@ public static class IO
                               $"{m.MediaTypeID,-10} " +
                               $"{m.Title,-35} ");
         }
-        Console.WriteLine();
     }
 
     public static void PrintMediaTypeList(List<MediaType> list)
     {
+        Console.Clear();
         PrintHeader($" Media Type List ");
         Console.WriteLine($"{"Type ID",-10} {"Type Name",-20}");
         Console.WriteLine(new string('=', 100));
@@ -218,6 +218,7 @@ public static class IO
 
     public static void PrintAvailableMedia(List<Media> list)
     {
+        Console.Clear();
         PrintHeader($" Available Media List ");
         Console.WriteLine($"{"Media ID",-10} {"Type ID",-10} {"Title",-35}");
         Console.WriteLine(new string('=', 100));
@@ -232,6 +233,7 @@ public static class IO
 
     public static void PrintMediaReport(List<TopThreeMedia> list)
     {
+        Console.Clear();
         PrintHeader(" Top 3 Most Popular Media List ");
         Console.WriteLine($"\n{"Media ID",-10} {"Type",-20} {"Title",-35} {"Checkout Count",-15}");
         Console.WriteLine(new string('=', 100));
@@ -246,6 +248,7 @@ public static class IO
 
     public static void PrintCheckoutLogList(List<CheckoutLog> list)
     {
+        Console.Clear();
         PrintHeader($" Checkout Log List");
         Console.WriteLine($"{"Name",-20} {"Email",-30} {"Title",-30} {"Checkout Date",-20} {"Due Date",-20}");
         Console.WriteLine(new string('=', 120));
