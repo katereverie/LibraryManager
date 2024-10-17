@@ -103,22 +103,5 @@ public class BorrowerService : IBorrowerService
         {
             return ResultFactory.Fail(ex.Message);
         }
-
     }
-
-    //public Result<List<CheckoutLog>> GetCheckoutLogsByEmail(string email)
-    //{
-    //    try
-    //    {
-    //        var list = _borrowerRepository.GetCheckoutLogsByEmail(email);
-
-    //        return list.Any()
-    //            ? ResultFactory.Success(list)
-    //            : ResultFactory.Fail<List<CheckoutLog>>("Borrower has no checkout logs records.");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return ResultFactory.Fail<List<CheckoutLog>>(ex.Message);
-    //    }
-    //}
 }
