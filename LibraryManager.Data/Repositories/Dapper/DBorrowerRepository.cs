@@ -8,6 +8,7 @@ namespace LibraryManager.Data.Repositories.Dapper;
 public class DBorrowerRepository : IBorrowerRepository
 {
     private readonly string _connectionString;
+
     public DBorrowerRepository(string connectionString)
     {
         _connectionString = connectionString;
@@ -84,32 +85,41 @@ public class DBorrowerRepository : IBorrowerRepository
 
     public ViewBorrowerDTO? GetByEmailWithLogs(string email)
     {
-        throw new NotImplementedException();
-    }
-
-    public List<CheckoutLog> GetCheckoutLogsByEmail(string email)
-    {
-        using (var cn = new SqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
-            var command = @"SELECT cl.CheckoutLogID, cl.BorrowerID, cl.MediaID, cl.CheckoutDate, cl.DueDate, cl.ReturnDate,
-                                    m.MediaID, m.MediaTypeID, m.Title, m.IsArchived,
-                                    b.BorrowerID, b.Email
-                                FROM CheckoutLog cl
-                                INNER JOIN Media m ON m.MediaID = cl.MediaID
-                                INNER JOIN Borrower b ON b.BorrowerID = cl.BorrowerID
-                                WHERE b.Email = @Email AND cl.ReturnDate IS NULL";
+            var sql = @"
+                SELECT b.BorrowerID, b.FirstName, b.LastName, b.Email,
+                       cl.CheckoutDate, cl.ReturnDate, cl.MediaID, m.Title
+                FROM Borrower b
+                LEFT JOIN CheckoutLog cl ON b.BorrowerID = cl.BorrowerID
+                LEFT JOIN Media m ON cl.MediaID = m.MediaID
+                WHERE b.Email = @Email";
 
-            return cn.Query<CheckoutLog, Media, Borrower, CheckoutLog>(
-                            command,
-                            (cl, m, b) =>
-                            {
-                                cl.Media = m;
-                                cl.Borrower = b;
-                                return cl;
-                            },
-                            new { email },
-                            splitOn: "MediaID, BorrowerID"
-                            ).ToList();
+            var borrowerDict = new Dictionary<int, ViewBorrowerDTO>();
+
+            connection.Query<ViewBorrowerDTO, CheckoutLogDTO, ViewBorrowerDTO>(
+                sql,
+                (borrower, checkoutLog) =>
+                {
+                    if (!borrowerDict.TryGetValue(borrower.BorrowerID, out var borrowerEntry))
+                    {
+                        borrowerEntry = borrower;
+                        borrowerEntry.CheckoutLogs = new List<CheckoutLogDTO>();
+                        borrowerDict[borrower.BorrowerID] = borrowerEntry;
+                    }
+
+                    if (checkoutLog != null)
+                    {
+                        borrowerEntry.CheckoutLogs.Add(checkoutLog);
+                    }
+
+                    return borrowerEntry;
+                },
+                new { Email = email },
+                splitOn: "CheckoutDate"
+            );
+
+            return borrowerDict.Values.SingleOrDefault();
         }
     }
 
