@@ -49,6 +49,7 @@ public static class CheckoutWorkflows
             while (returnOption != 2)
             {
                 var currentCheckoutLogs = await client.GetCurrentCheckoutLogsAsync();
+
                 var borrowerCheckoutLogs = currentCheckoutLogs.FindAll(cl => cl.Borrower.Email == email);
 
                 if (borrowerCheckoutLogs.Any())
@@ -74,7 +75,7 @@ public static class CheckoutWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
@@ -99,7 +100,7 @@ public static class CheckoutWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
