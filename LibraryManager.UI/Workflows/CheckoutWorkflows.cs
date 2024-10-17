@@ -21,7 +21,6 @@ public static class CheckoutWorkflows
                     Console.WriteLine("No available media items found.");
                     break;
                 }
-                Console.Clear();
                 IO.PrintAvailableMedia(availableMedias);
                 int mediaID = IO.GetMediaID(availableMedias, "Enter the ID of the media to check out: ");
                 await client.CheckoutMediaAsync(mediaID, email);
@@ -54,7 +53,6 @@ public static class CheckoutWorkflows
 
                 if (borrowerCheckoutLogs.Any())
                 {
-                    Console.Clear();
                     IO.PrintBorrowersCheckedoutMedia(borrowerCheckoutLogs);
                     int logID = IO.GetCheckoutLogID(borrowerCheckoutLogs, "Enter the Log ID to return: ");
                     await client.ReturnMediaAsync(logID);
