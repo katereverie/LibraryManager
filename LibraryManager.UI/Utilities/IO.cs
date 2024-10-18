@@ -53,6 +53,7 @@ public static class IO
     {
         string? input;
 
+        Console.WriteLine("Press \"Enter\" to skip");
         do
         {
             Console.Write(prompt);
