@@ -62,14 +62,6 @@ public class EFCheckoutRepository : ICheckoutRepository
                          .ToList();
     }
 
-    public List<CheckoutLog> GetCheckedoutMediaByBorrowerID(int borrowerID)
-    {
-        return _dbContext.CheckoutLog
-                         .Include(cl => cl.Media)
-                         .Where(cl => cl.BorrowerID == borrowerID && cl.ReturnDate == null)
-                         .ToList();
-    }
-
     public void Update(int checkoutLogID)
     {
         var checkoutLog = _dbContext.CheckoutLog

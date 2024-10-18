@@ -61,29 +61,6 @@ public class DCheckoutRepository : ICheckoutRepository
         }
     }
 
-    public List<CheckoutLog> GetCheckedoutMediaByBorrowerID(int borrowerID)
-    {
-        using (var cn = new SqlConnection(_connectionString))
-        {
-            var command = @"SELECT cl.CheckoutLogID, cl.MediaID, m.Title
-                                FROM CheckoutLog cl
-                                INNER JOIN Media m ON m.MediaID = cl.MediaID
-                                WHERE cl.BorrowerID = @BorrowerID
-                                AND cl.ReturnDate IS NULL";
-
-            return cn.Query<CheckoutLog, Media, CheckoutLog>(
-                            command,
-                            (cl, m) =>
-                            {
-                                cl.Media = m;
-                                return cl;
-                            },
-                            new { borrowerID },
-                            splitOn: "MediaID"
-                        ).ToList();
-        }
-    }
-
     public List<CheckoutLog> GetCheckoutLogsByBorrowerEmail(string email)
     {
         using (var cn = new SqlConnection(_connectionString))
