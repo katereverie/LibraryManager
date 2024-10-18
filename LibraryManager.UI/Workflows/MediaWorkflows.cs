@@ -76,10 +76,11 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                IO.PrintMediaList(selectedMedias.FindAll(m => m.IsArchived == false));
-                int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
-                var mediaToEdit = selectedMedias.Single(m => m.MediaID == mediaID);
-                mediaToEdit.Title = IO.GetRequiredString("Enter new title: ");
+                var editableMedias = selectedMedias.FindAll(m => m.IsArchived == false);
+                IO.PrintAvailableMedia(editableMedias);
+                int mediaID = IO.GetMediaID(editableMedias, "\nEnter the ID of the media to edit: ");
+                var mediaToEdit = editableMedias.Single(m => m.MediaID == mediaID);
+                mediaToEdit.Title = IO.GetEditedString("Enter new title: ", mediaToEdit.Title);
                 mediaToEdit.MediaTypeID = IO.GetMediaTypeID(mediaTypes, "Enter new type ID: ");
 
                 await client.EditMediaAsync(mediaToEdit);
@@ -110,8 +111,8 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                IO.PrintMediaList(selectedMedias);
-                int mediaID = IO.GetMediaID(selectedMedias, "Enter the ID of the media to edit: ");
+                IO.PrintAvailableMedia(selectedMedias.FindAll(m => m.IsArchived == false));
+                int mediaID = IO.GetMediaID(selectedMedias, "\nEnter the ID of the media to archive: ");
                 var mediaToArchive = selectedMedias.Single(m => m.MediaID == mediaID);
                 mediaToArchive.IsArchived = true;
 
