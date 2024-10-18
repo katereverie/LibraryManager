@@ -23,17 +23,30 @@ public class EFCheckoutRepository : ICheckoutRepository
     public List<CheckoutLog> GetAllCheckedoutMedia()
     {
         return _dbContext.CheckoutLog
-                         .Include(cl => cl.Borrower)
-                         .Include(cl => cl.Media)
                          .Where(cl => cl.ReturnDate == null)
+                         .Select(cl => new CheckoutLog
+                         {
+                             CheckoutLogID = cl.CheckoutLogID,
+                             MediaID = cl.MediaID,
+                             CheckoutDate = cl.CheckoutDate,
+                             DueDate = cl.DueDate,
+                             Borrower = new Borrower
+                             {
+                                 FirstName = cl.Borrower.FirstName,
+                                 LastName = cl.Borrower.LastName,
+                                 Email = cl.Borrower.Email,
+                             },
+                             Media = new Media
+                             {
+                                 Title = cl.Media.Title,
+                             }
+                         })
                          .ToList();
     }
 
     public List<Media> GetAvailableMedia()
     {
         return _dbContext.Media
-                         .Include(m => m.CheckoutLogs)
-                         .Include(m => m.MediaType)
                          .Where(m => !m.IsArchived)
                          .Where(m => !m.CheckoutLogs.Any() ||
                                      m.CheckoutLogs.OrderByDescending(cl => cl.CheckoutLogID)
