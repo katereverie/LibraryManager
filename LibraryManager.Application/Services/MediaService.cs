@@ -86,22 +86,6 @@ public class MediaService : IMediaService
         }
     }
 
-    public Result<Media> GetMediaByID(int mediaID)
-    {
-        try
-        {
-            var media = _mediaRepository.GetByID(mediaID);
-
-            return media != null
-                ? ResultFactory.Success(media)
-                : ResultFactory.Fail<Media>($"Media with ID {mediaID} not found");
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<Media>(ex.Message);
-        }
-    }
-
     public Result<List<Media>> GetMediaByType(int typeId)
     {
         try
@@ -134,19 +118,4 @@ public class MediaService : IMediaService
         }
     }
 
-    public Result<List<Media>> GetUnarchivedMediaByType(int typeID)
-    {
-        try
-        {
-            var list = _mediaRepository.GetUnarchivedByType(typeID);
-
-            return list.Any()
-                ? ResultFactory.Success(list)
-                : ResultFactory.Fail<List<Media>>("No unarchived media of this type is found.");
-        }
-        catch (Exception ex)
-        {
-            return ResultFactory.Fail<List<Media>>(ex.Message);
-        }
-    }
 }
