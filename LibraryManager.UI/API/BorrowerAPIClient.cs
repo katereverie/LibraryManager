@@ -42,11 +42,38 @@ public class BorrowerAPIClient : IBorrowerAPIClient
     public async Task AddBorrowerAsync(AddBorrowerRequest borrower)
     {
         var response = await _httpClient.PostAsJsonAsync(PATH, borrower);
-        
 
-        if (!response.IsSuccessStatusCode) {
+        if (!response.IsSuccessStatusCode)
+        {
             var content = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException(content);
+
+            try
+            {
+                using (JsonDocument doc = JsonDocument.Parse(content))
+                {
+                    if (doc.RootElement.TryGetProperty("errors", out var errorsElement))
+                    {
+                        var errorMessageList = new List<string>();
+
+                        foreach (var error in errorsElement.EnumerateObject())
+                        {
+                            var field = error.Name;
+                            var messages = error.Value.EnumerateArray().Select(e => e.GetString());
+
+                            errorMessageList.Add($"{field}: {string.Join(", ", messages)}");
+                        }
+
+                        var errorMessage = string.Join("; ", errorMessageList);
+                        throw new HttpRequestException($"Validation failed: {errorMessage}");
+                    }
+                }
+            }
+            catch (JsonException ex)
+            {
+                throw new HttpRequestException("An error occurred while processing the error response.", ex);
+            }
+
+            throw new HttpRequestException("An error occurred while processing your request.");
         }
     }
 
