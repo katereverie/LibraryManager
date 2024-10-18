@@ -76,15 +76,23 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                var editableMedias = selectedMedias.FindAll(m => m.IsArchived == false);
-                IO.PrintAvailableMedia(editableMedias);
-                int mediaID = IO.GetMediaID(editableMedias, "\nEnter the ID of the media to edit: ");
-                var mediaToEdit = editableMedias.Single(m => m.MediaID == mediaID);
-                mediaToEdit.Title = IO.GetEditedString("Enter new title: ", mediaToEdit.Title);
-                mediaToEdit.MediaTypeID = IO.GetMediaTypeID(mediaTypes, "Enter new type ID: ");
+                if (!selectedMedias.Any(m => m.IsArchived == false))
+                {
+                    Console.Clear();
+                    Console.WriteLine("No available media of this type found.");
+                }
+                else
+                {
+                    var editableMedias = selectedMedias.FindAll(m => m.IsArchived == false);
+                    IO.PrintAvailableMedia(editableMedias);
+                    int mediaID = IO.GetMediaID(editableMedias, "\nEnter the ID of the media to edit: ");
+                    var mediaToEdit = editableMedias.Single(m => m.MediaID == mediaID);
+                    mediaToEdit.Title = IO.GetEditedString("Enter new title: ", mediaToEdit.Title);
+                    mediaToEdit.MediaTypeID = IO.GetMediaTypeID(mediaTypes, "Enter new type ID: ");
 
-                await client.EditMediaAsync(mediaToEdit);
-                Console.WriteLine("Media successfully updated.");
+                    await client.EditMediaAsync(mediaToEdit);
+                    Console.WriteLine("Media successfully updated.");
+                }
             }
             else
             {
@@ -111,13 +119,22 @@ public static class MediaWorkflows
                 IO.PrintMediaTypeList(mediaTypes);
                 int typeID = IO.GetMediaTypeID(mediaTypes);
                 var selectedMedias = await client.GetMediaByTypeAsync(typeID);
-                IO.PrintAvailableMedia(selectedMedias.FindAll(m => m.IsArchived == false));
-                int mediaID = IO.GetMediaID(selectedMedias, "\nEnter the ID of the media to archive: ");
-                var mediaToArchive = selectedMedias.Single(m => m.MediaID == mediaID);
-                mediaToArchive.IsArchived = true;
+                if (!selectedMedias.Any(m => m.IsArchived == false))
+                {
+                    Console.Clear();
+                    Console.WriteLine("No available media of this type found.");
+                }
+                else
+                {
+                    var availableMedias = selectedMedias.FindAll(m => m.IsArchived == false);
+                    IO.PrintAvailableMedia(availableMedias);
+                    int mediaID = IO.GetMediaID(availableMedias, "\nEnter the ID of the media to archive: ");
+                    var mediaToArchive = availableMedias.Single(m => m.MediaID == mediaID);
+                    mediaToArchive.IsArchived = true;
 
-                await client.ArchiveMediaAsync(mediaToArchive);
-                Console.WriteLine("Media successfully archived.");
+                    await client.ArchiveMediaAsync(mediaToArchive);
+                    Console.WriteLine("Media successfully archived.");
+                }
             }
             else
             {
