@@ -39,7 +39,6 @@ public class EFMediaRepository : IMediaRepository
     public List<Media> GetAllArchived()
     {
         return _dbContext.Media
-                         .Include(m => m.MediaType)
                          .Where(m => m.IsArchived == true)
                          .OrderBy(m => m.MediaTypeID)
                          .ThenBy(m => m.Title)
@@ -66,8 +65,18 @@ public class EFMediaRepository : IMediaRepository
     public List<Media> GetByType(int typeId)
     {
         return _dbContext.Media
-                         .Include(m => m.MediaType)
                          .Where(m => m.MediaTypeID == typeId)
+                         .Select(m => new Media
+                         {
+                             MediaID = m.MediaID,
+                             MediaTypeID = m.MediaTypeID,
+                             Title = m.Title,
+                             IsArchived = m.IsArchived,
+                             MediaType = new MediaType
+                             {
+                                 MediaTypeName = m.MediaType.MediaTypeName
+                             }
+                         })
                          .ToList();
     }
 
