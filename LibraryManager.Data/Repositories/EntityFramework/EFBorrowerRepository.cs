@@ -1,6 +1,5 @@
 ﻿using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManager.Data.Repositories.EntityFramework;
 
@@ -37,13 +36,11 @@ public class EFBorrowerRepository : IBorrowerRepository
         return _dbContext.Borrower.ToList();
     }
 
-    // Method for getting borrower without checkout logs
     public Borrower? GetByEmail(string email)
     {
         return _dbContext.Borrower.FirstOrDefault(b => b.Email == email);
     }
 
-    // Method for getting borrower with checkout logs (returns DTO)
     public ViewBorrowerDTO? GetByEmailWithLogs(string email)
     {
         var borrowerWithLogs = _dbContext.Borrower
