@@ -155,17 +155,17 @@ public static class IO
         Console.WriteLine($"Email: {borrowerDTO.Email}");
         Console.WriteLine();
 
-        if (!borrowerDTO.CheckoutLogs.Any())
+        var checkedoutMedias = borrowerDTO.CheckoutLogs == null ? null : borrowerDTO.CheckoutLogs.FindAll(cl => cl.ReturnDate == null);
+        if (checkedoutMedias == null || !checkedoutMedias.Any())
         {
             Console.WriteLine("No checkout records.");
             return;
         }
 
-        var logDTOs = borrowerDTO.CheckoutLogs.FindAll(cl => cl.ReturnDate == null);
         PrintHeader(" Checkout Record ");
         Console.WriteLine($"{"Media ID",-10} {"Title",-40} {"Checkout Date",-20} {"Return Date",-20}");
         Console.WriteLine(new string('=', 100));
-        foreach (var log in logDTOs)
+        foreach (var log in checkedoutMedias)
         {
             Console.WriteLine($"{log.MediaID,-10} " +
                 $"{log.Title,-40} " +
