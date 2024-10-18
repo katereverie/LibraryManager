@@ -64,15 +64,6 @@ public class EFBorrowerRepository : IBorrowerRepository
         return borrowerWithLogs;
     }
 
-    public List<CheckoutLog> GetCheckoutLogsByEmail(string email)
-    {
-        return _dbContext.CheckoutLog
-                         .Include(cl => cl.Media)
-                         .Include(cl => cl.Borrower)
-                         .Where(cl => cl.Borrower.Email == email)
-                         .ToList();
-    }
-
     public void Update(Borrower borrower)
     {
         var borrowerToUpdate = _dbContext.Borrower.SingleOrDefault(b => b.BorrowerID == borrower.BorrowerID);
