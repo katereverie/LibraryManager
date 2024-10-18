@@ -47,6 +47,7 @@ public static class CheckoutWorkflows
             int returnOption = 0;
             while (returnOption != 2)
             {
+                Console.Clear();
                 var currentCheckoutLogs = await client.GetCurrentCheckoutLogsAsync();
 
                 var borrowerCheckoutLogs = currentCheckoutLogs.FindAll(cl => cl.Borrower.Email == email);
