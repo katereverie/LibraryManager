@@ -93,7 +93,6 @@ public static class BorrowerWorkflows
             }
             else
             {
-                Console.WriteLine("Edit Borrower (Press \"Enter\" to skip)");
                 var editedBorrower = new EditBorrowerRequest
                 {
                     BorrowerID = borrower.BorrowerID,
