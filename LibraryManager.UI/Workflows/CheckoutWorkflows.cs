@@ -30,7 +30,7 @@ public static class CheckoutWorkflows
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"API request failed.\n{ex.Message}");
+            Console.WriteLine(ex.Message);
         }
 
         IO.AnyKey();
