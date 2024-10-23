@@ -90,4 +90,9 @@ public class MockCheckoutRepo : ICheckoutRepository
     {
         throw new NotImplementedException();
     }
+
+    public List<CheckoutLog> GetCheckoutLogsByBorrowerEmail(string email)
+    {
+        throw new NotImplementedException();
+    }
 }

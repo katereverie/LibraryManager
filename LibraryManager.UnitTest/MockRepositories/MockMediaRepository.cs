@@ -59,4 +59,9 @@ public class MockMediaRepo : IMediaRepository
     {
         throw new NotImplementedException();
     }
+
+    void IMediaRepository.Add(Media newMedia)
+    {
+        throw new NotImplementedException();
+    }
 }

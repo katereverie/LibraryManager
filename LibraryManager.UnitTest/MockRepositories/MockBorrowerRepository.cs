@@ -47,4 +47,9 @@ public class MockBorrowerRepo : IBorrowerRepository
     {
         throw new NotImplementedException();
     }
+
+    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    {
+        throw new NotImplementedException();
+    }
 }
