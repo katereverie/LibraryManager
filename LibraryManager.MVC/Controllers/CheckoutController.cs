@@ -1,12 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LibraryManager.Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManager.MVC.Controllers
+namespace LibraryManager.MVC.Controllers;
+
+public class CheckoutController : Controller
 {
-    public class CheckoutController : Controller
+    private readonly ICheckoutService _checkoutService; 
+
+    public CheckoutController(ICheckoutService checkoutService)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _checkoutService = checkoutService;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
     }
 }

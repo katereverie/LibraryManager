@@ -1,12 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LibraryManager.Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManager.MVC.Controllers
+namespace LibraryManager.MVC.Controllers;
+
+public class BorrowerController : Controller
 {
-    public class BorrowerController : Controller
+    private readonly IBorrowerService _borrowerService;
+
+    public BorrowerController(IBorrowerService borrowerService)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _borrowerService = borrowerService;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
     }
 }

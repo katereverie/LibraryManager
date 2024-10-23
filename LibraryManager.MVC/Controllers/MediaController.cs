@@ -1,12 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LibraryManager.Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
-namespace LibraryManager.MVC.Controllers
+namespace LibraryManager.MVC.Controllers;
+
+public class MediaController : Controller
 {
-    public class MediaController : Controller
+    private readonly IMediaService _mediaService;
+
+    public MediaController(IMediaService mediaService)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _mediaService = mediaService;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
     }
 }
