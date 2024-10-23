@@ -21,14 +21,14 @@ public class EFBorrowerRepository : IBorrowerRepository
     public void Delete(Borrower borrower)
     {
         var checkoutLogs = _dbContext.CheckoutLog.Where(cl => cl.BorrowerID == borrower.BorrowerID);
-        _dbContext.Remove(borrower);
-        _dbContext.SaveChanges();
-
         if (checkoutLogs != null)
         {
             _dbContext.RemoveRange(checkoutLogs);
             _dbContext.SaveChanges();
-        } 
+        }
+
+        _dbContext.Remove(borrower);
+        _dbContext.SaveChanges();
     }
 
     public List<Borrower> GetAll()
