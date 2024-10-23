@@ -18,13 +18,10 @@ public class BorrowerForm
     /// <summary>
     /// initialize default BorrowerForm DTO
     /// </summary>
-    public BorrowerForm()
-    {
-        
-    }
+    public BorrowerForm() { }
 
     /// <summary>
-    /// transport Borrower entity data to BorrowerForm fields
+    /// transport data from Borrower entity to BorrowerForm DTO
     /// </summary>
     /// <param name="entity"></param>
     public BorrowerForm(Borrower entity)
@@ -37,7 +34,7 @@ public class BorrowerForm
     }
 
     /// <summary>
-    /// transport BorrowerForm DTO to Borrower entity
+    /// transport data from BorrowerForm DTO to Borrower entity
     /// </summary>
     /// <returns></returns>
     public Borrower ToEntity()
