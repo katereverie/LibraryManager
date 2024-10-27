@@ -1,0 +1,59 @@
+﻿@model List<BorrowerForm>
+@{
+    ViewData["Title"] = "Borrower Search";
+}
+
+<h2 class="mt-4">Borrower Search</h2>
+<p class="mb-4">Search for a borrower by email address. Leave blank to return all borrowers.</p>
+
+<div class="mb-4">
+    <form asp-action="Index" method="get" class="form-inline">
+        @Html.AntiForgeryToken()
+
+        <p class="mb-3">
+            You may also <a asp-action="Create" asp-controller="Borrower" class="btn btn-success">create</a> a borrower.
+        </p>
+
+        <div class="form-group mb-3">
+            <!-- Increased margin-bottom for spacing -->
+            <label for="email" class="sr-only">Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address" />
+        </div>
+
+        <button type="submit" class="btn btn-primary mb-2 ml-2">Search</button>
+    </form>
+</div>
+
+<table class="table table-bordered table-hover mt-4">
+    <thead class="thead-light">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            foreach (var borrower in Model)
+            {
+                <tr>
+                    <td>@borrower.FirstName @borrower.LastName</td>
+                    <td>@borrower.Email</td>
+                    <td>@borrower.Phone</td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="Borrower" asp-route-id="@borrower.BorrowerID" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-controller="Borrower" asp-route-id="@borrower.BorrowerID" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">No borrowers found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
