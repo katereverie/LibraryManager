@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LibraryManager.MVC</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LibraryManager.MVC.styles.css" asp-append-version="true" />
@@ -12,24 +12,53 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LibraryManager.MVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-controller="Borrower" asp-action="">Borrower</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Media" asp-action="">Media</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Checkout" asp-action="">Checkout</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Borrower" asp-action="">Return</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <!-- TempData Message Display -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert bg-success text-white" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="alert bg-primary text-white" role="alert">
+            @TempData["InfoMessage"]
+        </div>
+    }
+    @if (TempData["WarningMessage"] != null)
+    {
+        <div class="alert bg-warning text-dark" role="alert">
+            @TempData["WarningMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert bg-danger text-white" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -38,7 +67,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - LibraryManager.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Today.Year Library Manager
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
