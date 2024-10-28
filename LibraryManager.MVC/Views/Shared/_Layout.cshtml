@@ -34,31 +34,9 @@
             </div>
         </nav>
     </header>
-    <!-- TempData Message Display -->
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert bg-success text-white" role="alert">
-            @TempData["SuccessMessage"]
-        </div>
-    }
-    @if (TempData["InfoMessage"] != null)
-    {
-        <div class="alert bg-primary text-white" role="alert">
-            @TempData["InfoMessage"]
-        </div>
-    }
-    @if (TempData["WarningMessage"] != null)
-    {
-        <div class="alert bg-warning text-dark" role="alert">
-            @TempData["WarningMessage"]
-        </div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert bg-danger text-white" role="alert">
-            @TempData["ErrorMessage"]
-        </div>
-    }
+
+    <partial name="_AlertsPartial" />
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -73,6 +51,29 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('.alert');
+
+            alerts.forEach(alert => {
+                // start countdown
+                setTimeout(() => {
+                    // add fade-out effect
+                    if (alert) {
+                        alert.style.transaction = 'opacity 1s';
+                        alert.style.opacity = '0';
+
+                        // remove alert after fade
+                        setTimeout(() => {
+                            alert.remove();
+                        }, 1000);
+                    }
+                },5000)
+            })
+        })
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
