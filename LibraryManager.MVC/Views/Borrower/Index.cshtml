@@ -5,22 +5,17 @@
 
 <h2 class="mt-4">Borrower Search</h2>
 <p class="mb-4">Search for a borrower by email address. Leave blank to return all borrowers.</p>
-
 <div class="mb-4">
-    <form asp-action="Index" method="get" class="form-inline">
-        @Html.AntiForgeryToken()
-
+    <form asp-action="Index" asp-controller="Borrower" method="get" class="form-inline">
         <p class="mb-3">
             You may also <a asp-action="Create" asp-controller="Borrower" class="btn btn-success">create</a> a borrower.
         </p>
-
         <div class="form-group mb-3">
-            <!-- Increased margin-bottom for spacing -->
             <label for="email" class="sr-only">Email</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address" />
+            <input type="email" id="email" name="email" class="form-control"
+                   placeholder="Enter email address" />
         </div>
-
-        <button type="submit" class="btn btn-primary mb-2 ml-2">Search</button>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
     </form>
 </div>
 
@@ -34,7 +29,15 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model.Any())
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    No borrowers found. Try a different search.
+                </td>
+            </tr>
+        }
+        else
         {
             foreach (var borrower in Model)
             {
@@ -48,12 +51,6 @@
                     </td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="4" class="text-center text-muted">No borrowers found.</td>
-            </tr>
         }
     </tbody>
 </table>
