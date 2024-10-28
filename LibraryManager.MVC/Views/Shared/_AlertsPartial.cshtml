@@ -1,0 +1,21 @@
+﻿<div id="alertContainer">
+    @foreach (var type in new[] {"Success", "Error", "Warning", "Info"})
+    {
+        if (TempData[$"{type}Message"] != null)
+        {
+            var alertClass = type.ToLower() switch
+            {
+                "success" => "alert-success",
+                "error" => "alert-danger",
+                "warning" => "alert-warning",
+                "info" => "alert-info",
+                _ => "alert-info"
+            };
+
+            <div class="alert @alertClass alert-dismissible fade show" role="alert" id="@(type.ToLower())Alert">
+                @TempData[$"{type}Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
+</div>
