@@ -13,17 +13,47 @@ public class BorrowerController : Controller
         _borrowerService = borrowerService;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string? email)
     {
-        var result = _borrowerService.GetAllBorrowers();
+        var borrowers = new List<BorrowerForm>();
 
-        if (result.Ok && result.Data != null)
+        if (string.IsNullOrEmpty(email))
         {
-            var borrowers = result.Data.Select(e => new BorrowerForm(e)).ToList();
-            return View(borrowers);
+            var result = _borrowerService.GetAllBorrowers();
+            if (result.Ok)
+            {
+                borrowers.AddRange(result.Data.Select(e => new BorrowerForm(e)).ToList());
+                if (!borrowers.Any())
+                {
+                    TempData["InfoMessage"] = "No borrowers found in the system.";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+        }
+        else
+        {
+            var result = _borrowerService.GetBorrower(email);
+            if (result.Ok)
+            {
+                borrowers.Add(new BorrowerForm(result.Data));
+                TempData["SuccessMessage"] = "Borrower found.";
+            }
+            else
+            {
+                if (result.Message.Contains("No borrower"))
+                {
+                    TempData["WarningMessage"] = $"No borrower found with email: {email}";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result.Message;
+                }
+            }
         }
 
-        TempData["ErrorMessage"] = result.Message;
-        return View("Error");
+        return View(borrowers);
     }
 }
