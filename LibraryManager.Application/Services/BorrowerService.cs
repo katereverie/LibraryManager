@@ -71,23 +71,23 @@ public class BorrowerService : IBorrowerService
         }
     }
 
-    public Result AddBorrower(Borrower newBorrower)
+    public Result<int> AddBorrower(Borrower newBorrower)
     {
         try
         {
             var duplicate = _borrowerRepository.GetByEmail(newBorrower.Email);
             if (duplicate != null)
             {
-                return ResultFactory.Fail($"{newBorrower.Email} has already been taken!");
+                return ResultFactory.Fail<int>($"{newBorrower.Email} has already been taken!");
             }
 
-            _borrowerRepository.Add(newBorrower);
-            return ResultFactory.Success();
+            int newID = _borrowerRepository.Add(newBorrower);
+            return ResultFactory.Success(newID);
            
         }
         catch (Exception ex)
         {
-            return ResultFactory.Fail(ex.Message);
+            return ResultFactory.Fail<int>(ex.Message);
         }
     }
 
