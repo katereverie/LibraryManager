@@ -58,7 +58,8 @@ public class EFBorrowerRepository : IBorrowerRepository
                     CheckoutDate = cl.CheckoutDate,
                     ReturnDate = cl.ReturnDate,
                     MediaID = cl.MediaID,
-                    Title = cl.Media.Title
+                    Title = cl.Media.Title,
+                    MediaTypeName = cl.Media.MediaType.MediaTypeName,
                 }).ToList()
             })
             .FirstOrDefault();

@@ -94,6 +94,7 @@ public class DBorrowerRepository : IBorrowerRepository
                 FROM Borrower b
                 LEFT JOIN CheckoutLog cl ON b.BorrowerID = cl.BorrowerID
                 LEFT JOIN Media m ON cl.MediaID = m.MediaID
+                LEFT JOIN MediaType mt ON mt.MediaID = m.MediaID
                 WHERE b.Email = @Email";
 
             var borrowerDict = new Dictionary<int, BorrowerDetailsDTO>();
