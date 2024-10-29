@@ -56,4 +56,34 @@ public class BorrowerController : Controller
 
         return View(borrowers);
     }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new BorrowerForm());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(BorrowerForm model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var result = _borrowerService.AddBorrower(model.ToEntity());
+
+        if (!result.Ok)
+        {
+            string messageType = result.Message.Contains("already") ? "Warning" : "Error";
+            TempData[$"{messageType}Message"] = result.Message;
+
+            return View(model);
+        }
+
+        TempData["SuccessMessage"] = $"Borrower created with ID {result.Data}";
+
+        return RedirectToAction("List");
+    }
 }
