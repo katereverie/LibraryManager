@@ -38,7 +38,7 @@ public class EFBorrowerRepository : IBorrowerRepository
 
     public Borrower? GetByEmail(string email)
     {
-        return _dbContext.Borrower.FirstOrDefault(b => b.Email == email);
+        return _dbContext.Borrower.SingleOrDefault(b => b.Email == email);
     }
 
     public ViewBorrowerDTO? GetByEmailWithLogs(string email)
