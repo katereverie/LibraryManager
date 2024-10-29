@@ -42,16 +42,17 @@ public class EFBorrowerRepository : IBorrowerRepository
         return _dbContext.Borrower.SingleOrDefault(b => b.Email == email);
     }
 
-    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    public BorrowerDetailsDTO? GetByEmailWithLogs(string email)
     {
         var borrowerWithLogs = _dbContext.Borrower
             .Where(b => b.Email == email)
-            .Select(b => new ViewBorrowerDTO
+            .Select(b => new BorrowerDetailsDTO
             {
                 BorrowerID = b.BorrowerID,
                 FirstName = b.FirstName,
                 LastName = b.LastName,
                 Email = b.Email,
+                Phone = b.Phone,
                 CheckoutLogs = b.CheckoutLogs.Select(cl => new CheckoutLogDTO
                 {
                     CheckoutDate = cl.CheckoutDate,

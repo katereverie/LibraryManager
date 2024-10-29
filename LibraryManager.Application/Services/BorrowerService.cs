@@ -43,7 +43,7 @@ public class BorrowerService : IBorrowerService
         }
     }
 
-    public Result<ViewBorrowerDTO> GetBorrowerWithLogs(string email)
+    public Result<BorrowerDetailsDTO> GetBorrowerWithLogs(string email)
     {
         try
         {
@@ -51,11 +51,11 @@ public class BorrowerService : IBorrowerService
 
             return borrowerDTO != null
                 ? ResultFactory.Success(borrowerDTO)
-                : ResultFactory.Fail<ViewBorrowerDTO>($"No borrower registered with {email} was found.");
+                : ResultFactory.Fail<BorrowerDetailsDTO>($"No borrower registered with {email} was found.");
         }
         catch (Exception ex)
         {
-            return ResultFactory.Fail<ViewBorrowerDTO>(ex.Message);
+            return ResultFactory.Fail<BorrowerDetailsDTO>(ex.Message);
         }
     }
 

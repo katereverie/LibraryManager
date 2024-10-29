@@ -10,5 +10,5 @@ public interface IBorrowerRepository
     void Update(Borrower borrower);
     List<Borrower> GetAll();
     Borrower? GetByEmail(string email);
-    ViewBorrowerDTO? GetByEmailWithLogs(string email);
+    BorrowerDetailsDTO? GetByEmailWithLogs(string email);
 }
