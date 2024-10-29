@@ -1,4 +1,5 @@
 ﻿using LibraryManager.API.Models;
+using LibraryManager.Core.DTOs;
 using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;

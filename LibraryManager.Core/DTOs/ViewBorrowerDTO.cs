@@ -1,4 +1,4 @@
-﻿namespace LibraryManager.Core.Entities
+﻿namespace LibraryManager.Core.DTOs
 {
     public class ViewBorrowerDTO
     {

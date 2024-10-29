@@ -1,10 +1,10 @@
-﻿namespace LibraryManager.Core.Entities;
+﻿namespace LibraryManager.Core;
 
 public class Result
 {
     public bool Ok { get; set; }
     public string Message { get; private set; }
-    
+
     public Result(bool success, string message)
     {
         Ok = success;

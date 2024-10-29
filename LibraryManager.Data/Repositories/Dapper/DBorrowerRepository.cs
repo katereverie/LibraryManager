@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using LibraryManager.Core.DTOs;
 using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 using Microsoft.Data.SqlClient;

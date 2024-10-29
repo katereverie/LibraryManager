@@ -1,5 +1,5 @@
 ﻿using LibraryManager.Application.Services;
-using LibraryManager.Core.Entities;
+using LibraryManager.Core;
 using LibraryManager.Core.Interfaces;
 using LibraryManager.Data.Repositories.Dapper;
 using LibraryManager.Data.Repositories.EntityFramework;
