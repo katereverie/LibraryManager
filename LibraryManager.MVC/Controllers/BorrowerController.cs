@@ -86,4 +86,19 @@ public class BorrowerController : Controller
 
         return RedirectToAction("List");
     }
+
+    [HttpGet]
+    public IActionResult Details(string email)
+    {
+        var result = _borrowerService.GetBorrowerWithLogs(email);
+        if (result.Ok)
+        {
+            return View(result.Data);
+        }
+        else
+        {
+            TempData["ErrorMessage"] = result.Message;
+            return View();
+        }
+    }
 }
