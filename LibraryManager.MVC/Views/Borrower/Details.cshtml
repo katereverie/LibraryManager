@@ -1,0 +1,68 @@
+﻿@using LibraryManager.Core.DTOs
+@model BorrowerDetailsDTO
+@{
+    ViewData["Title"] = "Borrower Details";
+}
+
+<h2>Borrower Details</h2>
+
+<form>
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" readonly />
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" readonly />
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" readonly />
+    </div>
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" readonly />
+    </div>
+</form>
+
+<h2>Checkout Items</h2>
+
+<table class="table table-bordered table-hover mt-4">
+    <thead class="thead-light">
+        <tr>
+            <th>Media Type</th>
+            <th>Title</th>
+            <th>Checkout Date</th>
+            <th>Due Date</th>
+            <th>Check-In</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.CheckoutLogs != null)
+        {
+            foreach (var log in Model.CheckoutLogs)
+            {
+                <tr>
+                    <th>@log.MediaTypeName</th>
+                    <th>@log.Title</th>
+                    <th>@log.CheckoutDate.ToShortDateString()</th>
+                    <th>@log.CheckoutDate.AddDays(7).ToShortDateString()</th>
+                    <th>
+                        <a asp-controller="Borrower" asp-action="Checkin">
+                            Check-In
+                        </a>
+                    </th>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">
+                    No checkout items found.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
