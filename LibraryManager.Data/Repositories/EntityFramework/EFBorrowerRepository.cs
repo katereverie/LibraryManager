@@ -1,4 +1,5 @@
-﻿using LibraryManager.Core.Entities;
+﻿using LibraryManager.Core.DTOs;
+using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 
 namespace LibraryManager.Data.Repositories.EntityFramework;
@@ -41,25 +42,27 @@ public class EFBorrowerRepository : IBorrowerRepository
         return _dbContext.Borrower.SingleOrDefault(b => b.Email == email);
     }
 
-    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    public BorrowerDetailsDTO? GetByEmailWithLogs(string email)
     {
         var borrowerWithLogs = _dbContext.Borrower
             .Where(b => b.Email == email)
-            .Select(b => new ViewBorrowerDTO
+            .Select(b => new BorrowerDetailsDTO
             {
                 BorrowerID = b.BorrowerID,
                 FirstName = b.FirstName,
                 LastName = b.LastName,
                 Email = b.Email,
-                CheckoutLogs = b.CheckoutLogs.Select(cl => new CheckoutLogDTO
+                Phone = b.Phone,
+                CheckoutLogs = b.CheckoutLogs == null ? null : b.CheckoutLogs.Select(cl => new CheckoutLogDTO
                 {
                     CheckoutDate = cl.CheckoutDate,
                     ReturnDate = cl.ReturnDate,
                     MediaID = cl.MediaID,
-                    Title = cl.Media.Title
+                    Title = cl.Media.Title,
+                    MediaTypeName = cl.Media.MediaType.MediaTypeName,
                 }).ToList()
             })
-            .FirstOrDefault();
+            .SingleOrDefault();
 
         return borrowerWithLogs;
     }

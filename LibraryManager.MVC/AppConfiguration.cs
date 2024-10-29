@@ -1,4 +1,4 @@
-﻿using LibraryManager.Core.Entities;
+﻿using LibraryManager.Core;
 using LibraryManager.Core.Interfaces;
 
 namespace LibraryManager.MVC;

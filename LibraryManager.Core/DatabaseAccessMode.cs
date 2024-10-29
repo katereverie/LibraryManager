@@ -1,4 +1,4 @@
-﻿namespace LibraryManager.Core.Entities;
+﻿namespace LibraryManager.Core;
 
 public enum DatabaseAccessMode
 {

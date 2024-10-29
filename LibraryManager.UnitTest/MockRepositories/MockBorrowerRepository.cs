@@ -1,4 +1,5 @@
-﻿using LibraryManager.Core.Entities;
+﻿using LibraryManager.Core.DTOs;
+using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 
 namespace LibraryManagement.Test.MockRepos;
@@ -48,7 +49,7 @@ public class MockBorrowerRepo : IBorrowerRepository
         throw new NotImplementedException();
     }
 
-    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    public BorrowerDetailsDTO? GetByEmailWithLogs(string email)
     {
         throw new NotImplementedException();
     }

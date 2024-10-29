@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using LibraryManager.Core.DTOs;
 using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -83,21 +84,22 @@ public class DBorrowerRepository : IBorrowerRepository
         }
     }
 
-    public ViewBorrowerDTO? GetByEmailWithLogs(string email)
+    public BorrowerDetailsDTO? GetByEmailWithLogs(string email)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
             var sql = @"
-                SELECT b.BorrowerID, b.FirstName, b.LastName, b.Email,
+                SELECT b.BorrowerID, b.FirstName, b.LastName, b.Email, b.Phone
                        cl.CheckoutDate, cl.ReturnDate, cl.MediaID, m.Title
                 FROM Borrower b
                 LEFT JOIN CheckoutLog cl ON b.BorrowerID = cl.BorrowerID
                 LEFT JOIN Media m ON cl.MediaID = m.MediaID
+                LEFT JOIN MediaType mt ON mt.MediaID = m.MediaID
                 WHERE b.Email = @Email";
 
-            var borrowerDict = new Dictionary<int, ViewBorrowerDTO>();
+            var borrowerDict = new Dictionary<int, BorrowerDetailsDTO>();
 
-            connection.Query<ViewBorrowerDTO, CheckoutLogDTO, ViewBorrowerDTO>(
+            connection.Query<BorrowerDetailsDTO, CheckoutLogDTO, BorrowerDetailsDTO>(
                 sql,
                 (borrower, checkoutLog) =>
                 {

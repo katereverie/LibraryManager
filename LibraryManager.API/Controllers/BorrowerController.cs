@@ -1,4 +1,5 @@
 ﻿using LibraryManager.API.Models;
+using LibraryManager.Core.DTOs;
 using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -80,7 +81,7 @@ public class BorrowerController : Controller
     /// <param name="email">The email address of a borrower</param>
     /// <returns></returns>
     [HttpGet("{email}/logs")]
-    [ProducesResponseType(typeof(ViewBorrowerDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BorrowerDetailsDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetBorrowerWithLogs(string email)
     {

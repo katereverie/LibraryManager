@@ -1,4 +1,5 @@
-﻿using LibraryManager.Core.Entities;
+﻿using LibraryManager.Core.DTOs;
+using LibraryManager.Core.Entities;
 
 namespace LibraryManager.Core.Interfaces;
 
@@ -9,5 +10,5 @@ public interface IBorrowerRepository
     void Update(Borrower borrower);
     List<Borrower> GetAll();
     Borrower? GetByEmail(string email);
-    ViewBorrowerDTO? GetByEmailWithLogs(string email);
+    BorrowerDetailsDTO? GetByEmailWithLogs(string email);
 }

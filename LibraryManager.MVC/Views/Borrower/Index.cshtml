@@ -42,12 +42,12 @@
             foreach (var borrower in Model)
             {
                 <tr>
-                    <td>@borrower.FirstName @borrower.LastName</td>
+                    <td>@borrower.FirstName, @borrower.LastName</td>
                     <td>@borrower.Email</td>
                     <td>@borrower.Phone</td>
                     <td>
-                        <a asp-action="Edit" asp-controller="Borrower" asp-route-id="@borrower.BorrowerID" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-controller="Borrower" asp-route-id="@borrower.BorrowerID" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Details" asp-controller="Borrower" asp-route-email="@borrower.Email" class="btn btn-sm btn-warning">details</a>
+                        <a asp-action="Edit" asp-controller="Borrower" asp-route-email="@borrower.Email" class="btn btn-sm btn-danger">edit</a>
                     </td>
                 </tr>
             }

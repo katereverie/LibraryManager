@@ -1,4 +1,5 @@
-﻿using LibraryManager.Core.Entities;
+﻿using LibraryManager.Core.DTOs;
+using LibraryManager.Core.Entities;
 using LibraryManager.Core.Interfaces;
 
 namespace LibraryManagement.Test.MockRepos;
