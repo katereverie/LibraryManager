@@ -53,7 +53,7 @@ public class EFBorrowerRepository : IBorrowerRepository
                 LastName = b.LastName,
                 Email = b.Email,
                 Phone = b.Phone,
-                CheckoutLogs = b.CheckoutLogs.Select(cl => new CheckoutLogDTO
+                CheckoutLogs = b.CheckoutLogs == null ? null : b.CheckoutLogs.Select(cl => new CheckoutLogDTO
                 {
                     CheckoutDate = cl.CheckoutDate,
                     ReturnDate = cl.ReturnDate,
@@ -62,7 +62,7 @@ public class EFBorrowerRepository : IBorrowerRepository
                     MediaTypeName = cl.Media.MediaType.MediaTypeName,
                 }).ToList()
             })
-            .FirstOrDefault();
+            .SingleOrDefault();
 
         return borrowerWithLogs;
     }
