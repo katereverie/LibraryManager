@@ -93,6 +93,12 @@ public class BorrowerController : Controller
         var result = _borrowerService.GetBorrowerWithLogs(email);
         if (result.Ok)
         {
+            // filter out unreturned media
+            if (result.Data.CheckoutLogs != null)
+            {
+                result.Data.CheckoutLogs = result.Data.CheckoutLogs.FindAll(cl => cl.ReturnDate == null);
+            }
+
             return View(result.Data);
         }
         else
