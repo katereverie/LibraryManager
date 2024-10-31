@@ -12,6 +12,7 @@
 
     public class CheckoutLogDTO
     {
+        public int CheckoutLogID { get; set; }
         public DateTime CheckoutDate { get; set; }
         public DateTime? ReturnDate { get; set; }
         public int MediaID { get; set; }
