@@ -9,18 +9,18 @@ public class BorrowerForm
 
     [Required(ErrorMessage = "First name is required")]
     [Display(Name = "First Name")]
-    [StringLength(50, MinimumLength = 2,
+    [StringLength(50, MinimumLength = 1,
         ErrorMessage = "First name must be between {2} and {1} characters")]
-    [RegularExpression(@"^[A-Za-z\s-']+$", 
-        ErrorMessage = "First name can only contain letters, spaces, hyphens and apostrophes")]
+    [RegularExpression(@"^[A-Za-zÀ-ÖØ-öø-ÿ\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u309F\u30A0-\u30FF\s-']+$",
+        ErrorMessage = "First name can only contain letters, spaces, hyphens, apostrophes, and common Asian characters")]
     public string FirstName { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Last name is required")]
     [Display(Name = "Last Name")]
-    [StringLength(50, MinimumLength = 2,
+    [StringLength(50, MinimumLength = 1,
         ErrorMessage = "Last name must be between {2} and {1} characters")]
-    [RegularExpression(@"^[A-Za-z\s-']+$",
-        ErrorMessage = "Last name can only contain letters, spaces, hyphens and apostrophes")]
+    [RegularExpression(@"^[A-Za-zÀ-ÖØ-öø-ÿ\u4E00-\u9FFF\u3400-\u4DBF\u3040-\u309F\u30A0-\u30FF\s-']+$",
+        ErrorMessage = "Last name can only contain letters, spaces, hyphens, apostrophes, and common Asian characters")]
     public string LastName { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Email is required")]
