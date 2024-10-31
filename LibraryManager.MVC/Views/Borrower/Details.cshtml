@@ -48,9 +48,9 @@
                     <th>@log.CheckoutDate.ToShortDateString()</th>
                     <th>@log.CheckoutDate.AddDays(7).ToShortDateString()</th>
                     <th>
-                        <a asp-controller="Borrower" asp-action="Checkin">
-                            Check-In
-                        </a>
+                        <form asp-controller="Checkout" asp-action="Checkin" method="post" asp-route-checkoutLogID="@log.CheckoutLogID" asp-route-email="@Model.Email" class="d-inline">
+                            <button type="submit" class="btn btn-link p-0 text-primary">Check-In</button>
+                        </form>
                     </th>
                 </tr>
             }

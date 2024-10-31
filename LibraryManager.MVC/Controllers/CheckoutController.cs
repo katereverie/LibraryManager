@@ -16,4 +16,18 @@ public class CheckoutController : Controller
     {
         return View();
     }
+
+    [HttpPost]
+    public IActionResult Checkin(int checkoutLogID, string email)
+    {
+        var result = _checkoutService.ReturnMedia(checkoutLogID);
+
+        if (!result.Ok)
+        {
+            TempData["ErrorMessage"] = "An error occurred when returning media.";
+            return RedirectToAction("Index", "Borrower");
+        }
+
+        return RedirectToAction("Details", "Borrower", new { email });
+    }
 }

@@ -65,7 +65,7 @@ public class EFCheckoutRepository : ICheckoutRepository
     public void Update(int checkoutLogID)
     {
         var checkoutLog = _dbContext.CheckoutLog
-                          .FirstOrDefault(cl => cl.CheckoutLogID == checkoutLogID);
+                          .SingleOrDefault(cl => cl.CheckoutLogID == checkoutLogID);
 
         if (checkoutLog != null)
         {
