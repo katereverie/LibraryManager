@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Create Borrower";
 }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
 <h2>Create Borrower</h2>
 
@@ -10,18 +13,22 @@
     <div>
         <label asp-for="FirstName"></label>
         <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
     </div>
     <div>
         <label asp-for="LastName"></label>
         <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
     </div>
     <div>
         <label asp-for="Email"></label>
         <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
     </div>
     <div>
         <label asp-for="Phone"></label>
         <input asp-for="Phone" />
+        <span asp-validation-for="Phone"></span>
     </div>
     <div>
         <button type="submit">Save</button>
