@@ -76,7 +76,7 @@ public class BorrowerController : Controller
 
         if (!result.Ok)
         {
-            string messageType = result.Message.Contains("already") ? "Warning" : "Error";
+            var messageType = result.Message.Contains("already") ? "Warning" : "Error";
             TempData[$"{messageType}Message"] = result.Message;
 
             return View(model);
@@ -84,7 +84,7 @@ public class BorrowerController : Controller
 
         TempData["SuccessMessage"] = $"Borrower created with ID {result.Data}";
 
-        return RedirectToAction("List");
+        return RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -94,7 +94,7 @@ public class BorrowerController : Controller
         if (result.Ok)
         {
             // filter out unreturned media
-            if (result.Data.CheckoutLogs != null)
+            if (result.Data!.CheckoutLogs != null)
             {
                 result.Data.CheckoutLogs = result.Data.CheckoutLogs.FindAll(cl => cl.ReturnDate == null);
             }
