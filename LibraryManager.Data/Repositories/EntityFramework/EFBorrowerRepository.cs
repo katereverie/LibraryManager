@@ -55,6 +55,7 @@ public class EFBorrowerRepository : IBorrowerRepository
                 Phone = b.Phone,
                 CheckoutLogs = b.CheckoutLogs == null ? null : b.CheckoutLogs.Select(cl => new CheckoutLogDTO
                 {
+                    CheckoutLogID = cl.CheckoutLogID,
                     CheckoutDate = cl.CheckoutDate,
                     ReturnDate = cl.ReturnDate,
                     MediaID = cl.MediaID,

@@ -90,7 +90,7 @@ public class DBorrowerRepository : IBorrowerRepository
         {
             var sql = @"
                 SELECT b.BorrowerID, b.FirstName, b.LastName, b.Email, b.Phone
-                       cl.CheckoutDate, cl.ReturnDate, cl.MediaID, m.Title
+                       cl.CheckoutLogID, cl.CheckoutDate, cl.ReturnDate, cl.MediaID, m.Title
                 FROM Borrower b
                 LEFT JOIN CheckoutLog cl ON b.BorrowerID = cl.BorrowerID
                 LEFT JOIN Media m ON cl.MediaID = m.MediaID
