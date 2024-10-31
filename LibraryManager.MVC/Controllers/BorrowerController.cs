@@ -86,4 +86,36 @@ public class BorrowerController : Controller
 
         return RedirectToAction("List");
     }
+
+    [HttpGet]
+    public IActionResult Edit(string email)
+    {
+        var result = _borrowerService.GetBorrower(email);
+
+        return result.Ok ? View(new BorrowerForm(result.Data)) : View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(BorrowerForm model)
+    {
+        if (!ModelState.IsValid)
+        {
+            TempData["WarningMessage"] = "Invalid format";
+            return View(model);
+        }
+
+        var result = _borrowerService.UpdateBorrower(model.ToEntity());
+
+        if (result.Ok)
+        {
+            TempData["SuccessMessage"] = "Borrower information updated successfully.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "An error occurred while upding borrower information.";
+        }
+
+        return View(model);
+    }
 }
