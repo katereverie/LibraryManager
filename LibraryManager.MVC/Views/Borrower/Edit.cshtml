@@ -1,0 +1,31 @@
+﻿@model BorrowerForm
+@{
+    ViewData["Title"] = "Edit Borrower";
+}
+
+<h2>Edit Borrower</h2>
+
+<form asp-controller="Borrower" asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="BorrowerID" />
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+    </div>
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" />
+    </div>
+    <div>
+        <button type="submit">Save</button>
+        <a asp-action="Index" asp-controller="Borrower">Go Back</a>
+    </div>
+</form>
