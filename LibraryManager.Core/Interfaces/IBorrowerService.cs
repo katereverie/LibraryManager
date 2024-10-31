@@ -11,4 +11,5 @@ public interface IBorrowerService
     Result UpdateBorrower(Borrower borrower);
     Result<int> AddBorrower(Borrower newBorrower);
     Result DeleteBorrower(Borrower Borrower);
+    Result<bool> IsEmailTaken(string email);
 }

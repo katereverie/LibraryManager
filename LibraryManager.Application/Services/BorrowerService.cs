@@ -106,4 +106,18 @@ public class BorrowerService : IBorrowerService
             return ResultFactory.Fail(ex.Message);
         }
     }
+
+    public Result<bool> IsEmailTaken(string email)
+    {
+        try
+        {
+            Borrower? borrower = _borrowerRepository.GetByEmail(email);
+            
+            return ResultFactory.Success(borrower != null);
+        }
+        catch (Exception ex)
+        {
+            return ResultFactory.Fail<bool>(ex.Message);
+        }
+    }
 }
