@@ -1,0 +1,69 @@
+﻿@model MediaTypeForm
+
+<h2>Media Search</h2>
+<p>Search for media with the form below.</p>
+<p>You may also <a href="#">create new media</a>.</p>
+
+@*
+    (Done) MediaType should be a SelectList of media types. Field required. Use asp-validation-for, and model validation on the backend
+    (Done) Title: not required. User may enter all or a part of a title. Use LINQ in the controller to filter the search results in a non-case-sensitive way
+    if the users provides text.
+    (Done) Archived: by default, filter out archived media from search results.
+    If box is checked, show all matching media, despite having been archived or not.
+*@
+<form asp-controller="Media" asp-action="Search" method="post">
+    <div>
+        @* (x) How to implement a select list ? *@
+        <label asp-for="MediaTypeID"></label>
+        <select asp-for="MediaTypeID" asp-items="Model.MediaTypes"></select>
+    </div>
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        @* (x) What tag to use here? use input of type checkbox *@
+        <label asp-for="IsArchived"></label>
+        <input asp-for="IsArchived" type="checkbox" />
+    </div>
+    <div>
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+@if (Model.Medias != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Archived</th>
+                <th>Action Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Medias.Any())
+            {
+                <tr>
+                    <td colspan="3" class="text-center">
+                        No media items by title: @Model.Title found.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var media in Model.Medias)
+                {
+                    <tr>
+                        <td>@media.Title</td>
+                        @* use bootstrap ? to find correct symbols? *@
+                        <td>@(media.IsArchived ? "Yes" : "No")</td>
+                        <td>
+                            <a href="#">edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
