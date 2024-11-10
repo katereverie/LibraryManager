@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.Data", "LibraryManager.Data\LibraryManager.Data.csproj", "{0D080B02-FECF-44D0-B385-2DE417FC253F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.UnitTest", "LibraryManager.UnitTest\LibraryManager.UnitTest.csproj", "{3E43E05E-A439-48EC-9A13-8B1B87B46AC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.Tests.Unit", "LibraryManager.UnitTest\LibraryManager.Tests.Unit.csproj", "{3E43E05E-A439-48EC-9A13-8B1B87B46AC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.API", "LibraryManager.API\LibraryManager.API.csproj", "{89CEBF13-3AD8-42D2-AA0D-5B76F46B09F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.ConsoleUI", "LibraryManager.ConsoleUI\LibraryManager.ConsoleUI.csproj", "{E1651C54-2EC2-4D57-A8E8-175DCA73CECF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManager.MVC", "LibraryManager.MVC\LibraryManager.MVC.csproj", "{B406106F-9C9F-4A1C-8510-6316FCEC6D74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManager.MVC", "LibraryManager.MVC\LibraryManager.MVC.csproj", "{B406106F-9C9F-4A1C-8510-6316FCEC6D74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
