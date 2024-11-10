@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManager.API.Controllers;
 
 /// <summary>
-/// Controller for handling borrower-related operations
+/// Controller for handling borrower-related operations.
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
@@ -17,10 +17,10 @@ public class BorrowerController : Controller
     private readonly ILogger<BorrowerController> _logger;
 
     /// <summary>
-    /// Constructor method of BorrowerController, which injects ICheckoutService and ILogger and stores them in private readonly fields.
+    /// Initializes a new instance of the <see cref="BorrowerController"/> class, injecting the borrower service and logger.
     /// </summary>
-    /// <param name="borrowerService">Service for handling borrower-related operations</param>
-    /// <param name="logger">Logger for logging events and errors</param>
+    /// <param name="borrowerService">Service for handling borrower-related operations.</param>
+    /// <param name="logger">Logger for logging events and errors.</param>
     public BorrowerController(IBorrowerService borrowerService, ILogger<BorrowerController> logger)
     {
         _borrowerService = borrowerService;
@@ -28,9 +28,9 @@ public class BorrowerController : Controller
     }
 
     /// <summary>
-    /// Retrieves a list of all borrowers, which includes their information
+    /// Retrieves a list of all borrowers, including their information.
     /// </summary>
-    /// <returns>List of objects of type Borrower</returns>
+    /// <returns>A <see cref="List{Borrower}"/> containing borrower details.</returns>
     [HttpGet("")]
     [ProducesResponseType(typeof(List<Borrower>), StatusCodes.Status200OK)]
     public IActionResult GetAllBorrowers()
@@ -48,10 +48,10 @@ public class BorrowerController : Controller
     }
 
     /// <summary>
-    /// Retrieves a single borrower, which includes their personal information
+    /// Retrieves a single borrower based on their email.
     /// </summary>
-    /// <param name="email">The email address of a borrower</param>
-    /// <returns></returns>
+    /// <param name="email">The email address of the borrower.</param>
+    /// <returns>A <see cref="Borrower"/> object if found; otherwise, a 404 Not Found status.</returns>
     [HttpGet("{email}")]
     [ProducesResponseType(typeof(Borrower), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -76,10 +76,10 @@ public class BorrowerController : Controller
     }
 
     /// <summary>
-    /// Retrieves a single borrower, which includes their personal information and their checkout history
+    /// Retrieves a borrower's details, including their checkout history.
     /// </summary>
-    /// <param name="email">The email address of a borrower</param>
-    /// <returns></returns>
+    /// <param name="email">The email address of the borrower.</param>
+    /// <returns>A <see cref="BorrowerDetailsDTO"/> with borrower details and logs if found; otherwise, a 404 Not Found status.</returns>
     [HttpGet("{email}/logs")]
     [ProducesResponseType(typeof(BorrowerDetailsDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -90,7 +90,7 @@ public class BorrowerController : Controller
         if (result.Message.Contains("No borrower"))
         {
             _logger.LogWarning(result.Message);
-            return NotFound("Borrower not found");
+            return NotFound("Borrower not found.");
         }
 
         if (result.Ok)
@@ -104,10 +104,10 @@ public class BorrowerController : Controller
     }
 
     /// <summary>
-    /// Adds a single borrower, which includes the borrower's first and last name, email address, and phone number.
+    /// Adds a new borrower with provided details.
     /// </summary>
-    /// <param name="borrowerToAdd">A JSON object for adding borrower, which includes a borrower's FirstName, LastName, Email, Phone</param>
-    /// <returns>An IActionResult indicating corresponding HTTP response</returns>
+    /// <param name="borrowerToAdd">A <see cref="AddBorrower"/> object containing the borrower's information.</param>
+    /// <returns>A 201 Created response if successful; otherwise, appropriate error responses.</returns>
     [HttpPost("")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -147,11 +147,11 @@ public class BorrowerController : Controller
     }
 
     /// <summary>
-    /// Edits the first name, the last name, the email address, and phone number of a borrower.
+    /// Updates an existing borrower's details.
     /// </summary>
-    /// <param name="borrowerID">The ID number that uniquely identifies a borrower</param>
-    /// <param name="borrowerToEdit">A JSON object for editing a borrower,  which includes the borrower's FirstName, LastName, Email, Phone</param>
-    /// <returns>An IActionResult indicating corresponding HTTP response</returns>
+    /// <param name="borrowerID">The unique ID of the borrower.</param>
+    /// <param name="borrowerToEdit">A <see cref="EditBorrower"/> object with the updated borrower details.</param>
+    /// <returns>A 204 No Content response if successful; otherwise, appropriate error responses.</returns>
     [HttpPut("{borrowerID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -187,15 +187,15 @@ public class BorrowerController : Controller
             return Conflict();
         }
 
-        _logger.LogError("Error adding borrower. {BorrowerEmail} Error: {ErrorMessage}", entity.Email, result.Message);
+        _logger.LogError("Error updating borrower. {BorrowerEmail} Error: {ErrorMessage}", entity.Email, result.Message);
         return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
     }
 
     /// <summary>
-    /// Deletes a borrower by deleting their personal information and their associated data, such as checkout logs, if any.
+    /// Deletes a borrower and their associated data.
     /// </summary>
-    /// <param name="borrowerID">The ID number that uniquely identifies a borrower</param>
-    /// <returns>An IActionResult indicating corresponding HTTP response</returns>
+    /// <param name="borrowerID">The unique ID of the borrower.</param>
+    /// <returns>A 204 No Content response if successful; otherwise, appropriate error responses.</returns>
     [HttpDelete("{borrowerID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult DeleteBorrower(int borrowerID)

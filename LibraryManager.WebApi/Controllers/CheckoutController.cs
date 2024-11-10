@@ -15,20 +15,20 @@ public class CheckoutController : Controller
     private readonly ILogger<CheckoutController> _logger;
 
     /// <summary>
-    /// Constructor method of CheckoutController, which injects ICheckoutService and ILogger and stores them in private readonly fields.
+    /// Constructor for <see cref="CheckoutController"/>, injecting <see cref="ICheckoutService"/> and <see cref="ILogger{CheckoutController}"/>
     /// </summary>
     /// <param name="checkoutService">Service for handling checkout-related operations</param>
     /// <param name="logger">Logger for logging events and errors</param>
-    public CheckoutController (ICheckoutService checkoutService, ILogger<CheckoutController> logger)
+    public CheckoutController(ICheckoutService checkoutService, ILogger<CheckoutController> logger)
     {
         _checkoutService = checkoutService;
         _logger = logger;
     }
 
     /// <summary>
-    /// Retrieves a list of available media that can be checked out
+    /// Retrieves a list of available <see cref="Media"/> that can be checked out.
     /// </summary>
-    /// <returns>List of available media objects and an IActionResult indicating corresponding HTTP response</returns>
+    /// <returns>List of available <see cref="Media"/> objects and an <see cref="IActionResult"/> indicating the HTTP response.</returns>
     [HttpGet("")]
     [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
     public IActionResult GetAvailableMedia()
@@ -42,13 +42,14 @@ public class CheckoutController : Controller
         }
 
         _logger.LogError("Error retrieving available media. Error: {ErrorMessage}", result.Message);
-        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+        return StatusCode(StatusCodes.Status500InternalServerError,
+            "An unexpected error occurred while processing your request. Please try again later.");
     }
 
     /// <summary>
-    /// Retrieves a list of checkout logs that shows all checked-out media
+    /// Retrieves a list of <see cref="CheckoutLog"/> showing all checked-out media.
     /// </summary>
-    /// <returns>List of checked-out media and an IActionResult indicating corresponding HTTP response</returns>
+    /// <returns>List of checked-out media as <see cref="CheckoutLog"/> and an <see cref="IActionResult"/> indicating the HTTP response.</returns>
     [HttpGet("log")]
     [ProducesResponseType(typeof(List<CheckoutLog>), StatusCodes.Status200OK)]
     public IActionResult GetCheckoutLog()
@@ -62,15 +63,16 @@ public class CheckoutController : Controller
         }
 
         _logger.LogError("Error retrieving all checked-out media. Error: {ErrorMessage}", result.Message);
-        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+        return StatusCode(StatusCodes.Status500InternalServerError,
+            "An unexpected error occurred while processing your request. Please try again later.");
     }
 
     /// <summary>
-    /// Checks out a media item that is neither archived nor already checked-out
+    /// Checks out a <see cref="Media"/> item that is neither archived nor already checked-out.
     /// </summary>
-    /// <param name="mediaID">The ID number that uniquely identifies a media</param>
-    /// <param name="email">The email that uniquely identifies a borrower</param>
-    /// <returns>An IActionResult indicating corresponding HTTP response</returns>
+    /// <param name="mediaID">The ID number that uniquely identifies a <see cref="Media"/>.</param>
+    /// <param name="email">The email that uniquely identifies a borrower.</param>
+    /// <returns>An <see cref="IActionResult"/> indicating the HTTP response.</returns>
     [HttpPost("media/{mediaID}/{email}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -81,7 +83,7 @@ public class CheckoutController : Controller
         if (result.Ok)
         {
             _logger.LogInformation("Media successfully checked out.");
-            return Created();
+            return CreatedAtAction(nameof(GetCheckoutLog), new { mediaID, email });
         }
 
         if (result.Message.Contains("Borrower with") || result.Message.Contains("Borrower has"))
@@ -91,14 +93,15 @@ public class CheckoutController : Controller
         }
 
         _logger.LogError("Error checking out media. Error: {ErrorMessage}", result.Message);
-        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+        return StatusCode(StatusCodes.Status500InternalServerError,
+            "An unexpected error occurred while processing your request. Please try again later.");
     }
 
     /// <summary>
-    /// Returns a media item by assigning a return date to the corresponding checkout log
+    /// Returns a <see cref="Media"/> item by assigning a return date to the corresponding <see cref="CheckoutLog"/>.
     /// </summary>
-    /// <param name="checkoutLogID">The ID number that uniquely identifies a checkout log</param>
-    /// <returns>An IActionResult indicating corresponding HTTP response</returns>
+    /// <param name="checkoutLogID">The ID number that uniquely identifies a <see cref="CheckoutLog"/>.</param>
+    /// <returns>An <see cref="IActionResult"/> indicating the HTTP response.</returns>
     [HttpPut("returns/{checkoutLogID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult ReturnMedia(int checkoutLogID)
@@ -112,6 +115,7 @@ public class CheckoutController : Controller
         }
 
         _logger.LogError("Error returning media. Error: {ErrorMessage}", result.Message);
-        return StatusCode(500, "An unexpected error occurred while processing your request. Please try again later.");
+        return StatusCode(StatusCodes.Status500InternalServerError,
+            "An unexpected error occurred while processing your request. Please try again later.");
     }
 }

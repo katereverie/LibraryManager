@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LibraryManager.API.Controllers;
 
 /// <summary>
-/// Controller for handling media-related operations
+/// Controller for handling media-related operations.
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
@@ -17,10 +17,10 @@ public class MediaController : Controller
     private readonly ILogger<MediaController> _logger;
 
     /// <summary>
-    /// Constructor method of MediaController, which injects IMediaService and ILogger, and stores them in private readonly fields.
+    /// Initializes a new instance of the <see cref="MediaController"/> class, injecting <see cref="IMediaService"/> and <see cref="ILogger"/>.
     /// </summary>
-    /// <param name="mediaService">Service for handling media-related operations</param>
-    /// <param name="logger">Logger for logging events and errors</param>
+    /// <param name="mediaService">Service for handling media-related operations.</param>
+    /// <param name="logger">Logger for logging events and errors.</param>
     public MediaController(IMediaService mediaService, ILogger<MediaController> logger)
     {
         _mediaService = mediaService;
@@ -30,7 +30,7 @@ public class MediaController : Controller
     /// <summary>
     /// Retrieves a list of all existing media types.
     /// </summary>
-    /// <returns>List of objects of type MediaType</returns>
+    /// <returns>A list of <see cref="MediaType"/> objects.</returns>
     [HttpGet("types")]
     [ProducesResponseType(typeof(List<MediaType>), StatusCodes.Status200OK)]
     public IActionResult GetAllMediaTypes()
@@ -50,8 +50,8 @@ public class MediaController : Controller
     /// <summary>
     /// Retrieves a list of media specified by its type ID.
     /// </summary>
-    /// <param name="mediaTypeID">The ID number that uniquely identifies a media type</param>
-    /// <returns>List of objects of type Media</returns>
+    /// <param name="mediaTypeID">The ID number that uniquely identifies a media type.</param>
+    /// <returns>A list of <see cref="Media"/> objects.</returns>
     [HttpGet("types/{mediaTypeID}")]
     [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
     public IActionResult GetMediaByType(int mediaTypeID)
@@ -69,9 +69,9 @@ public class MediaController : Controller
     }
 
     /// <summary>
-    /// Retrieves a list of top 3 media items defined by their checkout counts.
+    /// Retrieves a list of the top 3 media items defined by their checkout counts.
     /// </summary>
-    /// <returns>List of 3 objects of type TopThreeMedia</returns>
+    /// <returns>A list of the top 3 <see cref="TopThreeMedia"/> objects.</returns>
     [HttpGet("top")]
     [ProducesResponseType(typeof(List<TopThreeMedia>), StatusCodes.Status200OK)]
     public IActionResult GetMostPopularMedia()
@@ -89,9 +89,9 @@ public class MediaController : Controller
     }
 
     /// <summary>
-    /// Retrieves a list of media that have been archived.
+    /// Retrieves a list of media items that have been archived.
     /// </summary>
-    /// <returns>List of objects of type Media</returns>
+    /// <returns>A list of archived <see cref="Media"/> objects.</returns>
     [HttpGet("archived")]
     [ProducesResponseType(typeof(List<Media>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -119,7 +119,7 @@ public class MediaController : Controller
     /// Adds a new media item specified by its media type ID and title.
     /// </summary>
     /// <param name="mediaToAdd">A JSON object for adding media, which includes a media's type ID and title.</param>
-    /// <returns>A newly created media item of type AddMedia or an error response.</returns>
+    /// <returns>A newly created <see cref="Media"/> object or an error response.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(Media), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -152,8 +152,8 @@ public class MediaController : Controller
     /// <summary>
     /// Archives a media item that has not been archived.
     /// </summary>
-    /// <param name="mediaID">The ID number that uniquely identifies a media item</param>
-    /// <returns>An IActionResult indicating the result of the operation</returns>
+    /// <param name="mediaID">The ID number that uniquely identifies a media item.</param>
+    /// <returns>An <see cref="IActionResult"/> indicating the result of the operation.</returns>
     [HttpPut("{mediaID}/archive")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult ArchiveMedia(int mediaID)
@@ -171,11 +171,11 @@ public class MediaController : Controller
     }
 
     /// <summary>
-    /// Edits the title, the media type ID of a media item.
+    /// Edits the title and media type ID of a media item.
     /// </summary>
-    /// <param name="mediaID">The ID number that uniquely identifies a media item</param>
-    /// <param name="editedMedia">A JSON object for editing media, which includes a media's ID, type ID, and title</param>
-    /// <returns></returns>
+    /// <param name="mediaID">The ID number that uniquely identifies a media item.</param>
+    /// <param name="editedMedia">A JSON object for editing media, which includes a media's ID, type ID, and title.</param>
+    /// <returns>An <see cref="IActionResult"/> indicating the result of the operation.</returns>
     [HttpPut("{mediaID}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

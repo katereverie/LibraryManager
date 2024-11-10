@@ -3,44 +3,59 @@ using LibraryManager.Application;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace LibraryManager.WebAPI;
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+/// <summary>
+/// Entry point for the Web API application. Configures services, logging, middleware, and runs the application.
+/// </summary>
+public class Program
+{
+    /// <summary>
+    /// Main method that configures and runs the Web API application.
+    /// </summary>
+    /// <param name="args">The command-line arguments passed to the application.</param>
+    public static void Main(string[] args)
     {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.WriteIndented = true;
-    });
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
-});
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
 
-// configure DI for service factory
-var config = new AppConfiguration();
-var serviceFactory = new ServiceFactory(config);
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
 
-builder.Services.AddScoped(_ => serviceFactory.CreateBorrowerService());
-builder.Services.AddScoped(_ => serviceFactory.CreateMediaService());
-builder.Services.AddScoped(_ => serviceFactory.CreateCheckoutService());
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+        });
 
-var app = builder.Build();
+        // Configure DI for service factory
+        var config = new AppConfiguration();
+        var serviceFactory = new ServiceFactory(config);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        builder.Services.AddScoped(_ => serviceFactory.CreateBorrowerService());
+        builder.Services.AddScoped(_ => serviceFactory.CreateMediaService());
+        builder.Services.AddScoped(_ => serviceFactory.CreateCheckoutService());
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+        app.MapControllers();
+
+        app.Run();
+    }
 }
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-
-app.Run();
