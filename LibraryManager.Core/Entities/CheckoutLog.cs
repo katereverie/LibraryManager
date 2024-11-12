@@ -9,6 +9,6 @@ public class CheckoutLog
     public DateTime DueDate { get; set; }
     public DateTime? ReturnDate { get; set; }
 
-    public Borrower Borrower { get; set; }
-    public Media Media { get; set; }
+    public Borrower? Borrower { get; set; }
+    public Media? Media { get; set; }
 }
